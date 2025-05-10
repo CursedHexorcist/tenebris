@@ -80,9 +80,9 @@ const FEATURE_BADGES = [
   { icon: "🔒", label: "Safe & Secure" },
 ];
 const SOCIAL_LINKS = [
-  { icon: Github, link: "https://github.com/EkiZR" },
-  { icon: Linkedin, link: "https://www.linkedin.com/in/ekizr/" },
-  { icon: Instagram, link: "https://www.instagram.com/ekizr_/?hl=id" },
+  { icon: Github, link: "https://github.com/gabrieluiux" },
+  { icon: Linkedin, link: "https://www.linkedin.com/in/gabrielltan/" },
+  { icon: Instagram, link: "https://www.instagram.com/capt_ivonic/?hl=id" },
 ];
 
 const Home = () => {
