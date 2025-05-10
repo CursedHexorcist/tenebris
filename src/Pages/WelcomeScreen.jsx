@@ -107,16 +107,13 @@ const WelcomeScreen = ({ onLoadingComplete }) => {
                     <span data-aos="fade-right" data-aos-delay="400" className="inline-block px-2 bg-gradient-to-r from-white via-blue-100 to-purple-200 bg-clip-text text-transparent">
                       To
                     </span>{' '}
-                    <span data-aos="fade-right" data-aos-delay="600" className="inline-block px-2 bg-gradient-to-r from-white via-blue-100 to-purple-200 bg-clip-text text-transparent">
-                      My
-                    </span>
                   </div>
                   <div>
                     <span data-aos="fade-up" data-aos-delay="800" className="inline-block px-2 bg-gradient-to-r from-cyan-400 via-white to-pink-200 bg-clip-text text-transparent">
-                      Portfolio
+                      TENEBRIS
                     </span>{' '}
                     <span data-aos="fade-up" data-aos-delay="1000" className="inline-block px-2 bg-gradient-to-r from-cyan-400 via-white to-pink-200 bg-clip-text text-transparent">
-                      Website
+                      HUB
                     </span>
                   </div>
                 </h1>
