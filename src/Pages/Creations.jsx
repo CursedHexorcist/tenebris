@@ -155,11 +155,10 @@ export default function FullWidthTabs() {
     <div className="md:px-[10%] px-[5%] w-full sm:mt-0 mt-[3rem] bg-[#030014] overflow-hidden" id="Creations">
       <div className="text-center pb-10" data-aos="fade-up" data-aos-duration="1000">
         <h2 className="inline-block text-3xl md:text-5xl font-bold text-center mx-auto text-transparent bg-clip-text bg-gradient-to-r from-[#06B6D4] to-[#FFD6E7]">
-          Portfolio Showcase
+          Our Project
         </h2>
         <p className="text-slate-400 max-w-2xl mx-auto text-sm md:text-base mt-2">
-          Explore my journey through projects and technical expertise. 
-          Each section represents a milestone in my continuous learning path.
+          EXPLORE OUR JOURNEY
         </p>
       </div>
 
