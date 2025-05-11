@@ -158,7 +158,7 @@ const WelcomeScreen = ({ onLoadingComplete }) => {
                       />
                     </div>
                   </div>
-                  <div className="mt-8 flex items-center justify-center space-x-1">
+                  <div className="mt-8 flex items-center justify-center space-x-[2px]">
                     {/* TENEBRIS with glow */}
                     <div className="relative inline-block group">
                       <div className="absolute -inset-1 bg-gradient-to-r from-cyan-400/40 to-purple-500/40 rounded-full blur-lg group-hover:blur-xl transition-all duration-300" />
