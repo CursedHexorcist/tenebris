@@ -14,7 +14,7 @@ import CustomCursor from "./components/CustomCursor";
 
 const LandingPage = ({ showWelcome, setShowWelcome }) => {
   return (
-    <div className="cursor-none"> {/* Added container div */}
+    <div className="cursor-none">
       <AnimatePresence mode="wait">
         {showWelcome && (
           <WelcomeScreen onLoadingComplete={() => setShowWelcome(false)} />
@@ -48,7 +48,7 @@ const LandingPage = ({ showWelcome, setShowWelcome }) => {
 };
 
 const ProjectPageLayout = () => (
-  <div className="cursor-none"> {/* Added container div */}
+  <div className="cursor-none">
     <ProjectDetails />
     <footer>
       <center>
@@ -70,16 +70,21 @@ function App() {
   const [isTouchDevice, setIsTouchDevice] = useState(false);
 
   useEffect(() => {
-    // Check if device supports touch
-    setIsTouchDevice(
-      'ontouchstart' in window ||
-      navigator.maxTouchPoints > 0 ||
-      window.matchMedia("(pointer: coarse)").matches
-    );
+    // Enhanced touch device detection
+    const checkTouchDevice = () => {
+      return (('ontouchstart' in window) ||
+        (navigator.maxTouchPoints > 0) ||
+        (navigator.msMaxTouchPoints > 0) ||
+        window.matchMedia("(pointer: coarse)").matches);
+    };
     
-    // Add class to HTML element for global cursor control
-    document.documentElement.classList.add('custom-cursor-active');
+    setIsTouchDevice(checkTouchDevice());
     
+    // Add class to HTML element
+    if (!checkTouchDevice()) {
+      document.documentElement.classList.add('custom-cursor-active');
+    }
+
     return () => {
       document.documentElement.classList.remove('custom-cursor-active');
     };
@@ -87,19 +92,9 @@ function App() {
 
   return (
     <BrowserRouter>
-      {/* Only show custom cursor on non-touch devices */}
       {!isTouchDevice && <CustomCursor />}
-      
       <Routes>
-        <Route 
-          path="/" 
-          element={
-            <LandingPage 
-              showWelcome={showWelcome} 
-              setShowWelcome={setShowWelcome} 
-            />
-          } 
-        />
+        <Route path="/" element={<LandingPage showWelcome={showWelcome} setShowWelcome={setShowWelcome} />} />
         <Route path="/project/:id" element={<ProjectPageLayout />} />
       </Routes>
     </BrowserRouter>
