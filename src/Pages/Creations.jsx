@@ -112,18 +112,18 @@ const techStacks = [
 const projects = [
   {
     id: "Project",
-    Img: "project1.jpg",
-    Title: "Project 1",
+    Img: "https://res.cloudinary.com/dc3bfhgfd/image/upload/v1746961358/59fa7aa6-6943-4031-a37e-1a26fcde0b59_myujkf.png",
+    Title: "coming soon",
     Description: "Description of project 1",
-    Link: "#",
+    Link: "https://tenebris-web-sepia.vercel.app/",
     TechStack: ["React", "Tailwind"]
   },
   {
-    id: "Buy Script",
-    Img: "your-image.jpg",
-    Title: "Buy Script",
-    Description: "Penjelasan tentang project Buy Script",
-    Link: "https://demo-link.com", // opsional
+    id: "coming soon",
+    Img: "https://res.cloudinary.com/dc3bfhgfd/image/upload/v1746961358/59fa7aa6-6943-4031-a37e-1a26fcde0b59_myujkf.png",
+    Title: "coming soon",
+    Description: "coming soon",
+    Link: "https://tenebris-web-sepia.vercel.app/", // opsional
     TechStack: ["React", "Tailwind"]
   },
 ];
