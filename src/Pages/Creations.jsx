@@ -114,7 +114,7 @@ const Product = [
     id: "Project",
     Img: "https://res.cloudinary.com/dc3bfhgfd/image/upload/v1746961358/59fa7aa6-6943-4031-a37e-1a26fcde0b59_myujkf.png",
     Title: "coming soon",
-    Description: "Description of project 1",
+    Description: "coming soon",
     Link: "https://tenebris-web-sepia.vercel.app/",
     TechStack: ["React", "Tailwind"]
   },
