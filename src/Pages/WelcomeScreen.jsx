@@ -184,8 +184,8 @@ const WelcomeScreen = ({ onLoadingComplete }) => {
                     className="absolute top-0 left-0 h-full bg-gradient-to-r from-cyan-400 to-purple-500"
                     initial={{ width: 0 }}
                     animate={{ width: "100%" }}
-                    transition={{ duration: 3, ease: "linear" }}
-                  />
+                    transition={{ duration: 1900, ease: "linear" }}
+                    />
                 </div>
               </motion.div>
             </div>
