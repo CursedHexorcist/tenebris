@@ -1,34 +1,87 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import Particles from 'react-tsparticles';
-import { loadFull } from 'tsparticles';
+import AOS from 'aos';
+import 'aos/dist/aos.css';
+
+const TypewriterEffect = ({ text }) => {
+  const [displayText, setDisplayText] = useState('');
+
+  useEffect(() => {
+    let index = 0;
+    const timer = setInterval(() => {
+      if (index <= text.length) {
+        setDisplayText(text.slice(0, index));
+        index++;
+      } else {
+        clearInterval(timer);
+      }
+    }, 100); // Kecepatan dikurangi untuk efek lebih smooth
+
+    return () => clearInterval(timer);
+  }, [text]);
+
+  return (
+    <span className="inline-block">
+      {displayText}
+      <span className="animate-pulse">|</span>
+    </span>
+  );
+};
+
+const BackgroundEffect = () => (
+  <div className="absolute inset-0 overflow-hidden">
+    <motion.div 
+      className="absolute inset-0 bg-gradient-to-br from-indigo-900/30 via-purple-900/30 to-pink-900/30 blur-3xl"
+      animate={{
+        opacity: [0.8, 1, 0.8],
+      }}
+      transition={{
+        duration: 4,
+        repeat: Infinity,
+        ease: "easeInOut"
+      }}
+    />
+    <motion.div 
+      className="absolute inset-0 bg-gradient-to-tr from-indigo-600/20 via-transparent to-purple-600/20 blur-2xl"
+      animate={{
+        backgroundPosition: ['0% 0%', '100% 100%'],
+      }}
+      transition={{
+        duration: 8,
+        repeat: Infinity,
+        repeatType: "reverse",
+        ease: "linear"
+      }}
+    />
+  </div>
+);
 
 const WelcomeScreen = ({ onLoadingComplete }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [showContent, setShowContent] = useState(false);
 
-  // Inisialisasi partikel
-  const particlesInit = async (engine) => {
-    await loadFull(engine);
-  };
-
   useEffect(() => {
-    // Delay untuk animasi masuk
-    setTimeout(() => setShowContent(true), 300);
-    
-    // Timer untuk loading selesai
-    const timer = setTimeout(() => {
+    AOS.init({
+      duration: 1000,
+      once: false,
+      mirror: false,
+    });
+
+    const timer1 = setTimeout(() => setShowContent(true), 300);
+    const timer2 = setTimeout(() => {
       setIsLoading(false);
       setTimeout(() => onLoadingComplete?.(), 1000);
     }, 3500);
 
-    return () => clearTimeout(timer);
+    return () => {
+      clearTimeout(timer1);
+      clearTimeout(timer2);
+    };
   }, [onLoadingComplete]);
 
-  // Varians animasi premium
   const containerVariants = {
     hidden: { opacity: 0 },
-    visible: {
+    visible: { 
       opacity: 1,
       transition: {
         when: "beforeChildren",
@@ -75,7 +128,7 @@ const WelcomeScreen = ({ onLoadingComplete }) => {
   const glowVariants = {
     hidden: { opacity: 0 },
     visible: {
-      opacity: 1,
+      opacity: 0.5,
       transition: {
         duration: 1.5,
         repeat: Infinity,
@@ -94,73 +147,39 @@ const WelcomeScreen = ({ onLoadingComplete }) => {
           exit="exit"
           variants={containerVariants}
         >
-          {/* Partikel Background Premium */}
-          <Particles
-            init={particlesInit}
-            options={{
-              fullScreen: { enable: false },
-              particles: {
-                number: { value: 80 },
-                color: { value: ["#4F46E5", "#EC4899", "#10B981"] },
-                shape: { type: "circle" },
-                opacity: { value: 0.5, random: true },
-                size: { value: 3, random: true },
-                move: {
-                  enable: true,
-                  speed: 1,
-                  direction: "none",
-                  random: true,
-                  straight: false,
-                  out_mode: "out"
-                },
-                line_linked: {
-                  enable: true,
-                  distance: 150,
-                  color: "#4F46E5",
-                  opacity: 0.3,
-                  width: 1
-                }
-              },
-              interactivity: {
-                events: {
-                  onhover: { enable: true, mode: "repulse" }
-                }
-              }
-            }}
-          />
+          <BackgroundEffect />
 
-          {/* Konten Utama */}
           {showContent && (
-            <div className="relative z-10 text-center px-4">
-              {/* Glow Effect */}
+            <div className="relative z-10 text-center px-4 w-full max-w-4xl mx-auto">
               <motion.div
                 className="absolute -inset-8 bg-gradient-to-r from-indigo-500/30 via-purple-500/30 to-pink-500/30 rounded-full blur-3xl"
                 variants={glowVariants}
               />
               
-              {/* Teks Utama */}
-              <motion.h1 
-                className="text-5xl md:text-7xl font-bold mb-6"
+              <motion.div
+                className="text-center mb-6 sm:mb-8 md:mb-12"
                 variants={textVariants}
               >
-                <span className="bg-gradient-to-r from-cyan-400 via-blue-300 to-purple-400 bg-clip-text text-transparent">
-                  TENEBRIS
-                </span>
-              </motion.h1>
-              
-              <motion.h2 
-                className="text-2xl md:text-4xl font-medium mb-8 text-gray-300"
-                variants={textVariants}
-              >
-                Digital Experience Studio
-              </motion.h2>
-              
-              {/* Animated Loader */}
+                <h1 className="text-3xl sm:text-4xl md:text-6xl font-bold space-y-2 sm:space-y-4">
+                  <div className="mb-2 sm:mb-4">
+                    <TypewriterEffect text="Welcome to" />
+                  </div>
+                  <div>
+                    <span className="inline-block px-2 bg-gradient-to-r from-cyan-400 via-blue-300 to-purple-400 bg-clip-text text-transparent">
+                      TENEBRIS
+                    </span>{' '}
+                    <span className="inline-block px-2 bg-gradient-to-r from-cyan-400 via-blue-300 to-purple-400 bg-clip-text text-transparent">
+                      HUB
+                    </span>
+                  </div>
+                </h1>
+              </motion.div>
+
               <motion.div
                 className="flex justify-center"
                 variants={textVariants}
               >
-                <div className="relative w-24 h-1 bg-gray-700 rounded-full overflow-hidden">
+                <div className="relative w-48 h-1 bg-gray-700 rounded-full overflow-hidden">
                   <motion.div
                     className="absolute top-0 left-0 h-full bg-gradient-to-r from-cyan-400 to-purple-500"
                     initial={{ width: 0 }}
