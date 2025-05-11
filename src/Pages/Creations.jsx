@@ -1,299 +1,231 @@
-import React, { useState, useEffect } from "react";
-import PropTypes from "prop-types";
-import SwipeableViews from "react-swipeable-views";
-import { useTheme } from "@mui/material/styles";
-import AppBar from "@mui/material/AppBar";
-import Tabs from "@mui/material/Tabs";
-import Tab from "@mui/material/Tab";
-import Typography from "@mui/material/Typography";
-import Box from "@mui/material/Box";
-import CardProject from "../components/CardProject";
-import TechStackIcon from "../components/TechStackIcon";
+import React, { useState, useEffect, useRef, useCallback, memo } from 'react';
+import { getDocs, addDoc, collection, onSnapshot, query, orderBy, serverTimestamp } from 'firebase/firestore';
+import { db } from '../firebase-comment';
+import { MessageCircle, UserCircle2, Loader2, AlertCircle, Send } from 'lucide-react';
 import AOS from "aos";
 import "aos/dist/aos.css";
-import { Code, Boxes } from "lucide-react";
 
-const ToggleButton = ({ onClick, isShowingMore }) => (
-  <button
-    onClick={onClick}
-    className="
-      px-3 py-1.5
-      text-slate-300 
-      hover:text-white 
-      text-sm 
-      font-medium 
-      transition-all 
-      duration-300 
-      ease-in-out
-      flex 
-      items-center 
-      gap-2
-      bg-white/5 
-      hover:bg-white/10
-      rounded-md
-      border 
-      border-white/10
-      hover:border-white/20
-      backdrop-blur-sm
-      group
-      relative
-      overflow-hidden
-    "
-  >
-    <span className="relative z-10 flex items-center gap-2">
-      {isShowingMore ? "See Less" : "See More"}
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="16"
-        height="16"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        className={`transition-transform duration-300 ${
-          isShowingMore ? "group-hover:-translate-y-0.5" : "group-hover:translate-y-0.5"
-        }`}
-      >
-        <polyline points={isShowingMore ? "18 15 12 9 6 15" : "6 9 12 15 18 9"}></polyline>
-      </svg>
-    </span>
-    <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-[#06B6D4] to-[#FFD6E7] transition-all duration-300 group-hover:w-full"></span>
-  </button>
-);
-
-function TabPanel({ children, value, index, ...other }) {
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`full-width-tabpanel-${index}`}
-      aria-labelledby={`full-width-tab-${index}`}
-      {...other}
+const Comment = memo(({ comment, formatDate, index }) => (
+    <div 
+        className="px-4 pt-4 pb-2 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all group hover:shadow-lg hover:-translate-y-0.5"
     >
-      {value === index && (
-        <Box sx={{ p: { xs: 1, sm: 3 } }}>
-          <Typography>{children}</Typography>
-        </Box>
-      )}
+        <div className="flex items-start gap-3">
+            <div className="p-2 rounded-full bg-[#06B6D4]/20 text-[#06B6D4] group-hover:bg-[#06B6D4]/30 transition-colors">
+                <UserCircle2 className="w-5 h-5" />
+            </div>
+            <div className="flex-grow min-w-0">
+                <div className="flex items-center justify-between gap-4 mb-2">
+                    <h4 className="font-medium text-white truncate">{comment.userName}</h4>
+                    <span className="text-xs text-gray-400 whitespace-nowrap">
+                        {formatDate(comment.createdAt)}
+                    </span>
+                </div>
+                <p className="text-gray-300 text-sm break-words leading-relaxed relative bottom-2">{comment.content}</p>
+            </div>
+        </div>
     </div>
-  );
-}
+));
 
-TabPanel.propTypes = {
-  children: PropTypes.node,
-  index: PropTypes.number.isRequired,
-  value: PropTypes.number.isRequired,
+const CommentForm = memo(({ onSubmit, isSubmitting, error }) => {
+    const [newComment, setNewComment] = useState('');
+    const [userName, setUserName] = useState('');
+    const textareaRef = useRef(null);
+
+    const handleTextareaChange = useCallback((e) => {
+        setNewComment(e.target.value);
+        if (textareaRef.current) {
+            textareaRef.current.style.height = 'auto';
+            textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+        }
+    }, []);
+
+    const handleSubmit = useCallback((e) => {
+        e.preventDefault();
+        if (!newComment.trim() || !userName.trim()) return;
+        
+        onSubmit({ newComment, userName });
+        setNewComment('');
+        if (textareaRef.current) textareaRef.current.style.height = 'auto';
+    }, [newComment, userName, onSubmit]);
+
+    return (
+        <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="space-y-2" data-aos="fade-up" data-aos-duration="1000">
+                <label className="block text-sm font-medium text-white">
+                    Name <span className="text-[#FFD6E7]">*</span>
+                </label>
+                <input
+                    type="text"
+                    value={userName}
+                    onChange={(e) => setUserName(e.target.value)}
+                    placeholder="Enter your name"
+                    className="w-full p-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-400 focus:outline-none focus:border-[#06B6D4] focus:ring-2 focus:ring-[#06B6D4]/20 transition-all"
+                    required
+                />
+            </div>
+
+            <div className="space-y-2" data-aos="fade-up" data-aos-duration="1200">
+                <label className="block text-sm font-medium text-white">
+                    Message <span className="text-[#FFD6E7]">*</span>
+                </label>
+                <textarea
+                    ref={textareaRef}
+                    value={newComment}
+                    onChange={handleTextareaChange}
+                    placeholder="Write your message here..."
+                    className="w-full p-4 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-400 focus:outline-none focus:border-[#06B6D4] focus:ring-2 focus:ring-[#06B6D4]/20 transition-all resize-none min-h-[120px]"
+                    required
+                />
+            </div>
+
+            <button
+                type="submit"
+                disabled={isSubmitting}
+                data-aos="fade-up" data-aos-duration="1000"
+                className="relative w-full h-12 bg-gradient-to-r from-[#06B6D4] to-[#FFD6E7] rounded-xl font-medium text-white overflow-hidden group transition-all duration-300 hover:scale-[1.02] hover:shadow-lg active:scale-[0.98] disabled:opacity-50 disabled:hover:scale-100 disabled:cursor-not-allowed"
+            >
+                <div className="absolute inset-0 bg-white/20 translate-y-12 group-hover:translate-y-0 transition-transform duration-300" />
+                <div className="relative flex items-center justify-center gap-2">
+                    {isSubmitting ? (
+                        <>
+                            <Loader2 className="w-4 h-4 animate-spin" />
+                            <span>Posting...</span>
+                        </>
+                    ) : (
+                        <>
+                            <Send className="w-4 h-4" />
+                            <span>Post Comment</span>
+                        </>
+                    )}
+                </div>
+            </button>
+        </form>
+    );
+});
+
+const Komentar = () => {
+    const [comments, setComments] = useState([]);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [error, setError] = useState('');
+
+    useEffect(() => {
+        AOS.init({
+            once: false,
+            duration: 1000,
+        });
+    }, []);
+
+    useEffect(() => {
+        const commentsRef = collection(db, 'portfolio-comments');
+        const q = query(commentsRef, orderBy('createdAt', 'desc'));
+        
+        return onSnapshot(q, (querySnapshot) => {
+            const commentsData = querySnapshot.docs.map((doc) => ({
+                id: doc.id,
+                ...doc.data(),
+            }));
+            setComments(commentsData);
+        });
+    }, []);
+
+    const handleCommentSubmit = useCallback(async ({ newComment, userName }) => {
+        setError('');
+        setIsSubmitting(true);
+        
+        try {
+            await addDoc(collection(db, 'portfolio-comments'), {
+                content: newComment,
+                userName,
+                createdAt: serverTimestamp(),
+            });
+        } catch (error) {
+            setError('Failed to post comment. Please try again.');
+            console.error('Error adding comment: ', error);
+        } finally {
+            setIsSubmitting(false);
+        }
+    }, []);
+
+    const formatDate = useCallback((timestamp) => {
+        if (!timestamp) return '';
+        const date = timestamp.toDate();
+        const now = new Date();
+        const diffMinutes = Math.floor((now - date) / (1000 * 60));
+        const diffHours = Math.floor(diffMinutes / 60);
+        const diffDays = Math.floor(diffHours / 24);
+
+        if (diffMinutes < 1) return 'Just now';
+        if (diffMinutes < 60) return `${diffMinutes}m ago`;
+        if (diffHours < 24) return `${diffHours}h ago`;
+        if (diffDays < 7) return `${diffDays}d ago`;
+
+        return new Intl.DateTimeFormat('en-US', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric'
+        }).format(date);
+    }, []);
+
+    return (
+        <div className="w-full bg-gradient-to-b from-white/10 to-white/5 rounded-2xl overflow-hidden backdrop-blur-xl shadow-xl" data-aos="fade-up" data-aos-duration="1000">
+            <div className="p-6 border-b border-white/10" data-aos="fade-down" data-aos-duration="800">
+                <div className="flex items-center gap-3">
+                    <div className="p-2 rounded-xl bg-[#06B6D4]/20">
+                        <MessageCircle className="w-6 h-6 text-[#06B6D4]" />
+                    </div>
+                    <h3 className="text-xl font-semibold text-white">
+                        Comments <span className="text-[#06B6D4]">({comments.length})</span>
+                    </h3>
+                </div>
+            </div>
+            <div className="p-6 space-y-6">
+                {error && (
+                    <div className="flex items-center gap-2 p-4 text-[#FFD6E7] bg-[#FFD6E7]/10 border border-[#FFD6E7]/20 rounded-xl" data-aos="fade-in">
+                        <AlertCircle className="w-5 h-5 flex-shrink-0" />
+                        <p className="text-sm">{error}</p>
+                    </div>
+                )}
+                
+                <div>
+                    <CommentForm onSubmit={handleCommentSubmit} isSubmitting={isSubmitting} error={error} />
+                </div>
+
+                <div className="space-y-4 h-[300px] overflow-y-auto custom-scrollbar" data-aos="fade-up" data-aos-delay="200">
+                    {comments.length === 0 ? (
+                        <div className="text-center py-8" data-aos="fade-in">
+                            <UserCircle2 className="w-12 h-12 text-[#06B6D4] mx-auto mb-3 opacity-50" />
+                            <p className="text-gray-400">No comments yet. Start the conversation!</p>
+                        </div>
+                    ) : (
+                        comments.map((comment, index) => (
+                            <Comment 
+                                key={comment.id} 
+                                comment={comment} 
+                                formatDate={formatDate}
+                                index={index}
+                            />
+                        ))
+                    )}
+                </div>
+            </div>
+            <style jsx>{`
+                .custom-scrollbar::-webkit-scrollbar {
+                    width: 6px;
+                }
+                .custom-scrollbar::-webkit-scrollbar-track {
+                    background: rgba(255, 255, 255, 0.05);
+                    border-radius: 6px;
+                }
+                .custom-scrollbar::-webkit-scrollbar-thumb {
+                    background: rgba(6, 182, 212, 0.5);
+                    border-radius: 6px;
+                }
+                .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+                    background: rgba(6, 182, 212, 0.7);
+                }
+            `}</style>
+        </div>
+    );
 };
 
-function a11yProps(index) {
-  return {
-    id: `full-width-tab-${index}`,
-    "aria-controls": `full-width-tabpanel-${index}`,
-  };
-}
-
-const techStacks = [
-  { icon: "html.svg", language: "HTML" },
-  { icon: "css.svg", language: "CSS" },
-  { icon: "javascript.svg", language: "JavaScript" },
-  { icon: "tailwind.svg", language: "Tailwind" },
-  { icon: "reactjs.svg", language: "ReactJS" },
-  { icon: "vite.svg", language: "Vite" },
-  { icon: "nodejs.svg", language: "Node JS" },
-  { icon: "bootstrap.svg", language: "Bootstrap" },
-  { icon: "firebase.svg", language: "Firebase" },
-  { icon: "MUI.svg", language: "MaterialUI" },
-  { icon: "vercel.svg", language: "Vercel" },
-  { icon: "https://res.cloudinary.com/dc3bfhgfd/image/upload/v1746962294/lua-2_crvnbm.png", language: "Lua" },
-];
-
-const Product = [
-  {
-    id: "Project",
-    Img: "https://res.cloudinary.com/dc3bfhgfd/image/upload/v1746961358/59fa7aa6-6943-4031-a37e-1a26fcde0b59_myujkf.png",
-    Title: "coming soon",
-    Description: "Description of project 1",
-    Link: "https://tenebris-web-sepia.vercel.app/",
-    TechStack: ["React", "Tailwind"]
-  },
-  {
-    id: "coming soon",
-    Img: "https://res.cloudinary.com/dc3bfhgfd/image/upload/v1746961358/59fa7aa6-6943-4031-a37e-1a26fcde0b59_myujkf.png",
-    Title: "coming soon",
-    Description: "coming soon",
-    Link: "https://tenebris-web-sepia.vercel.app/", // opsional
-    TechStack: ["React", "Tailwind"]
-  },
-];
-
-export default function FullWidthTabs() {
-  const theme = useTheme();
-  const [value, setValue] = useState(0);
-  const [showAllProduct, setShowAllProduct] = useState(false);
-  const isMobile = window.innerWidth < 768;
-  const initialItems = isMobile ? 4 : 6;
-
-  useEffect(() => {
-    AOS.init({
-      once: false,
-    });
-  }, []);
-
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
-
-  const toggleShowMore = () => {
-    setShowAllProduct(prev => !prev);
-  };
-
-  const displayedProduct = showAllProduct ? Product : Product.slice(0, initialItems);
-
-  return (
-    <div className="md:px-[10%] px-[5%] w-full sm:mt-0 mt-[3rem] bg-[#030014] overflow-hidden" id="Creations">
-      <div className="text-center pb-10" data-aos="fade-up" data-aos-duration="1000">
-        <h2 className="inline-block text-3xl md:text-5xl font-bold text-center mx-auto text-transparent bg-clip-text bg-gradient-to-r from-[#06B6D4] to-[#FFD6E7]">
-          Our Project
-        </h2>
-        <p className="text-slate-400 max-w-2xl mx-auto text-sm md:text-base mt-2">
-          EXPLORE OUR JOURNEY
-        </p>
-      </div>
-
-      <Box sx={{ width: "100%" }}>
-        <AppBar
-          position="static"
-          elevation={0}
-          sx={{
-            bgcolor: "transparent",
-            border: "1px solid rgba(255, 255, 255, 0.1)",
-            borderRadius: "20px",
-            position: "relative",
-            overflow: "hidden",
-            "&::before": {
-              content: '""',
-              position: "absolute",
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              background: "linear-gradient(180deg, rgba(6, 182, 212, 0.03) 0%, rgba(255, 214, 231, 0.03) 100%)",
-              backdropFilter: "blur(10px)",
-              zIndex: 0,
-            },
-          }}
-          className="md:px-4"
-        >
-          <Tabs
-            value={value}
-            onChange={handleChange}
-            textColor="secondary"
-            indicatorColor="secondary"
-            variant="fullWidth"
-            sx={{
-              minHeight: "70px",
-              "& .MuiTab-root": {
-                fontSize: { xs: "0.9rem", md: "1rem" },
-                fontWeight: "600",
-                color: "#94a3b8",
-                textTransform: "none",
-                transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
-                padding: "20px 0",
-                zIndex: 1,
-                margin: "8px",
-                borderRadius: "12px",
-                "&:hover": {
-                  color: "#ffffff",
-                  backgroundColor: "rgba(6, 182, 212, 0.1)",
-                  transform: "translateY(-2px)",
-                  "& .lucide": {
-                    transform: "scale(1.1) rotate(5deg)",
-                  },
-                },
-                "&.Mui-selected": {
-                  color: "#fff",
-                  background: "linear-gradient(135deg, rgba(6, 182, 212, 0.2), rgba(255, 214, 231, 0.2))",
-                  boxShadow: "0 4px 15px -3px rgba(6, 182, 212, 0.2)",
-                  "& .lucide": {
-                    color: "#06B6D4",
-                  },
-                },
-              },
-              "& .MuiTabs-indicator": {
-                height: 0,
-              },
-              "& .MuiTabs-flexContainer": {
-                gap: "8px",
-              },
-            }}
-          >
-            <Tab
-              icon={<Code className="mb-2 w-5 h-5 transition-all duration-300" />}
-              label="Product"
-              {...a11yProps(0)}
-            />
-            <Tab
-              icon={<Boxes className="mb-2 w-5 h-5 transition-all duration-300" />}
-              label="Tech Stack"
-              {...a11yProps(1)}
-            />
-          </Tabs>
-        </AppBar>
-
-        <SwipeableViews
-          axis={theme.direction === "rtl" ? "x-reverse" : "x"}
-          index={value}
-          onChangeIndex={setValue}
-        >
-          <TabPanel value={value} index={0} dir={theme.direction}>
-            <div className="container mx-auto flex justify-center items-center overflow-hidden">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 2xl:grid-cols-3 gap-5">
-                {displayedProduct.map((project, index) => (
-                  <div
-                    key={project.id || index}
-                    data-aos={index % 3 === 0 ? "fade-up-right" : index % 3 === 1 ? "fade-up" : "fade-up-left"}
-                    data-aos-duration={index % 3 === 0 ? "1000" : index % 3 === 1 ? "1200" : "1000"}
-                  >
-                    <CardProject
-                      Img={project.Img}
-                      Title={project.Title}
-                      Description={project.Description}
-                      Link={project.Link}
-                      id={project.id}
-                    />
-                  </div>
-                ))}
-              </div>
-            </div>
-            {Product.length > initialItems && (
-              <div className="mt-6 w-full flex justify-start">
-                <ToggleButton
-                  onClick={toggleShowMore}
-                  isShowingMore={showAllProduct}
-                />
-              </div>
-            )}
-          </TabPanel>
-
-          <TabPanel value={value} index={1} dir={theme.direction}>
-            <div className="container mx-auto flex justify-center items-center overflow-hidden pb-[5%]">
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 lg:gap-8 gap-5">
-                {techStacks.map((stack, index) => (
-                  <div
-                    key={index}
-                    data-aos={index % 3 === 0 ? "fade-up-right" : index % 3 === 1 ? "fade-up" : "fade-up-left"}
-                    data-aos-duration={index % 3 === 0 ? "1000" : index % 3 === 1 ? "1200" : "1000"}
-                  >
-                    <TechStackIcon TechStackIcon={stack.icon} Language={stack.language} />
-                  </div>
-                ))}
-              </div>
-            </div>
-          </TabPanel>
-        </SwipeableViews>
-      </Box>
-    </div>
-  );
-}
+export default Komentar;
