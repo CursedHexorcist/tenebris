@@ -30,8 +30,8 @@ const Header = memo(() => (
 const ProfileImageSlider = memo(() => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const images = [
-    "https://res.cloudinary.com/dc3bfhgfd/image/upload/v1746895304/WhatsApp_Image_2025-05-10_at_23.41.09_c9477554_b9p8q1.jpg",
-    "https://res.cloudinary.com/dc3bfhgfd/image/upload/v1746895304/WhatsApp_Image_2025-05-10_at_23.41.09_c9477554_b9p8q1.jpg" // Using same image for demo
+    "https://res.cloudinary.com/dc3bfhgfd/image/upload/v1746947564/WhatsApp_Image_2025-05-11_at_14.07.23_73b83b9c_zakzbj.jpg",
+    "https://res.cloudinary.com/dc3bfhgfd/image/upload/v1746947607/nierautomata_gakyda.jpg" // Using same image for demo
   ];
 
   const nextSlide = () => {
