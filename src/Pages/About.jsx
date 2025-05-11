@@ -1,5 +1,5 @@
 import React, { useEffect, memo, useMemo, useState } from "react";
-import { MessageCircle, Code, Globe, ArrowUpRight, Sparkles } from "lucide-react";
+import { MessageCircle, Code, Globe, ArrowUpRight, Sparkles, ChevronLeft, ChevronRight } from "lucide-react";
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 
@@ -27,43 +27,100 @@ const Header = memo(() => (
   </div>
 ));
 
-const ProfileImage = memo(() => (
-  <div className="flex justify-end items-center sm:p-12 sm:py-0 sm:pb-0 p-0 py-2 pb-2">
-    <div 
-      className="relative group" 
-      data-aos="fade-up"
-      data-aos-duration="1000"
-    >
-      <div className="absolute -inset-6 opacity-[25%] z-0 hidden sm:block">
-        <div className="absolute inset-0 bg-gradient-to-r from-[#06B6D4] via-[#06B6D4] to-[#FFD6E7] rounded-full blur-2xl animate-spin-slower" />
-        <div className="absolute inset-0 bg-gradient-to-l from-[#FFD6E7] via-white to-[#06B6D4] rounded-full blur-2xl animate-pulse-slow opacity-50" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#06B6D4] via-white to-[#FFD6E7] rounded-full blur-2xl animate-float opacity-50" />
-      </div>
+const ProfileImageSlider = memo(() => {
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const images = [
+    "https://res.cloudinary.com/dc3bfhgfd/image/upload/v1746895304/WhatsApp_Image_2025-05-10_at_23.41.09_c9477554_b9p8q1.jpg",
+    "https://res.cloudinary.com/dc3bfhgfd/image/upload/v1746895304/WhatsApp_Image_2025-05-10_at_23.41.09_c9477554_b9p8q1.jpg" // Using same image for demo
+  ];
 
-      <div className="relative">
-        <div className="w-72 h-72 sm:w-80 sm:h-80 rounded-full overflow-hidden shadow-[0_0_40px_rgba(6,182,212,0.3)] transform transition-all duration-700 group-hover:scale-105">
-          <div className="absolute inset-0 border-4 border-white/20 rounded-full z-20 transition-all duration-700 group-hover:border-white/40 group-hover:scale-105" />
-          
-          <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/40 z-10 transition-opacity duration-700 group-hover:opacity-0 hidden sm:block" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#06B6D4]/20 via-transparent to-[#FFD6E7]/20 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-700 hidden sm:block" />
-          
-          <img
-            src="https://res.cloudinary.com/dc3bfhgfd/image/upload/v1746895304/WhatsApp_Image_2025-05-10_at_23.41.09_c9477554_b9p8q1.jpg"
-            alt="Profile"
-            className="w-full h-full object-cover transition-all duration-700 group-hover:scale-110 group-hover:rotate-2"
-            loading="lazy"
-          />
+  const nextSlide = () => {
+    setCurrentSlide((prev) => (prev === images.length - 1 ? 0 : prev + 1));
+  };
 
-          <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-all duration-700 z-20 hidden sm:block">
-            <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-transparent transform -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
-            <div className="absolute inset-0 bg-gradient-to-bl from-transparent via-white/10 to-transparent transform translate-y-full group-hover:-translate-y-full transition-transform duration-1000 delay-100" />
-            <div className="absolute inset-0 rounded-full border-8 border-white/10 scale-0 group-hover:scale-100 transition-transform duration-700 animate-pulse-slow" />
-          </div>
+  const prevSlide = () => {
+    setCurrentSlide((prev) => (prev === 0 ? images.length - 1 : prev - 1));
+  };
+
+  return (
+    <div className="flex justify-end items-center sm:p-12 sm:py-0 sm:pb-0 p-0 py-2 pb-2 relative">
+      <div 
+        className="relative group w-full max-w-[20rem] mx-auto" 
+        data-aos="fade-up"
+        data-aos-duration="1000"
+      >
+        {/* Glow effects */}
+        <div className="absolute -inset-6 opacity-[25%] z-0 hidden sm:block">
+          <div className="absolute inset-0 bg-gradient-to-r from-[#06B6D4] via-[#06B6D4] to-[#FFD6E7] rounded-full blur-2xl animate-spin-slower" />
+          <div className="absolute inset-0 bg-gradient-to-l from-[#FFD6E7] via-white to-[#06B6D4] rounded-full blur-2xl animate-pulse-slow opacity-50" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#06B6D4] via-white to-[#FFD6E7] rounded-full blur-2xl animate-float opacity-50" />
+        </div>
+
+        {/* Slider container */}
+        <div className="relative overflow-hidden w-72 h-72 sm:w-80 sm:h-80 rounded-full mx-auto">
+          {images.map((img, index) => (
+            <div
+              key={index}
+              className={`absolute inset-0 transition-opacity duration-500 ${
+                index === currentSlide ? 'opacity-100' : 'opacity-0 pointer-events-none'
+              }`}
+            >
+              <div className="w-full h-full rounded-full overflow-hidden shadow-[0_0_40px_rgba(6,182,212,0.3)] transform transition-all duration-700 group-hover:scale-105">
+                <div className="absolute inset-0 border-4 border-white/20 rounded-full z-20 transition-all duration-700 group-hover:border-white/40 group-hover:scale-105" />
+                
+                <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/40 z-10 transition-opacity duration-700 group-hover:opacity-0 hidden sm:block" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#06B6D4]/20 via-transparent to-[#FFD6E7]/20 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-700 hidden sm:block" />
+                
+                <img
+                  src={img}
+                  alt={`Profile ${index + 1}`}
+                  className="w-full h-full object-cover transition-all duration-700 group-hover:scale-110 group-hover:rotate-2"
+                  loading="lazy"
+                />
+
+                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-all duration-700 z-20 hidden sm:block">
+                  <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-transparent transform -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+                  <div className="absolute inset-0 bg-gradient-to-bl from-transparent via-white/10 to-transparent transform translate-y-full group-hover:-translate-y-full transition-transform duration-1000 delay-100" />
+                  <div className="absolute inset-0 rounded-full border-8 border-white/10 scale-0 group-hover:scale-100 transition-transform duration-700 animate-pulse-slow" />
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Navigation arrows */}
+        <button
+          onClick={prevSlide}
+          className="absolute left-0 top-1/2 -translate-y-1/2 z-20 bg-black/50 hover:bg-black/70 rounded-full p-2 transition-all duration-300 shadow-lg"
+          aria-label="Previous image"
+        >
+          <ChevronLeft className="w-6 h-6 text-white" />
+        </button>
+        <button
+          onClick={nextSlide}
+          className="absolute right-0 top-1/2 -translate-y-1/2 z-20 bg-black/50 hover:bg-black/70 rounded-full p-2 transition-all duration-300 shadow-lg"
+          aria-label="Next image"
+        >
+          <ChevronRight className="w-6 h-6 text-white" />
+        </button>
+
+        {/* Dots indicator */}
+        <div className="flex justify-center mt-4 space-x-2">
+          {images.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => setCurrentSlide(index)}
+              className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                index === currentSlide ? 'bg-[#06B6D4] w-6' : 'bg-gray-500/50'
+              }`}
+              aria-label={`Go to slide ${index + 1}`}
+            />
+          ))}
         </div>
       </div>
     </div>
-  </div>
-));
+  );
+});
 
 const StatCard = memo(({ icon: Icon, color, value, label, description, animation }) => (
   <div data-aos={animation} data-aos-duration={1300} className="relative group">
@@ -260,7 +317,7 @@ const AboutPage = () => {
             </div>
           </div>
 
-          <ProfileImage />
+          <ProfileImageSlider />
         </div>
 
         <a href="#Creations">
