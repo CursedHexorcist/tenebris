@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 
-const TypewriterEffect = ({ text }) => {
+const TypewriterEffect = ({ text, className = "" }) => {
   const [displayText, setDisplayText] = useState('');
 
   useEffect(() => {
@@ -15,13 +15,13 @@ const TypewriterEffect = ({ text }) => {
       } else {
         clearInterval(timer);
       }
-    }, 100); // Kecepatan dikurangi untuk efek lebih smooth
+    }, 100);
 
     return () => clearInterval(timer);
   }, [text]);
 
   return (
-    <span className="inline-block">
+    <span className={`inline-block ${className}`}>
       {displayText}
       <span className="animate-pulse">|</span>
     </span>
@@ -125,23 +125,11 @@ const WelcomeScreen = ({ onLoadingComplete }) => {
     }
   };
 
-  const glowVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 0.5,
-      transition: {
-        duration: 1.5,
-        repeat: Infinity,
-        repeatType: "reverse"
-      }
-    }
-  };
-
   return (
     <AnimatePresence>
       {isLoading && (
         <motion.div
-          className="fixed inset-0 bg-[#050017] overflow-hidden flex items-center justify-center"
+          className="fixed inset-0 bg-[#050017] overflow-hidden flex items-center justify-center font-poppins"
           initial="hidden"
           animate="visible"
           exit="exit"
@@ -151,34 +139,50 @@ const WelcomeScreen = ({ onLoadingComplete }) => {
 
           {showContent && (
             <div className="relative z-10 text-center px-4 w-full max-w-4xl mx-auto">
-              <motion.div
-                className="absolute -inset-8 bg-gradient-to-r from-indigo-500/30 via-purple-500/30 to-pink-500/30 rounded-full blur-3xl"
-                variants={glowVariants}
-              />
+              {/* Main Glow Container */}
+              <div className="absolute -inset-8 bg-gradient-to-r from-indigo-500/30 via-purple-500/30 to-pink-500/30 rounded-full blur-3xl animate-glow-pulse" />
               
+              {/* Text Container */}
               <motion.div
-                className="text-center mb-6 sm:mb-8 md:mb-12"
+                className="text-center mb-6 sm:mb-8 md:mb-12 relative"
                 variants={textVariants}
               >
                 <h1 className="text-3xl sm:text-4xl md:text-6xl font-bold space-y-2 sm:space-y-4">
-                  <div className="mb-2 sm:mb-4">
-                    <TypewriterEffect text="Welcome to" />
+                  <div className="mb-2 sm:mb-4 relative">
+                    {/* White "Welcome to" with glow */}
+                    <div className="relative inline-block">
+                      <div className="absolute -inset-1 bg-white/20 rounded-full blur-md" />
+                      <TypewriterEffect 
+                        text="Welcome to" 
+                        className="text-white font-medium tracking-wider"
+                      />
+                    </div>
                   </div>
-                  <div>
-                    <span className="inline-block px-2 bg-gradient-to-r from-cyan-400 via-blue-300 to-purple-400 bg-clip-text text-transparent">
-                      TENEBRIS
-                    </span>{' '}
-                    <span className="inline-block px-2 bg-gradient-to-r from-cyan-400 via-blue-300 to-purple-400 bg-clip-text text-transparent">
-                      HUB
-                    </span>
+                  <div className="mt-8">
+                    {/* TENEBRIS with glow */}
+                    <div className="relative inline-block mx-2 group">
+                      <div className="absolute -inset-1 bg-gradient-to-r from-cyan-400/40 to-purple-500/40 rounded-full blur-lg group-hover:blur-xl transition-all duration-300" />
+                      <span className="relative inline-block px-2 bg-gradient-to-r from-cyan-400 via-blue-300 to-purple-400 bg-clip-text text-transparent">
+                        TENEBRIS
+                      </span>
+                    </div>
+                    {/* HUB with glow */}
+                    <div className="relative inline-block mx-2 group">
+                      <div className="absolute -inset-1 bg-gradient-to-r from-cyan-400/40 to-purple-500/40 rounded-full blur-lg group-hover:blur-xl transition-all duration-300" />
+                      <span className="relative inline-block px-2 bg-gradient-to-r from-cyan-400 via-blue-300 to-purple-400 bg-clip-text text-transparent">
+                        HUB
+                      </span>
+                    </div>
                   </div>
                 </h1>
               </motion.div>
 
+              {/* Loading Bar with Glow */}
               <motion.div
-                className="flex justify-center"
+                className="flex justify-center relative group"
                 variants={textVariants}
               >
+                <div className="absolute -inset-1 bg-gradient-to-r from-cyan-400/20 to-purple-500/20 rounded-full blur opacity-0 group-hover:opacity-50 transition-opacity duration-300" />
                 <div className="relative w-48 h-1 bg-gray-700 rounded-full overflow-hidden">
                   <motion.div
                     className="absolute top-0 left-0 h-full bg-gradient-to-r from-cyan-400 to-purple-500"
