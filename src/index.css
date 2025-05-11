@@ -107,6 +107,42 @@ body {
    animation: shine 1.5s ease-in-out infinite;
  }
 
+/* ===== Custom Cursor Styles ===== */
+html.custom-cursor-active,
+html.custom-cursor-active body {
+  cursor: none !important;
+}
+
+.custom-cursor {
+  position: fixed;
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.8);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  mix-blend-mode: difference;
+  transform: translate(-50%, -50%);
+  transition: 
+    transform 0.15s ease,
+    width 0.15s ease,
+    height 0.15s ease,
+    border-color 0.3s ease;
+  will-change: transform;
+}
+
+.custom-cursor.cursor-hover {
+  transform: translate(-50%, -50%) scale(1.5);
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+/* Exception for elements that need default cursor */
+.keep-default-cursor,
+.keep-default-cursor * {
+  cursor: auto !important;
+}
+
   
 /*   @media (prefers-color-scheme: dark) {
 	::-webkit-scrollbar-track {
