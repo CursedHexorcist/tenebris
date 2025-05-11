@@ -68,108 +68,38 @@ const socialLinks = [
 ];
 
 const SocialLinks = () => {
-  const linkedIn = socialLinks.find(link => link.isPrimary);
-  const otherLinks = socialLinks.filter(link => !link.isPrimary);
-  const [instagram, youtube, github, tiktok] = otherLinks;
-
   return (
-    <div className="w-full bg-gradient-to-br from-white/5 to-transparent rounded-3xl p-6 backdrop-blur-xl border border-white/10 shadow-lg">
-      <div className="flex items-center gap-3 mb-6">
-        <div className={`w-8 h-8 rounded-lg flex items-center justify-center bg-gradient-to-br ${linkedIn.gradient}`}>
-          <Linkedin className="w-4 h-4 text-white" />
-        </div>
-        <h3 className="text-xl font-bold text-white">
-          My Social Links
-        </h3>
+    <div className="w-full bg-white/5 rounded-lg p-4 backdrop-blur-sm border border-white/10">
+      <div className="mb-4">
+        <h3 className="text-lg font-semibold text-white">Connect With Me</h3>
+        <div className="w-full h-px bg-white/10 mt-2"></div>
       </div>
 
-      <div className="flex flex-col gap-3">
-        {/* LinkedIn - Primary Card */}
-        <a
-          href={linkedIn.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="group relative flex items-center p-4 rounded-xl 
-                   bg-gradient-to-br from-white/5 to-white/10 border border-white/10
-                   hover:border-white/20 transition-all duration-300 overflow-hidden"
-        >
-          {/* Gradient overlay on hover */}
-          <div 
-            className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500
-                       bg-gradient-to-r ${linkedIn.gradient}`}
-          />
-          
-          <div className="relative flex items-center gap-4 z-10">
-            {/* Icon with animated background */}
-            <div className="relative flex items-center justify-center">
+      <div className="flex flex-col gap-2">
+        {socialLinks.map((link) => (
+          <a
+            key={link.name}
+            href={link.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group flex items-center justify-between p-3 rounded-md
+                     bg-white/5 border border-white/10 hover:bg-white/10
+                     transition-all duration-200"
+          >
+            <div className="flex items-center gap-3">
               <div 
-                className="absolute inset-0 rounded-lg bg-white/10 backdrop-blur-sm
-                           group-hover:scale-110 transition-transform duration-500"
-              />
-              <div className="relative p-2">
-                <linkedIn.icon
-                  className="w-5 h-5 transition-all duration-300 group-hover:scale-110"
-                  style={{ color: linkedIn.color }}
-                />
+                className={`p-2 rounded-md bg-gradient-to-br ${link.gradient}`}
+              >
+                <link.icon className="w-4 h-4 text-white" />
+              </div>
+              <div>
+                <div className="text-sm font-medium text-white">{link.displayName}</div>
+                <div className="text-xs text-white/70">{link.subText}</div>
               </div>
             </div>
-
-            {/* Text content */}
-            <div className="flex-1">
-              <div className="text-lg font-bold text-white">{linkedIn.displayName}</div>
-              <div className="text-sm text-white/80">{linkedIn.subText}</div>
-            </div>
-
-            {/* External link icon */}
-            <ExternalLink 
-              className="w-4 h-4 text-white/50 group-hover:text-white
-                         transition-all duration-300 group-hover:translate-x-1"
-            />
-          </div>
-        </a>
-
-        {/* Secondary Links Grid */}
-        <div className="grid grid-cols-2 gap-3">
-          {[instagram, youtube, github, tiktok].map((link) => (
-            <a
-              key={link.name}
-              href={link.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group relative flex items-center p-3 rounded-lg 
-                       bg-white/5 border border-white/10 hover:border-white/20
-                       transition-all duration-300 overflow-hidden"
-            >
-              {/* Gradient overlay on hover */}
-              <div 
-                className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500
-                           bg-gradient-to-br ${link.gradient}`}
-              />
-              
-              <div className="relative flex items-center gap-3 z-10">
-                {/* Icon */}
-                <div className="relative flex items-center justify-center">
-                  <div 
-                    className="absolute inset-0 rounded-md bg-white/10 backdrop-blur-sm
-                               group-hover:scale-110 transition-transform duration-500"
-                  />
-                  <div className="relative p-1.5">
-                    <link.icon
-                      className="w-4 h-4 transition-all duration-300 group-hover:scale-110"
-                      style={{ color: link.color }}
-                    />
-                  </div>
-                </div>
-
-                {/* Text */}
-                <div className="flex-1 min-w-0">
-                  <div className="text-sm font-medium text-white truncate">{link.displayName}</div>
-                  <div className="text-xs text-white/70 truncate">{link.subText}</div>
-                </div>
-              </div>
-            </a>
-          ))}
-        </div>
+            <ExternalLink className="w-4 h-4 text-white/40 group-hover:text-white transition-colors" />
+          </a>
+        ))}
       </div>
     </div>
   );
