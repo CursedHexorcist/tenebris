@@ -106,7 +106,7 @@ const techStacks = [
   { icon: "firebase.svg", language: "Firebase" },
   { icon: "MUI.svg", language: "MaterialUI" },
   { icon: "vercel.svg", language: "Vercel" },
-  { icon: "SweetAlert.svg", language: "SweetAlert2" },
+  { icon: "https://res.cloudinary.com/dc3bfhgfd/image/upload/v1746962294/lua-2_crvnbm.png", language: "Lua" },
 ];
 
 const Product = [
