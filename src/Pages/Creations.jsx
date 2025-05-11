@@ -109,7 +109,7 @@ const techStacks = [
   { icon: "SweetAlert.svg", language: "SweetAlert2" },
 ];
 
-const projects = [
+const Product = [
   {
     id: "Project",
     Img: "https://res.cloudinary.com/dc3bfhgfd/image/upload/v1746961358/59fa7aa6-6943-4031-a37e-1a26fcde0b59_myujkf.png",
@@ -131,7 +131,7 @@ const projects = [
 export default function FullWidthTabs() {
   const theme = useTheme();
   const [value, setValue] = useState(0);
-  const [showAllProjects, setShowAllProjects] = useState(false);
+  const [showAllProduct, setShowAllProduct] = useState(false);
   const isMobile = window.innerWidth < 768;
   const initialItems = isMobile ? 4 : 6;
 
@@ -146,10 +146,10 @@ export default function FullWidthTabs() {
   };
 
   const toggleShowMore = () => {
-    setShowAllProjects(prev => !prev);
+    setShowAllProduct(prev => !prev);
   };
 
-  const displayedProjects = showAllProjects ? projects : projects.slice(0, initialItems);
+  const displayedProduct = showAllProduct ? Product : Product.slice(0, initialItems);
 
   return (
     <div className="md:px-[10%] px-[5%] w-full sm:mt-0 mt-[3rem] bg-[#030014] overflow-hidden" id="Creations">
@@ -231,7 +231,7 @@ export default function FullWidthTabs() {
           >
             <Tab
               icon={<Code className="mb-2 w-5 h-5 transition-all duration-300" />}
-              label="Projects"
+              label="Product"
               {...a11yProps(0)}
             />
             <Tab
@@ -250,7 +250,7 @@ export default function FullWidthTabs() {
           <TabPanel value={value} index={0} dir={theme.direction}>
             <div className="container mx-auto flex justify-center items-center overflow-hidden">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 2xl:grid-cols-3 gap-5">
-                {displayedProjects.map((project, index) => (
+                {displayedProduct.map((project, index) => (
                   <div
                     key={project.id || index}
                     data-aos={index % 3 === 0 ? "fade-up-right" : index % 3 === 1 ? "fade-up" : "fade-up-left"}
@@ -267,11 +267,11 @@ export default function FullWidthTabs() {
                 ))}
               </div>
             </div>
-            {projects.length > initialItems && (
+            {Product.length > initialItems && (
               <div className="mt-6 w-full flex justify-start">
                 <ToggleButton
                   onClick={toggleShowMore}
-                  isShowingMore={showAllProjects}
+                  isShowingMore={showAllProduct}
                 />
               </div>
             )}
