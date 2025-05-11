@@ -210,34 +210,51 @@ const AboutPage = () => {
                 href="https://www.instagram.com/gwen.example" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="w-full lg:w-auto"
+                className="w-full lg:w-auto relative group"
                 onMouseEnter={() => setIsHoveringGwen(true)}
                 onMouseLeave={() => setIsHoveringGwen(false)}
               >
+                <div className={`absolute inset-0 rounded-lg bg-gradient-to-r from-[#06B6D4] to-[#FFD6E7] transition-all duration-300 ${isHoveringGwen ? 'opacity-0' : 'opacity-100'}`}></div>
+                <div className={`absolute inset-0 bg-[#030014] rounded-lg border border-transparent transition-all duration-300 ${isHoveringGwen ? 'opacity-100 border-gradient' : 'opacity-0'}`}>
+                  <div className="absolute inset-0 rounded-lg border-2 border-transparent bg-clip-padding" style={{
+                    backgroundImage: 'linear-gradient(#030014, #030014), linear-gradient(to right, #06B6D4, #FFD6E7)',
+                    backgroundOrigin: 'border-box',
+                    backgroundClip: 'content-box, border-box'
+                  }}></div>
+                </div>
                 <button 
                   data-aos="fade-up"
                   data-aos-duration="800"
-                  className={`w-full lg:w-auto sm:px-6 py-2 sm:py-3 rounded-lg bg-gradient-to-r from-[#06B6D4] to-[#FFD6E7] text-white font-medium transition-all duration-300 hover:scale-105 flex items-center justify-center lg:justify-start gap-2 shadow-lg hover:shadow-xl animate-bounce-slow ${isHoveringGwen ? 'from-[#FFD6E7] to-[#06B6D4]' : ''}`}
+                  className="relative w-full lg:w-auto sm:px-6 py-2 sm:py-3 rounded-lg text-white font-medium flex items-center justify-center lg:justify-start gap-2 animate-bounce-slow"
                 >
                   <MessageCircle className="w-4 h-4 sm:w-5 sm:h-5" /> 
-                  {isHoveringNier ? "Chat With Gwen" : "Chat With Gwen"}
+                  Chat With Gwen
                 </button>
               </a>
+
               <a 
                 href="https://www.instagram.com/nier.example" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="w-full lg:w-auto"
+                className="w-full lg:w-auto relative group"
                 onMouseEnter={() => setIsHoveringNier(true)}
                 onMouseLeave={() => setIsHoveringNier(false)}
               >
+                <div className={`absolute inset-0 rounded-lg bg-gradient-to-r from-[#06B6D4] to-[#FFD6E7] transition-all duration-300 ${isHoveringNier ? 'opacity-0' : 'opacity-100'}`}></div>
+                <div className={`absolute inset-0 bg-[#030014] rounded-lg border border-transparent transition-all duration-300 ${isHoveringNier ? 'opacity-100 border-gradient' : 'opacity-0'}`}>
+                  <div className="absolute inset-0 rounded-lg border-2 border-transparent bg-clip-padding" style={{
+                    backgroundImage: 'linear-gradient(#030014, #030014), linear-gradient(to right, #06B6D4, #FFD6E7)',
+                    backgroundOrigin: 'border-box',
+                    backgroundClip: 'content-box, border-box'
+                  }}></div>
+                </div>
                 <button 
                   data-aos="fade-up"
                   data-aos-duration="1000"
-                  className={`w-full lg:w-auto sm:px-6 py-2 sm:py-3 rounded-lg border border-[#FFD6E7]/50 text-[#FFD6E7] font-medium transition-all duration-300 hover:scale-105 flex items-center justify-center lg:justify-start gap-2 hover:bg-[#FFD6E7]/10 animate-bounce-slow delay-200 ${isHoveringNier ? 'bg-gradient-to-r from-[#FFD6E7] to-[#06B6D4] text-white border-transparent' : ''}`}
+                  className="relative w-full lg:w-auto sm:px-6 py-2 sm:py-3 rounded-lg text-white font-medium flex items-center justify-center lg:justify-start gap-2 animate-bounce-slow delay-200"
                 >
                   <MessageCircle className="w-4 h-4 sm:w-5 sm:h-5" /> 
-                  {isHoveringNier ? "Chat With Nier" : "Chat With Nier"}
+                  Chat With Nier
                 </button>
               </a>
             </div>
