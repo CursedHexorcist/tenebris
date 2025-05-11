@@ -159,17 +159,13 @@ const WelcomeScreen = ({ onLoadingComplete }) => {
                     </div>
                   </div>
                   <div className="mt-8 flex items-center justify-center space-x-[2px]">
-                    {/* TENEBRIS with glow */}
                     <div className="relative inline-block group">
-                      <div className="absolute -inset-1 bg-gradient-to-r from-cyan-400/40 to-purple-500/40 rounded-full blur-lg group-hover:blur-xl transition-all duration-300" />
-                      <span className="relative inline-block px-2 bg-gradient-to-r from-cyan-400 via-blue-300 to-purple-400 bg-clip-text text-transparent">
+                      <span className="relative inline-block px-[2px] bg-gradient-to-r from-cyan-400 via-blue-300 to-purple-400 bg-clip-text text-transparent">
                         TENEBRIS
                       </span>
                     </div>
-                    {/* HUB with glow */}
                     <div className="relative inline-block group">
-                      <div className="absolute -inset-1 bg-gradient-to-r from-cyan-400/40 to-purple-500/40 rounded-full blur-lg group-hover:blur-xl transition-all duration-300" />
-                      <span className="relative inline-block px-2 bg-gradient-to-r from-cyan-400 via-blue-300 to-purple-400 bg-clip-text text-transparent">
+                      <span className="relative inline-block px-[2px] bg-gradient-to-r from-cyan-400 via-blue-300 to-purple-400 bg-clip-text text-transparent">
                         HUB
                       </span>
                     </div>
