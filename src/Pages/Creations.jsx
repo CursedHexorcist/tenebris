@@ -119,12 +119,12 @@ const projects = [
     TechStack: ["React", "Tailwind"]
   },
   {
-    id: 2,
-    Img: "project2.jpg",
-    Title: "Project 2",
-    Description: "Description of project 2",
-    Link: "#",
-    TechStack: ["React", "Firebase"]
+    id: "Buy Script",
+    Img: "your-image.jpg",
+    Title: "Buy Script",
+    Description: "Penjelasan tentang project Buy Script",
+    Link: "https://demo-link.com", // opsional
+    TechStack: ["React", "Tailwind"]
   },
 ];
 
