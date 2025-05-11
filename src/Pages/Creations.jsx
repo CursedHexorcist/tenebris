@@ -111,7 +111,7 @@ const techStacks = [
 
 const projects = [
   {
-    id: 1,
+    id: "Project",
     Img: "project1.jpg",
     Title: "Project 1",
     Description: "Description of project 1",
