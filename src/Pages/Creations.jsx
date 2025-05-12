@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState, useCallback } from "react";
+import { db, collection } from "../firebase";
+import { getDocs } from "firebase/firestore";
 import PropTypes from "prop-types";
 import SwipeableViews from "react-swipeable-views";
 import { useTheme } from "@mui/material/styles";
@@ -11,8 +13,9 @@ import CardProject from "../components/CardProject";
 import TechStackIcon from "../components/TechStackIcon";
 import AOS from "aos";
 import "aos/dist/aos.css";
-import { Code, Boxes, Fish, Gamepad2, Globe, Award, Headphones, Zap } from "lucide-react";
+import { Code, Boxes } from "lucide-react";
 
+// Separate ShowMore/ShowLess button component
 const ToggleButton = ({ onClick, isShowingMore }) => (
   <button
     onClick={onClick}
@@ -52,14 +55,16 @@ const ToggleButton = ({ onClick, isShowingMore }) => (
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
-        className={`transition-transform duration-300 ${
-          isShowingMore ? "group-hover:-translate-y-0.5" : "group-hover:translate-y-0.5"
-        }`}
+        className={`
+          transition-transform 
+          duration-300 
+          ${isShowingMore ? "group-hover:-translate-y-0.5" : "group-hover:translate-y-0.5"}
+        `}
       >
         <polyline points={isShowingMore ? "18 15 12 9 6 15" : "6 9 12 15 18 9"}></polyline>
       </svg>
     </span>
-    <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-[#06B6D4] to-[#FFD6E7] transition-all duration-300 group-hover:w-full"></span>
+    <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-purple-500/50 transition-all duration-300 group-hover:w-full"></span>
   </button>
 );
 
@@ -98,140 +103,89 @@ const techStacks = [
   { icon: "html.svg", language: "HTML" },
   { icon: "css.svg", language: "CSS" },
   { icon: "javascript.svg", language: "JavaScript" },
-  { icon: "tailwind.svg", language: "Tailwind" },
+  { icon: "tailwind.svg", language: "Tailwind CSS" },
   { icon: "reactjs.svg", language: "ReactJS" },
   { icon: "vite.svg", language: "Vite" },
   { icon: "nodejs.svg", language: "Node JS" },
   { icon: "bootstrap.svg", language: "Bootstrap" },
   { icon: "firebase.svg", language: "Firebase" },
-  { icon: "MUI.svg", language: "MaterialUI" },
+  { icon: "MUI.svg", language: "Material UI" },
   { icon: "vercel.svg", language: "Vercel" },
-  { icon: "https://res.cloudinary.com/dc3bfhgfd/image/upload/v1746962294/lua-2_crvnbm.png", language: "Lua" },
-];
-
-const Product = [
-  {
-    id: "project1",
-    Img: "https://res.cloudinary.com/dc3bfhgfd/image/upload/v1746961358/59fa7aa6-6943-4031-a37e-1a26fcde0b59_myujkf.png",
-    Title: "Fisch Project",
-    Description: "An innovative fish tracking app",
-    Link: "#",
-    TechStack: ["React", "Tailwind"],
-    category: "fisch"
-  },
-  {
-    id: "project2",
-    Img: "https://res.cloudinary.com/dc3bfhgfd/image/upload/v1746961358/59fa7aa6-6943-4031-a37e-1a26fcde0b59_myujkf.png",
-    Title: "Roblox Game",
-    Description: "Exciting adventure game on Roblox",
-    Link: "#",
-    TechStack: ["Lua", "Roblox"],
-    category: "roblox"
-  },
-  {
-    id: "project3",
-    Img: "https://res.cloudinary.com/dc3bfhgfd/image/upload/v1746961358/59fa7aa6-6943-4031-a37e-1a26fcde0b59_myujkf.png",
-    Title: "Web Application",
-    Description: "Modern web application",
-    Link: "#",
-    TechStack: ["React", "NodeJS"],
-    category: "web"
-  },
-  {
-    id: "project4",
-    Img: "https://res.cloudinary.com/dc3bfhgfd/image/upload/v1746961358/59fa7aa6-6943-4031-a37e-1a26fcde0b59_myujkf.png",
-    Title: "Fisch Analytics",
-    Description: "Data analytics for fish populations",
-    Link: "#",
-    TechStack: ["React", "Firebase"],
-    category: "fisch"
-  },
-  {
-    id: "project5",
-    Img: "https://res.cloudinary.com/dc3bfhgfd/image/upload/v1746961358/59fa7aa6-6943-4031-a37e-1a26fcde0b59_myujkf.png",
-    Title: "Roblox Tycoon",
-    Description: "Build your empire in Roblox",
-    Link: "#",
-    TechStack: ["Lua", "Roblox"],
-    category: "roblox"
-  },
-  {
-    id: "project6",
-    Img: "https://res.cloudinary.com/dc3bfhgfd/image/upload/v1746961358/59fa7aa6-6943-4031-a37e-1a26fcde0b59_myujkf.png",
-    Title: "Portfolio Website",
-    Description: "Professional portfolio site",
-    Link: "#",
-    TechStack: ["HTML", "CSS"],
-    category: "web"
-  },
-];
-
-const categories = [
-  { id: "all", name: "All Projects", icon: <Boxes className="w-4 h-4" /> },
-  { id: "fisch", name: "Fisch", icon: <Fish className="w-4 h-4" /> },
-  { id: "roblox", name: "Roblox", icon: <Gamepad2 className="w-4 h-4" /> },
-  { id: "web", name: "Web", icon: <Globe className="w-4 h-4" /> },
-];
-
-const benefits = [
-  {
-    title: "Premium Quality, Accessible Pricing",
-    description: "Enterprise-grade products at a fraction of traditional costs.",
-    icon: <Award className="w-6 h-6 text-[#06B6D4]" />
-  },
-  {
-    title: "Comprehensive Technical Support",
-    description: "Dedicated professional assistance ensuring seamless implementation and performance.",
-    icon: <Headphones className="w-6 h-6 text-[#06B6D4]" />
-  },
-  {
-    title: "Maximize Your Value",
-    description: "Strategic pricing engineered to deliver unbeatable value, optimize your spend, and drive unprecedented success ingame.",
-    icon: <Zap className="w-6 h-6 text-[#06B6D4]" />
-  }
+  { icon: "SweetAlert.svg", language: "SweetAlert2" },
 ];
 
 export default function FullWidthTabs() {
   const theme = useTheme();
   const [value, setValue] = useState(0);
-  const [showAllProduct, setShowAllProduct] = useState(false);
-  const [activeCategory, setActiveCategory] = useState("all");
+  const [projects, setProjects] = useState([]);
+  const [showAllProjects, setShowAllProjects] = useState(false);
   const isMobile = window.innerWidth < 768;
   const initialItems = isMobile ? 4 : 6;
 
   useEffect(() => {
+    // Initialize AOS once
     AOS.init({
-      once: false,
+      once: false, // This will make animations occur only once
     });
   }, []);
+
+  const fetchData = useCallback(async () => {
+    try {
+      const projectCollection = collection(db, "projects");
+      const projectSnapshot = await getDocs(projectCollection);
+
+      const projectData = projectSnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+        TechStack: doc.data().TechStack || [],
+      }));
+
+      setProjects(projectData);
+      localStorage.setItem("projects", JSON.stringify(projectData));
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
-  const toggleShowMore = () => {
-    setShowAllProduct(prev => !prev);
-  };
+  const toggleShowMore = useCallback((type) => {
+    if (type === 'projects') {
+      setShowAllProjects(prev => !prev);
+    }
+  }, []);
 
-  const filteredProducts = activeCategory === "all" 
-    ? Product 
-    : Product.filter(project => project.category === activeCategory);
-
-  const displayedProduct = showAllProduct ? filteredProducts : filteredProducts.slice(0, initialItems);
+  const displayedProjects = showAllProjects ? projects : projects.slice(0, initialItems);
 
   return (
-    <div className="md:px-[10%] px-[5%] w-full sm:mt-0 mt-[3rem] bg-[#030014] overflow-hidden" id="Creations">
-      {/* Our Projects Section */}
+    <div className="md:px-[10%] px-[5%] w-full sm:mt-0 mt-[3rem] bg-[#030014] overflow-hidden" id="Portofolio">
+      {/* Header section - unchanged */}
       <div className="text-center pb-10" data-aos="fade-up" data-aos-duration="1000">
-        <h2 className="inline-block text-3xl md:text-5xl font-bold text-center mx-auto text-transparent bg-clip-text bg-gradient-to-r from-[#06B6D4] to-[#FFD6E7]">
-          Our Projects
+        <h2 className="inline-block text-3xl md:text-5xl font-bold text-center mx-auto text-transparent bg-clip-text bg-gradient-to-r from-[#6366f1] to-[#a855f7]">
+          <span style={{
+            color: '#6366f1',
+            backgroundImage: 'linear-gradient(45deg, #6366f1 10%, #a855f7 93%)',
+            WebkitBackgroundClip: 'text',
+            backgroundClip: 'text',
+            WebkitTextFillColor: 'transparent'
+          }}>
+            Portfolio Showcase
+          </span>
         </h2>
         <p className="text-slate-400 max-w-2xl mx-auto text-sm md:text-base mt-2">
-          EXPLORE OUR JOURNEY
+          Explore my journey through projects and technical expertise. 
+          Each section represents a milestone in my continuous learning path.
         </p>
       </div>
 
       <Box sx={{ width: "100%" }}>
+        {/* AppBar and Tabs section - unchanged */}
         <AppBar
           position="static"
           elevation={0}
@@ -248,13 +202,14 @@ export default function FullWidthTabs() {
               left: 0,
               right: 0,
               bottom: 0,
-              background: "linear-gradient(180deg, rgba(6, 182, 212, 0.03) 0%, rgba(255, 214, 231, 0.03) 100%)",
+              background: "linear-gradient(180deg, rgba(139, 92, 246, 0.03) 0%, rgba(59, 130, 246, 0.03) 100%)",
               backdropFilter: "blur(10px)",
               zIndex: 0,
             },
           }}
           className="md:px-4"
         >
+          {/* Tabs remain unchanged */}
           <Tabs
             value={value}
             onChange={handleChange}
@@ -275,7 +230,7 @@ export default function FullWidthTabs() {
                 borderRadius: "12px",
                 "&:hover": {
                   color: "#ffffff",
-                  backgroundColor: "rgba(6, 182, 212, 0.1)",
+                  backgroundColor: "rgba(139, 92, 246, 0.1)",
                   transform: "translateY(-2px)",
                   "& .lucide": {
                     transform: "scale(1.1) rotate(5deg)",
@@ -283,10 +238,10 @@ export default function FullWidthTabs() {
                 },
                 "&.Mui-selected": {
                   color: "#fff",
-                  background: "linear-gradient(135deg, rgba(6, 182, 212, 0.2), rgba(255, 214, 231, 0.2))",
-                  boxShadow: "0 4px 15px -3px rgba(6, 182, 212, 0.2)",
+                  background: "linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(59, 130, 246, 0.2))",
+                  boxShadow: "0 4px 15px -3px rgba(139, 92, 246, 0.2)",
                   "& .lucide": {
-                    color: "#06B6D4",
+                    color: "#a78bfa",
                   },
                 },
               },
@@ -300,7 +255,7 @@ export default function FullWidthTabs() {
           >
             <Tab
               icon={<Code className="mb-2 w-5 h-5 transition-all duration-300" />}
-              label="Product"
+              label="Projects"
               {...a11yProps(0)}
             />
             <Tab
@@ -317,31 +272,9 @@ export default function FullWidthTabs() {
           onChangeIndex={setValue}
         >
           <TabPanel value={value} index={0} dir={theme.direction}>
-            {/* Category Filter Buttons */}
-            <div className="flex flex-wrap gap-2 mb-6">
-              {categories.map((category) => (
-                <button
-                  key={category.id}
-                  onClick={() => setActiveCategory(category.id)}
-                  className={`
-                    px-4 py-2 rounded-full text-sm font-medium transition-all duration-300
-                    flex items-center gap-2
-                    ${
-                      activeCategory === category.id
-                        ? "bg-gradient-to-r from-[#06B6D4] to-[#FFD6E7] text-white shadow-lg"
-                        : "bg-white/5 text-slate-300 hover:bg-white/10 hover:text-white"
-                    }
-                  `}
-                >
-                  {category.icon}
-                  {category.name}
-                </button>
-              ))}
-            </div>
-
             <div className="container mx-auto flex justify-center items-center overflow-hidden">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 2xl:grid-cols-3 gap-5">
-                {displayedProduct.map((project, index) => (
+                {displayedProjects.map((project, index) => (
                   <div
                     key={project.id || index}
                     data-aos={index % 3 === 0 ? "fade-up-right" : index % 3 === 1 ? "fade-up" : "fade-up-left"}
@@ -358,11 +291,11 @@ export default function FullWidthTabs() {
                 ))}
               </div>
             </div>
-            {filteredProducts.length > initialItems && (
+            {projects.length > initialItems && (
               <div className="mt-6 w-full flex justify-start">
                 <ToggleButton
-                  onClick={toggleShowMore}
-                  isShowingMore={showAllProduct}
+                  onClick={() => toggleShowMore('projects')}
+                  isShowingMore={showAllProjects}
                 />
               </div>
             )}
@@ -385,33 +318,6 @@ export default function FullWidthTabs() {
           </TabPanel>
         </SwipeableViews>
       </Box>
-
-      {/* Why Choose Us Section */}
-      <div className="text-center py-16" data-aos="fade-up" data-aos-duration="1000">
-        <h2 className="inline-block text-3xl md:text-5xl font-bold text-center mx-auto text-transparent bg-clip-text bg-gradient-to-r from-[#06B6D4] to-[#FFD6E7]">
-          Why You Should Choose Us
-        </h2>
-        <p className="text-slate-400 max-w-2xl mx-auto text-sm md:text-base mt-2">
-          OUR COMPETITIVE ADVANTAGES
-        </p>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
-          {benefits.map((benefit, index) => (
-            <div 
-              key={index}
-              className="bg-white/5 rounded-xl p-6 border border-white/10 hover:border-[#06B6D4]/30 transition-all duration-300 hover:shadow-lg hover:shadow-[#06B6D4]/10"
-              data-aos="fade-up"
-              data-aos-delay={index * 100}
-            >
-              <div className="w-12 h-12 bg-white/10 rounded-lg flex items-center justify-center mb-4">
-                {benefit.icon}
-              </div>
-              <h3 className="text-xl font-bold text-white mb-2">{benefit.title}</h3>
-              <p className="text-slate-400">{benefit.description}</p>
-            </div>
-          ))}
-        </div>
-      </div>
     </div>
   );
 }
