@@ -11,7 +11,7 @@ import CardProject from "../components/CardProject";
 import TechStackIcon from "../components/TechStackIcon";
 import AOS from "aos";
 import "aos/dist/aos.css";
-import { Code, Boxes } from "lucide-react";
+import { Code, Boxes, Fish, Gamepad2, Globe } from "lucide-react";
 
 const ToggleButton = ({ onClick, isShowingMore }) => (
   <button
@@ -111,27 +111,73 @@ const techStacks = [
 
 const Product = [
   {
-    id: "Project",
+    id: "project1",
     Img: "https://res.cloudinary.com/dc3bfhgfd/image/upload/v1746961358/59fa7aa6-6943-4031-a37e-1a26fcde0b59_myujkf.png",
-    Title: "coming soon",
-    Description: "coming soon",
-    Link: "https://tenebris-web-sepia.vercel.app/",
-    TechStack: ["React", "Tailwind"]
+    Title: "Fisch Project",
+    Description: "An innovative fish tracking app",
+    Link: "#",
+    TechStack: ["React", "Tailwind"],
+    category: "fisch"
   },
   {
-    id: "coming soon",
+    id: "project2",
     Img: "https://res.cloudinary.com/dc3bfhgfd/image/upload/v1746961358/59fa7aa6-6943-4031-a37e-1a26fcde0b59_myujkf.png",
-    Title: "coming soon",
-    Description: "coming soon",
-    Link: "https://tenebris-web-sepia.vercel.app/", // opsional
-    TechStack: ["React", "Tailwind"]
+    Title: "Roblox Game",
+    Description: "Exciting adventure game on Roblox",
+    Link: "#",
+    TechStack: ["Lua", "Roblox"],
+    category: "roblox"
   },
+  {
+    id: "project3",
+    Img: "https://res.cloudinary.com/dc3bfhgfd/image/upload/v1746961358/59fa7aa6-6943-4031-a37e-1a26fcde0b59_myujkf.png",
+    Title: "Web Application",
+    Description: "Modern web application",
+    Link: "#",
+    TechStack: ["React", "NodeJS"],
+    category: "web"
+  },
+  {
+    id: "project4",
+    Img: "https://res.cloudinary.com/dc3bfhgfd/image/upload/v1746961358/59fa7aa6-6943-4031-a37e-1a26fcde0b59_myujkf.png",
+    Title: "Fisch Analytics",
+    Description: "Data analytics for fish populations",
+    Link: "#",
+    TechStack: ["React", "Firebase"],
+    category: "fisch"
+  },
+  {
+    id: "project5",
+    Img: "https://res.cloudinary.com/dc3bfhgfd/image/upload/v1746961358/59fa7aa6-6943-4031-a37e-1a26fcde0b59_myujkf.png",
+    Title: "Roblox Tycoon",
+    Description: "Build your empire in Roblox",
+    Link: "#",
+    TechStack: ["Lua", "Roblox"],
+    category: "roblox"
+  },
+  {
+    id: "project6",
+    Img: "https://res.cloudinary.com/dc3bfhgfd/image/upload/v1746961358/59fa7aa6-6943-4031-a37e-1a26fcde0b59_myujkf.png",
+    Title: "Portfolio Website",
+    Description: "Professional portfolio site",
+    Link: "#",
+    TechStack: ["HTML", "CSS"],
+    category: "web"
+  },
+];
+
+const categories = [
+  { id: "all", name: "All Projects", icon: <Boxes className="w-4 h-4" /> },
+  { id: "fisch", name: "Fisch", icon: <Fish className="w-4 h-4" /> },
+  { id: "roblox", name: "Roblox", icon: <Gamepad2 className="w-4 h-4" /> },
+  { id: "web", name: "Web", icon: <Globe className="w-4 h-4" /> },
 ];
 
 export default function FullWidthTabs() {
   const theme = useTheme();
   const [value, setValue] = useState(0);
   const [showAllProduct, setShowAllProduct] = useState(false);
+  const [activeCategory, setActiveCategory] = useState("all");
   const isMobile = window.innerWidth < 768;
   const initialItems = isMobile ? 4 : 6;
 
@@ -149,7 +195,11 @@ export default function FullWidthTabs() {
     setShowAllProduct(prev => !prev);
   };
 
-  const displayedProduct = showAllProduct ? Product : Product.slice(0, initialItems);
+  const filteredProducts = activeCategory === "all" 
+    ? Product 
+    : Product.filter(project => project.category === activeCategory);
+
+  const displayedProduct = showAllProduct ? filteredProducts : filteredProducts.slice(0, initialItems);
 
   return (
     <div className="md:px-[10%] px-[5%] w-full sm:mt-0 mt-[3rem] bg-[#030014] overflow-hidden" id="Creations">
@@ -248,6 +298,28 @@ export default function FullWidthTabs() {
           onChangeIndex={setValue}
         >
           <TabPanel value={value} index={0} dir={theme.direction}>
+            {/* Category Filter Buttons */}
+            <div className="flex flex-wrap gap-2 mb-6">
+              {categories.map((category) => (
+                <button
+                  key={category.id}
+                  onClick={() => setActiveCategory(category.id)}
+                  className={`
+                    px-4 py-2 rounded-full text-sm font-medium transition-all duration-300
+                    flex items-center gap-2
+                    ${
+                      activeCategory === category.id
+                        ? "bg-gradient-to-r from-[#06B6D4] to-[#FFD6E7] text-white shadow-lg"
+                        : "bg-white/5 text-slate-300 hover:bg-white/10 hover:text-white"
+                    }
+                  `}
+                >
+                  {category.icon}
+                  {category.name}
+                </button>
+              ))}
+            </div>
+
             <div className="container mx-auto flex justify-center items-center overflow-hidden">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 2xl:grid-cols-3 gap-5">
                 {displayedProduct.map((project, index) => (
@@ -267,7 +339,7 @@ export default function FullWidthTabs() {
                 ))}
               </div>
             </div>
-            {Product.length > initialItems && (
+            {filteredProducts.length > initialItems && (
               <div className="mt-6 w-full flex justify-start">
                 <ToggleButton
                   onClick={toggleShowMore}
