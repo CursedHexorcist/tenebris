@@ -11,7 +11,7 @@ import CardProject from "../components/CardProject";
 import TechStackIcon from "../components/TechStackIcon";
 import AOS from "aos";
 import "aos/dist/aos.css";
-import { Code, Boxes, Fish, Gamepad2, Globe } from "lucide-react";
+import { Code, Boxes, Fish, Gamepad2, Globe, Award, Headphones, Zap } from "lucide-react";
 
 const ToggleButton = ({ onClick, isShowingMore }) => (
   <button
@@ -173,6 +173,24 @@ const categories = [
   { id: "web", name: "Web", icon: <Globe className="w-4 h-4" /> },
 ];
 
+const benefits = [
+  {
+    title: "Premium Quality, Accessible Pricing",
+    description: "Enterprise-grade products at a fraction of traditional costs.",
+    icon: <Award className="w-6 h-6 text-[#06B6D4]" />
+  },
+  {
+    title: "Comprehensive Technical Support",
+    description: "Dedicated professional assistance ensuring seamless implementation and performance.",
+    icon: <Headphones className="w-6 h-6 text-[#06B6D4]" />
+  },
+  {
+    title: "Maximize Your Value",
+    description: "Strategic pricing engineered to deliver unbeatable value, optimize your spend, and drive unprecedented success ingame.",
+    icon: <Zap className="w-6 h-6 text-[#06B6D4]" />
+  }
+];
+
 export default function FullWidthTabs() {
   const theme = useTheme();
   const [value, setValue] = useState(0);
@@ -203,9 +221,10 @@ export default function FullWidthTabs() {
 
   return (
     <div className="md:px-[10%] px-[5%] w-full sm:mt-0 mt-[3rem] bg-[#030014] overflow-hidden" id="Creations">
+      {/* Our Projects Section */}
       <div className="text-center pb-10" data-aos="fade-up" data-aos-duration="1000">
         <h2 className="inline-block text-3xl md:text-5xl font-bold text-center mx-auto text-transparent bg-clip-text bg-gradient-to-r from-[#06B6D4] to-[#FFD6E7]">
-          Our Project
+          Our Projects
         </h2>
         <p className="text-slate-400 max-w-2xl mx-auto text-sm md:text-base mt-2">
           EXPLORE OUR JOURNEY
@@ -366,6 +385,33 @@ export default function FullWidthTabs() {
           </TabPanel>
         </SwipeableViews>
       </Box>
+
+      {/* Why Choose Us Section */}
+      <div className="text-center py-16" data-aos="fade-up" data-aos-duration="1000">
+        <h2 className="inline-block text-3xl md:text-5xl font-bold text-center mx-auto text-transparent bg-clip-text bg-gradient-to-r from-[#06B6D4] to-[#FFD6E7]">
+          Why You Should Choose Us
+        </h2>
+        <p className="text-slate-400 max-w-2xl mx-auto text-sm md:text-base mt-2">
+          OUR COMPETITIVE ADVANTAGES
+        </p>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
+          {benefits.map((benefit, index) => (
+            <div 
+              key={index}
+              className="bg-white/5 rounded-xl p-6 border border-white/10 hover:border-[#06B6D4]/30 transition-all duration-300 hover:shadow-lg hover:shadow-[#06B6D4]/10"
+              data-aos="fade-up"
+              data-aos-delay={index * 100}
+            >
+              <div className="w-12 h-12 bg-white/10 rounded-lg flex items-center justify-center mb-4">
+                {benefit.icon}
+              </div>
+              <h3 className="text-xl font-bold text-white mb-2">{benefit.title}</h3>
+              <p className="text-slate-400">{benefit.description}</p>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
