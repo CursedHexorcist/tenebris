@@ -4,13 +4,13 @@ import { getStorage } from "firebase/storage";
 import { collection, addDoc } from "@firebase/firestore";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyBwn_P0qQkA1T7VjVU1b9sXyj4Tky8WMp0",
-  authDomain: "gweenlyn-be10b.firebaseapp.com",
-  projectId: "gweenlyn-be10b",
-  storageBucket: "gweenlyn-be10b.firebasestorage.app",
-  messagingSenderId: "1038792659119",
-  appId: "1:1038792659119:web:3a7312d23498b6d455445a",
-  measurementId: "G-KGKV3SG752"
+    apiKey: "AIzaSyDP6XNlI1jUgHN3pVWIXNZjGT3YWXKSdes",
+  authDomain: "gweenlearn.firebaseapp.com",
+  projectId: "gweenlearn",
+  storageBucket: "gweenlearn.firebasestorage.app",
+  messagingSenderId: "915816429541",
+  appId: "1:915816429541:web:65c885efda4472930c210c",
+  measurementId: "G-RSGBWRE6BD"
 };
 
 // Initialize with a unique name
