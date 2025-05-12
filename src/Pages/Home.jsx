@@ -65,9 +65,9 @@ const SocialLink = memo(({ icon: Icon, link }) => (
   </a>
 ));
 
-const TYPING_SPEED = 60;
-const ERASING_SPEED = 50;
-const PAUSE_DURATION = 500;
+const TYPING_SPEED = 80;
+const ERASING_SPEED = 70;
+const PAUSE_DURATION = 700;
 const WORDS = [
   "Fast Execution",
   "Continuous Improvement",
