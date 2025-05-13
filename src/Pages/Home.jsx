@@ -190,7 +190,7 @@ const Home = () => {
           </div>
 
           {/* PROJECT SECTION */}
-          <div className="pb-20" data-aos="fade-up" data-aos-delay="300">
+          <div className="mt-20 mb-20 pb-20" data-aos="fade-up" data-aos-delay="300">
             {/* Our Product Header */}
             <div className="text-center mb-6">
               <div className="inline-block relative group">
