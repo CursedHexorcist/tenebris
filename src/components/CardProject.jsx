@@ -1,92 +1,67 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ExternalLink, ArrowRight, ShoppingCart, Info, Eye } from 'lucide-react';
+import { ShoppingCart, Eye, Info } from 'lucide-react';
 
 const CardProject = ({ Img, Title, Description, Link: ProjectLink, id }) => {
-  const handleLiveDemo = (e) => {
-    if (!ProjectLink) {
-      console.log("ProjectLink kosong");
+  const handleAction = (e, type) => {
+    if ((type === 'demo' && !ProjectLink) || (type === 'details' && !id)) {
       e.preventDefault();
-      alert("Live demo link is not available");
-    }
-  };
-  
-  const handleDetails = (e) => {
-    if (!id) {
-      console.log("ID kosong");
-      e.preventDefault();
-      alert("Project details are not available");
+      alert(`${type === 'demo' ? 'Live demo' : 'Details'} not available`);
     }
   };
 
   return (
-    <div className="group relative w-full">
-      <div className="relative overflow-hidden rounded-lg bg-gradient-to-br from-slate-900/90 to-slate-800/90 backdrop-blur-lg border border-white/10 shadow-md transition-all duration-300 hover:shadow-[#06B6D4]/20 flex items-stretch h-40">
-        <div className="absolute inset-0 bg-gradient-to-br from-[#06B6D4]/10 via-[#06B6D4]/10 to-[#FFD6E7]/10 opacity-50 group-hover:opacity-70 transition-opacity duration-300"></div>
-        
-        {/* Left side - Image */}
-        <div className="w-1/3 relative overflow-hidden">
+    <div className="group w-full mb-4 last:mb-0">
+      <div className="flex items-stretch h-28 bg-gradient-to-r from-slate-800/90 to-slate-900/90 rounded-lg border border-white/10 shadow hover:shadow-md transition-shadow duration-300 overflow-hidden">
+        {/* Image thumbnail */}
+        <div className="w-24 flex-shrink-0 relative overflow-hidden">
           <img
             src={Img}
             alt={Title}
-            className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
+            className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
           />
         </div>
-        
-        {/* Middle - Content */}
-        <div className="w-1/2 p-4 z-10 flex flex-col justify-between">
+
+        {/* Content area */}
+        <div className="flex-grow p-3 flex flex-col justify-between">
           <div>
-            <h3 className="text-lg font-semibold bg-gradient-to-r from-[#06B6D4] via-[#06B6D4] to-[#FFD6E7] bg-clip-text text-transparent">
-              {Title}
-            </h3>
-            <p className="text-gray-300/80 text-xs leading-relaxed line-clamp-2 mt-1">
-              {Description}
-            </p>
+            <h3 className="text-sm font-semibold text-white line-clamp-1">{Title}</h3>
+            <p className="text-xs text-gray-400 line-clamp-2 mt-1">{Description}</p>
           </div>
-          
-          <div className="flex items-center space-x-3 mt-2">
-            {ProjectLink ? (
+
+          <div className="flex justify-between items-center mt-2">
+            {/* Left action buttons */}
+            <div className="flex space-x-2">
               <a
                 href={ProjectLink || "#"}
                 target="_blank"
                 rel="noopener noreferrer"
-                onClick={handleLiveDemo}
-                className="inline-flex items-center space-x-1 text-[#06B6D4] hover:text-[#06B6D4]/80 transition-colors duration-200 text-xs"
-                title="Live Demo"
+                onClick={(e) => handleAction(e, 'demo')}
+                className={`p-1.5 rounded ${ProjectLink ? 'text-blue-400 hover:bg-blue-400/10' : 'text-gray-500 cursor-not-allowed'}`}
+                title="Preview"
               >
-                <Eye className="w-3 h-3" />
+                <Eye className="w-4 h-4" />
               </a>
-            ) : (
-              <span className="text-gray-500 text-xs" title="Demo Not Available">
-                <Eye className="w-3 h-3" />
-              </span>
-            )}
-            
-            {id ? (
+
               <Link
-                to={`/project/${id}`}
-                onClick={handleDetails}
-                className="inline-flex items-center space-x-1 text-white/90 hover:text-white transition-colors duration-200 text-xs"
+                to={id ? `/project/${id}` : "#"}
+                onClick={(e) => handleAction(e, 'details')}
+                className={`p-1.5 rounded ${id ? 'text-purple-400 hover:bg-purple-400/10' : 'text-gray-500 cursor-not-allowed'}`}
                 title="Details"
               >
-                <Info className="w-3 h-3" />
+                <Info className="w-4 h-4" />
               </Link>
-            ) : (
-              <span className="text-gray-500 text-xs" title="Details Not Available">
-                <Info className="w-3 h-3" />
-              </span>
-            )}
+            </div>
+
+            {/* Buy button on right */}
+            <button 
+              className="flex items-center space-x-1 bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-md text-xs font-medium transition-colors duration-200"
+            >
+              <ShoppingCart className="w-4 h-4" />
+              <span>Get</span>
+            </button>
           </div>
         </div>
-        
-        {/* Right side - Buy button */}
-        <div className="w-1/6 flex items-center justify-center p-2 border-l border-white/10">
-          <button className="p-2 rounded-full bg-[#06B6D4]/10 hover:bg-[#06B6D4]/20 text-[#06B6D4] transition-all duration-200 hover:scale-110">
-            <ShoppingCart className="w-5 h-5" />
-          </button>
-        </div>
-        
-        <div className="absolute inset-0 border border-white/0 group-hover:border-[#06B6D4]/50 rounded-lg transition-colors duration-300 -z-50"></div>
       </div>
     </div>
   );
