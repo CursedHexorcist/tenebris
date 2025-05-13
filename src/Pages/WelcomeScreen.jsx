@@ -1,76 +1,119 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import './styles.css'; // For extra effects (explained below)
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 
-const NeonText = ({ text }) => {
+const TypewriterEffect = ({ text }) => {
+  const [displayText, setDisplayText] = useState('');
+
+  useEffect(() => {
+    let index = 0;
+    const interval = setInterval(() => {
+      setDisplayText(text.slice(0, index));
+      index++;
+      if (index > text.length) clearInterval(interval);
+    }, 80);
+
+    return () => clearInterval(interval);
+  }, [text]);
+
   return (
-    <div className="neon-text">
-      {text.split("").map((char, idx) => (
-        <motion.span
-          key={idx}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{
-            delay: idx * 0.05,
-            duration: 0.5,
-            ease: "easeOut"
-          }}
-          className="inline-block"
-        >
-          {char}
-        </motion.span>
-      ))}
+    <div className="relative inline-block text-white font-semibold text-xl sm:text-2xl md:text-3xl tracking-wide">
+      {displayText}
+      <motion.span
+        className="inline-block ml-1 text-purple-400"
+        animate={{ opacity: [0, 1, 0] }}
+        transition={{ duration: 1, repeat: Infinity }}
+      >
+        ✨
+      </motion.span>
     </div>
   );
 };
 
-const WelcomeScreen = ({ onComplete }) => {
-  const [visible, setVisible] = useState(true);
+const BackgroundParticles = () => (
+  <div className="absolute inset-0 -z-10 overflow-hidden">
+    {[...Array(40)].map((_, i) => (
+      <motion.div
+        key={i}
+        className="absolute w-1 h-1 bg-white rounded-full opacity-20"
+        style={{
+          top: `${Math.random() * 100}%`,
+          left: `${Math.random() * 100}%`,
+        }}
+        animate={{ y: ['0%', '100%'], opacity: [0.2, 0.5, 0.2] }}
+        transition={{
+          duration: 10 + Math.random() * 10,
+          repeat: Infinity,
+          ease: 'linear',
+          delay: Math.random() * 5,
+        }}
+      />
+    ))}
+  </div>
+);
+
+const WelcomeScreen = ({ onLoadingComplete }) => {
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setVisible(false);
-      if (onComplete) onComplete();
-    }, 4000); // screen duration
-    return () => clearTimeout(timer);
-  }, [onComplete]);
+    AOS.init();
+    const timeout = setTimeout(() => {
+      setLoading(false);
+      onLoadingComplete?.();
+    }, 4000);
+
+    return () => clearTimeout(timeout);
+  }, [onLoadingComplete]);
 
   return (
     <AnimatePresence>
-      {visible && (
+      {loading && (
         <motion.div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-[#0c0c1e] overflow-hidden"
+          className="fixed inset-0 bg-gradient-to-br from-[#0a0020] via-[#140034] to-[#1c003f] flex items-center justify-center"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
+          exit={{ opacity: 0, scale: 0.9, transition: { duration: 0.8 } }}
         >
-          {/* Background Glow Layer */}
-          <motion.div
-            className="absolute w-[200%] h-[200%] bg-gradient-radial from-purple-700/30 via-indigo-900/20 to-black blur-3xl animate-bg-float"
-            style={{ zIndex: 0 }}
-          />
+          <BackgroundParticles />
 
-          {/* Glass Card */}
           <motion.div
-            className="relative px-10 py-8 rounded-3xl backdrop-blur-xl bg-white/5 border border-white/10 shadow-2xl"
-            initial={{ scale: 0.8, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0.9, opacity: 0 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-            style={{ zIndex: 2 }}
+            initial={{ scale: 0.8, opacity: 0, filter: 'blur(10px)' }}
+            animate={{ scale: 1, opacity: 1, filter: 'blur(0)' }}
+            transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
+            className="text-center space-y-6"
           >
-            <NeonText text="TENEBRIS HUB" />
-            <p className="text-white/60 text-center mt-4 tracking-wide text-sm">loading... please wait</p>
+            <TypewriterEffect text="Welcome to" />
 
-            {/* Loading Bar */}
+            <motion.h1
+              className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-blue-400 to-purple-500 text-5xl sm:text-6xl font-extrabold tracking-widest"
+              initial={{ y: 40, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 1, duration: 1.2, ease: 'easeOut' }}
+            >
+              TENEBRIS HUB
+            </motion.h1>
+
             <motion.div
-              className="mt-6 h-1 w-56 bg-white/10 rounded-full overflow-hidden"
+              className="w-64 h-2 bg-gray-800 rounded-full overflow-hidden mx-auto relative"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 2 }}
             >
               <motion.div
-                className="h-full bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500"
-                initial={{ width: "0%" }}
-                animate={{ width: "100%" }}
-                transition={{ duration: 3.2, ease: "easeInOut" }}
+                className="absolute h-full bg-gradient-to-r from-cyan-400 to-purple-500"
+                initial={{ width: 0 }}
+                animate={{ width: '100%' }}
+                transition={{ duration: 2, ease: 'easeInOut' }}
+              />
+              <motion.div
+                className="absolute top-0 left-0 w-full h-full bg-white/10 blur"
+                animate={{ x: ['-100%', '100%'] }}
+                transition={{
+                  duration: 1.5,
+                  repeat: Infinity,
+                  ease: 'linear',
+                }}
               />
             </motion.div>
           </motion.div>
