@@ -39,9 +39,9 @@ const PROJECTS = [
 // Title Component
 const MainTitle = memo(() => (
   <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white leading-tight tracking-tight">
-    Welcome to <br />
+    TENEBRIS <br />
     <span className="bg-gradient-to-r from-[#06B6D4] to-[#FFD6E7] bg-clip-text text-transparent">
-      Venera Studio
+      DEVELOPER
     </span>
   </h1>
 ));
