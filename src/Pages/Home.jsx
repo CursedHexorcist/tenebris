@@ -213,41 +213,41 @@ const Home = () => {
               </p>
             </div>
 
-            {/* Social Icons - Moved closer to Our Product */}
-            <div className="flex justify-center gap-4 mb-8">
-              {SOCIAL_LINKS.map((s, i) => (
-                <SocialLink key={i} {...s} />
-              ))}
-            </div>
-
-            {/* Project Filter - Moved further down */}
-            <div className="mt-12">
-              <div className="flex gap-3 mb-6 justify-center">
-                {["All", "Ongoing", "Coming Soon"].map((cat) => (
-                  <button
-                    key={cat}
-                    onClick={() => setSelectedCategory(cat)}
-                    className={`px-4 py-1.5 rounded-full text-sm font-medium transition ${
-                      selectedCategory === cat
-                        ? "bg-[#06B6D4]/10 text-[#06B6D4] border border-[#06B6D4]/50"
-                        : "text-gray-400 border border-transparent hover:text-white"
-                    }`}
-                  >
-                    {cat}
-                  </button>
-                ))}
+            {/* Project Filter and Content */}
+            <div className="mt-12 flex flex-col md:flex-row gap-8">
+              {/* Left Side Filter - Slider Style */}
+              <div className="md:w-48 flex-shrink-0">
+                <div className="flex md:flex-col gap-2 overflow-x-auto md:overflow-x-visible pb-2 md:pb-0">
+                  {["All", "Ongoing", "Coming Soon"].map((cat) => (
+                    <button
+                      key={cat}
+                      onClick={() => setSelectedCategory(cat)}
+                      className={`px-4 py-2 rounded-lg text-sm font-medium transition whitespace-nowrap ${
+                        selectedCategory === cat
+                          ? "bg-[#06B6D4]/10 text-[#06B6D4] border border-[#06B6D4]/50"
+                          : "text-gray-400 border border-transparent hover:text-white hover:bg-white/5"
+                      }`}
+                    >
+                      {cat}
+                    </button>
+                  ))}
+                </div>
               </div>
-              <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
-                {filteredProjects.map((project) => (
-                  <Link
-                    key={project.id}
-                    to={`/project/${project.id}`}
-                    className="p-4 rounded-xl bg-white/5 backdrop-blur border border-white/10 hover:border-[#06B6D4]/30 transition"
-                  >
-                    <div className="text-lg font-semibold text-white">{project.name}</div>
-                    <div className="text-sm text-gray-400 mt-1">{project.category}</div>
-                  </Link>
-                ))}
+
+              {/* Right Side Projects */}
+              <div className="flex-1">
+                <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
+                  {filteredProjects.map((project) => (
+                    <Link
+                      key={project.id}
+                      to={`/project/${project.id}`}
+                      className="p-4 rounded-xl bg-white/5 backdrop-blur border border-white/10 hover:border-[#06B6D4]/30 transition"
+                    >
+                      <div className="text-lg font-semibold text-white">{project.name}</div>
+                      <div className="text-sm text-gray-400 mt-1">{project.category}</div>
+                    </Link>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
