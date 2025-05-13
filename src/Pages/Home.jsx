@@ -18,9 +18,9 @@ const WORDS = [
 
 // Badge & Social Link Data
 const FEATURE_BADGES = [
-  { icon: "âš¡", label: "Fast Execution" },
-  { icon: "ðŸš€", label: "24/7 Service" },
-  { icon: "ðŸ”’", label: "Safe & Secure" },
+  { icon: "⚡", label: "Fast Execution" },
+  { icon: "🚀", label: "24/7 Service" },
+  { icon: "🔒", label: "Safe & Secure" },
 ];
 const SOCIAL_LINKS = [
   { icon: Github, link: "https://github.com/gabrieluiux" },
@@ -133,7 +133,7 @@ const Home = () => {
 
   return (
     <div className="min-h-screen bg-[#030014] overflow-hidden" id="Home">
-      <div className={relative z-10 transition-all duration-1000 ${isLoaded ? "opacity-100" : "opacity-0"}}>
+      <div className={`relative z-10 transition-all duration-1000 ${isLoaded ? "opacity-100" : "opacity-0"}`}>
         <div className="container mx-auto px-4 sm:px-6 lg:px-16 xl:px-24 2xl:px-32 pt-12 md:pt-20 pb-4">
           <div className="flex flex-col lg:flex-row items-center md:justify-between gap-6 lg:gap-12 pt-8 md:pt-12 pb-8">
             {/* LEFT */}
@@ -152,7 +152,7 @@ const Home = () => {
               </div>
               <div className="flex gap-3" data-aos="fade-up" data-aos-delay="1400">
                 <Link
-                  to={/project/your-project-id}
+                  to={`/project/your-project-id`}
                   className="inline-flex items-center text-[#06B6D4] hover:text-[#06B6D4]/80"
                 >
                   <span className="text-sm font-medium">Detail Project</span>
@@ -240,7 +240,7 @@ const Home = () => {
                   {filteredProjects.map((project) => (
                     <Link
                       key={project.id}
-                      to={/project/${project.id}}
+                      to={`/project/${project.id}`}
                       className="p-4 rounded-xl bg-white/5 backdrop-blur border border-white/10 hover:border-[#06B6D4]/30 transition"
                     >
                       <div className="text-lg font-semibold text-white">{project.name}</div>
