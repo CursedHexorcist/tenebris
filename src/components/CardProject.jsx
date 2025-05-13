@@ -1,64 +1,85 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ShoppingCart, Eye, Info } from 'lucide-react';
+import { ExternalLink, ArrowRight, ShoppingCart } from 'lucide-react';
 
 const CardProject = ({ Img, Title, Description, Link: ProjectLink, id }) => {
-  const handleAction = (e, type) => {
-    if ((type === 'demo' && !ProjectLink) || (type === 'details' && !id)) {
+  const handleLiveDemo = (e) => {
+    if (!ProjectLink) {
       e.preventDefault();
-      alert(`${type === 'demo' ? 'Demo' : 'Detail'} tidak tersedia`);
+      alert("Live demo link is not available");
+    }
+  };
+  
+  const handleDetails = (e) => {
+    if (!id) {
+      e.preventDefault();
+      alert("Project details are not available");
     }
   };
 
   return (
-    {/* Kartu horizontal dalam list vertikal */}
-    <div className="w-full mb-4 last:mb-0"> 
-      <div className="flex h-28 bg-gradient-to-r from-slate-800 to-slate-900 rounded-lg border border-white/10 hover:border-blue-500/30 transition-all duration-300 overflow-hidden">
+    <div className="group w-full mb-6">
+      {/* Horizontal elongated card */}
+      <div className="flex h-40 bg-gradient-to-br from-slate-900/90 to-slate-800/90 rounded-xl border border-white/10 shadow-lg overflow-hidden">
         
-        {/* Gambar di kiri */}
-        <div className="w-24 flex-shrink-0 bg-gray-700">
-          <img 
+        {/* Image on left */}
+        <div className="w-1/3 flex-shrink-0 relative overflow-hidden">
+          <img
             src={Img}
             alt={Title}
-            className="w-full h-full object-cover hover:scale-110 transition-transform duration-500"
+            className="absolute inset-0 w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
           />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/30" />
         </div>
-        
-        {/* Konten tengah */}
-        <div className="flex-grow p-3 flex flex-col justify-between">
+
+        {/* Content middle */}
+        <div className="flex-grow p-5 flex flex-col justify-between">
           <div>
-            <h3 className="text-md font-bold text-white line-clamp-1">{Title}</h3>
-            <p className="text-xs text-gray-300 line-clamp-2 mt-1">{Description}</p>
-          </div>
-          
-          {/* Tombol aksi */}
-          <div className="flex justify-between items-center mt-2">
-            <div className="flex space-x-2">
-              {/* Tombol Preview */}
-              <button
-                onClick={(e) => handleAction(e, 'demo')}
-                disabled={!ProjectLink}
-                className={`p-1.5 rounded-md ${ProjectLink ? 'text-blue-400 hover:bg-blue-400/10' : 'text-gray-500 cursor-not-allowed'}`}
-                title="Preview"
-              >
-                <Eye className="w-4 h-4" />
-              </button>
-              
-              {/* Tombol Detail */}
-              <Link
-                to={id ? `/project/${id}` : "#"}
-                onClick={(e) => handleAction(e, 'details')}
-                className={`p-1.5 rounded-md ${id ? 'text-purple-400 hover:bg-purple-400/10' : 'text-gray-500 cursor-not-allowed'}`}
-                title="Detail"
-              >
-                <Info className="w-4 h-4" />
-              </Link>
-            </div>
+            <h3 className="text-xl font-semibold bg-gradient-to-r from-[#06B6D4] via-[#06B6D4] to-[#FFD6E7] bg-clip-text text-transparent">
+              {Title}
+            </h3>
             
-            {/* Tombol Beli di kanan */}
-            <button className="flex items-center space-x-1 bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-xs font-medium transition-colors">
-              <ShoppingCart className="w-4 h-4" />
-              <span>Beli</span>
+            <p className="text-gray-300/80 text-sm leading-relaxed line-clamp-2 mt-2">
+              {Description}
+            </p>
+          </div>
+
+          {/* Actions bottom */}
+          <div className="flex justify-between items-center pt-3">
+            <div className="flex space-x-4">
+              {ProjectLink ? (
+                <a
+                  href={ProjectLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={handleLiveDemo}
+                  className="inline-flex items-center space-x-1 text-[#06B6D4] hover:text-[#06B6D4]/80 transition-colors duration-200 text-sm"
+                >
+                  <span>Live Demo</span>
+                  <ExternalLink className="w-4 h-4" />
+                </a>
+              ) : (
+                <span className="text-gray-500 text-sm">Demo Not Available</span>
+              )}
+              
+              {id ? (
+                <Link
+                  to={`/project/${id}`}
+                  onClick={handleDetails}
+                  className="inline-flex items-center space-x-1 text-white/90 hover:text-white transition-colors duration-200 text-sm"
+                >
+                  <span>Details</span>
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+              ) : (
+                <span className="text-gray-500 text-sm">Details Not Available</span>
+              )}
+            </div>
+
+            {/* Buy button on right */}
+            <button className="flex items-center space-x-2 bg-[#06B6D4] hover:bg-[#06B6D4]/90 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200">
+              <ShoppingCart className="w-5 h-5" />
+              <span>Get</span>
             </button>
           </div>
         </div>
