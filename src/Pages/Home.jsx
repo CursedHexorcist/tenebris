@@ -120,17 +120,17 @@ const Home = () => {
       : PROJECTS.filter((p) => p.category === selectedCategory);
 
   const lottieOptions = {
-    src: "https://lottie.host/1a32fee8-6121-4e6e-b861-fc4afe794b61/0W8pY7Wfem.lottie",
-    loop: true,
-    autoplay: true,
-    style: { width: "100%", height: "100%" },
-    className: `w-full h-full transition-all duration-500 ${
-      isHovering
-        ? "scale-[180%] sm:scale-[160%] md:scale-[150%] lg:scale-[145%] rotate-2"
-        : "scale-[175%] sm:scale-[155%] md:scale-[145%] lg:scale-[140%]"
-    }`,
-  };
-
+  src: "https://lottie.host/1a32fee8-6121-4e6e-b861-fc4afe794b61/0W8pY7Wfem.lottie",
+  loop: true,
+  autoplay: true,
+  style: { width: "100%", height: "100%" },
+  className: `w-full h-full transition-all duration-500 ${
+    isHovering
+      ? "scale-[140%] sm:scale-[160%] md:scale-[150%] lg:scale-[145%] rotate-2"
+      : "scale-[135%] sm:scale-[155%] md:scale-[145%] lg:scale-[140%]"
+  }`,
+};
+  
   return (
     <div className="min-h-screen bg-[#030014] overflow-hidden" id="Home">
       <div className={`relative z-10 transition-all duration-1000 ${isLoaded ? "opacity-100" : "opacity-0"}`}>
@@ -170,25 +170,23 @@ const Home = () => {
               </div>
             </div>
 
-            {/* RIGHT */}
-            <div
-              className="w-full py-[10%] sm:py-0 lg:w-1/2 relative flex items-center justify-center"
-              onMouseEnter={() => setIsHovering(true)}
-              onMouseLeave={() => setIsHovering(false)}
-              data-aos="fade-left"
-              data-aos-delay="600"
-            >
-              <div className="relative w-full opacity-90">
-                <div className={`absolute inset-0 bg-gradient-to-r ${
-                  isHovering ? "from-black/10 to-black/10" : "from-[#06B6D4]/10 via-white/5 to-[#FFD6E7]/10"
-                } rounded-3xl blur-3xl`}></div>
-                <div className="relative z-10 w-full">
-                  <DotLottieReact {...lottieOptions} />
-                </div>
-              </div>
-            </div>
-          </div>
-
+           {/* RIGHT */}
+<div
+  className="w-full py-[5%] sm:py-0 lg:w-1/2 relative flex items-center justify-center"
+  onMouseEnter={() => setIsHovering(true)}
+  onMouseLeave={() => setIsHovering(false)}
+  data-aos="fade-left"
+  data-aos-delay="600"
+>
+  <div className="relative w-full max-w-[400px] mx-auto opacity-90">
+    <div className={`absolute inset-0 bg-gradient-to-r ${
+      isHovering ? "from-black/10 to-black/10" : "from-[#06B6D4]/10 via-white/5 to-[#FFD6E7]/10"
+    } rounded-3xl blur-3xl`}></div>
+    <div className="relative z-10 w-full">
+      <DotLottieReact {...lottieOptions} />
+    </div>
+  </div>
+</div>
           {/* PROJECT SECTION */}
           <div className="pb-20" data-aos="fade-up" data-aos-delay="300">
             {/* Our Product Header */}
