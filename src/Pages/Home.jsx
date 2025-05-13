@@ -134,7 +134,7 @@ const Home = () => {
   return (
     <div className="min-h-screen bg-[#030014] overflow-hidden" id="Home">
       <div className={`relative z-10 transition-all duration-1000 ${isLoaded ? "opacity-100" : "opacity-0"}`}>
-        <div className="container mx-auto px-4 sm:px-6 lg:px-16 xl:px-24 2xl:px-32 pt-24 md:pt-28 pb-8">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-16 xl:px-24 2xl:px-32 pt-24 md:pt-28 pb-4">
           <div className="flex flex-col lg:flex-row items-center md:justify-between gap-6 lg:gap-12 pt-16 md:pt-20 pb-8">
             {/* LEFT */}
             <div className="w-full lg:w-1/2 space-y-4 sm:space-y-6 md:space-y-8" data-aos="fade-right" data-aos-delay="200">
@@ -192,7 +192,7 @@ const Home = () => {
           {/* PROJECT SECTION */}
           <div className="py-8 md:py-12" data-aos="fade-up" data-aos-delay="300">
             {/* Our Product Header */}
-            <div className="text-center mb-6 md:mb-8">
+            <div className="text-center mb-4 md:mb-8">
               <div className="inline-block relative group">
                 <h2 
                   className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#06B6D4] to-[#FFD6E7]" 
