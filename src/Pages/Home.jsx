@@ -1,3 +1,123 @@
+Gween
+lugwen
+Hi Stalker!
+
+Gween[rich]
+ — 14:43
+pusing
+aku udah modifikasi banyak
+tpi yg bug skrng bagian our product sampai about us
+!                           Nier[#1]
+ — 14:43
+apa mau korbanin 1
+buat yg lain?
+Gween[rich]
+ — 14:48
+bukan masalah korbanin
+ini maslaah bugnya gmn atur sizenya
+!                           Nier[#1]
+ — 14:48
+awh
+Gween[rich]
+ — 14:53
+import React, { useState, useEffect, useCallback, memo } from "react";
+import { Github, Linkedin, Mail, ExternalLink, Instagram, ArrowRight, Sparkles } from "lucide-react";
+import { DotLottieReact } from "@lottiefiles/dotlottie-react";
+import AOS from "aos";
+import { Link } from "react-router-dom";
+import "aos/dist/aos.css";
+Expand
+message.txt
+11 KB
+coba cari cara
+pusing aku
+!                           Nier[#1]
+ — 14:53
+yg itu ya
+Gween[rich]
+ — 14:53
+iru bagian home
+!                           Nier[#1]
+ — 14:53
+desktop mode/ap
+Gween[rich]
+ — 14:54
+yang handle tenebris sampai our project
+ye
+dia di windows aman
+!                           Nier[#1]
+ — 14:54
+yep
+Gween[rich]
+ — 14:54
+deskstop modenya rusak
+u cek aja di hp
+u lgsg ganti aja di githubku
+!                           Nier[#1]
+ — 14:56
+hnn
+hmm
+Gween[rich]
+ — 14:56
+CursedHexorcist
+NierNiggerChinese
+Gween[rich]
+ — 15:03
+ini kode pertamanya
+import React, { useState, useEffect, useCallback, memo } from "react";
+import { Github, Linkedin, Mail, ExternalLink, Instagram } from "lucide-react";
+import { DotLottieReact } from "@lottiefiles/dotlottie-react";
+import AOS from "aos";
+import "aos/dist/aos.css";
+Expand
+message.txt
+10 KB
+!                           Nier[#1]
+ — 15:03
+sec
+Gween[rich]
+ — 15:04
+sebelm ada penambahan our product
+!                           Nier[#1]
+ — 15:06
+ok
+Gween[rich]
+ — 15:09
+Image
+aku rapat dlu
+!                           Nier[#1]
+ — 15:09
+alright
+try put
+import React, { useState, useEffect, useCallback, memo } from "react";
+import { Github, Linkedin, Mail, ExternalLink, Instagram, ArrowRight, Sparkles } from "lucide-react";
+import { DotLottieReact } from "@lottiefiles/dotlottie-react";
+import AOS from "aos";
+import { Link } from "react-router-dom";
+import "aos/dist/aos.css";
+Expand
+deepseek_jsx_20250513_809b16.jsx
+5 KB
+Gween[rich]
+ — 15:10
+u nyari xeuvelie utk apa
+nama akunku
+!                           Nier[#1]
+ — 15:10
+idk
+iseng ja
+Gween[rich]
+ — 15:11
+Image
+!                           Nier[#1]
+ — 15:11
+:peclap:
+Gween[rich]
+ — 15:11
+minta ke dia full kodenya
+!                           Nier[#1]
+ — 15:15
+ini pake tailwind ya
 import React, { useState, useEffect, useCallback, memo } from "react";
 import { Github, Linkedin, Mail, ExternalLink, Instagram, ArrowRight, Sparkles } from "lucide-react";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
@@ -98,38 +218,59 @@ const Home = () => {
     } else {
       if (charIndex > 0) {
         setText((prev) => prev.slice(0, -1));
-        setCharIndex((prev) => prev - 1);
-      } else {
-        setWordIndex((prev) => (prev + 1) % WORDS.length);
-        setIsTyping(true);
-      }
-    }
-  }, [charIndex, isTyping, wordIndex]);
+... (160 lines left)
+Collapse
+deepseek_jsx_20250513_1394e2.jsx
+11 KB
+done
+coba
+kl ad bug blg aja
+githubku error
+Image
+bruh
+ini yg diganti app.jsx? @Gween
+!                           Nier[#1]
+ — 15:24
+home.jsx
+Gween[rich]
+ — 15:24
+home lah ege
+ngapain di app
+Tak fungsi jga kode u
+sama aja
+!                           Nier[#1]
+ — 15:25
+uda
+bruh
+﻿
+ShinyBlackCheap Black & Script DM!!
+! Nier
+chaeltz
+陈
+[#1]
+ 
+ 
+ 
+ 
+Never Stop Flying 🪽  
 
-  useEffect(() => {
-    const timeout = setTimeout(
-      handleTyping,
-      isTyping ? TYPING_SPEED : ERASING_SPEED
-    );
-    return () => clearTimeout(timeout);
-  }, [handleTyping]);
+BUY/SELL BLACK BGL
+About Chaeltz:
+ https://chaeltz.vercel.app/
+Nier Community Discord:
+https://discord.gg/G6sAnjqUX9
+import React, { useState, useEffect, useCallback, memo } from "react";
+import { Github, Linkedin, Mail, ExternalLink, Instagram, ArrowRight, Sparkles } from "lucide-react";
+import { DotLottieReact } from "@lottiefiles/dotlottie-react";
+import AOS from "aos";
+import { Link } from "react-router-dom";
+import "aos/dist/aos.css";
 
-  const filteredProjects =
-    selectedCategory === "All"
-      ? PROJECTS
-      : PROJECTS.filter((p) => p.category === selectedCategory);
+// ... (keep all the existing constants and components exactly the same) ...
 
-  const lottieOptions = {
-    src: "https://lottie.host/1a32fee8-6121-4e6e-b861-fc4afe794b61/0W8pY7Wfem.lottie",
-    loop: true,
-    autoplay: true,
-    style: { width: "100%", height: "100%" },
-    className: `w-full h-full transition-all duration-500 ${
-      isHovering
-        ? "scale-[140%] sm:scale-[160%] md:scale-[150%] lg:scale-[145%] rotate-2"
-        : "scale-[135%] sm:scale-[155%] md:scale-[145%] lg:scale-[140%]"
-    }`,
-  };
+// Main Home Component
+const Home = () => {
+  // ... (keep all the existing state and methods exactly the same) ...
 
   return (
     <div className="min-h-screen bg-[#030014] overflow-hidden" id="Home">
@@ -137,59 +278,13 @@ const Home = () => {
         <div className="container mx-auto px-4 sm:px-6 lg:px-16 xl:px-24 2xl:px-32 pt-12 md:pt-20 pb-4">
           <div className="flex flex-col lg:flex-row items-center md:justify-between gap-6 lg:gap-12 pt-8 md:pt-12 pb-8">
             {/* LEFT */}
-            <div className="w-full lg:w-1/2 space-y-4 sm:space-y-6 md:space-y-8" data-aos="fade-right" data-aos-delay="200">
-              <MainTitle />
-              <div className="h-8 flex items-center" data-aos="fade-up" data-aos-delay="800">
-                <span className="text-xl md:text-2xl bg-gradient-to-r from-gray-100 to-gray-300 bg-clip-text text-transparent font-light">
-                  {text}
-                </span>
-                <span className="w-[3px] h-6 bg-gradient-to-t from-[#06B6D4] to-[#FFD6E7] ml-1 animate-blink"></span>
-              </div>
-              <div className="flex flex-wrap gap-3" data-aos="fade-up" data-aos-delay="1200">
-                {FEATURE_BADGES.map((badge, i) => (
-                  <FeatureBadge key={i} {...badge} />
-                ))}
-              </div>
-              <div className="flex gap-3" data-aos="fade-up" data-aos-delay="1400">
-                <Link
-                  to={`/project/your-project-id`}
-                  className="inline-flex items-center text-[#06B6D4] hover:text-[#06B6D4]/80"
-                >
-                  <span className="text-sm font-medium">Detail Project</span>
-                  <ArrowRight className="w-4 h-4 ml-1" />
-                </Link>
-                <a href="#Contact" className="inline-flex items-center text-[#06B6D4] hover:text-[#06B6D4]/80">
-                  <span className="text-sm font-medium">Contact</span>
-                  <Mail className="w-4 h-4 ml-1" />
-                </a>
-              </div>
-              <div className="hidden sm:flex gap-4" data-aos="fade-up" data-aos-delay="1600">
-                {SOCIAL_LINKS.map((s, i) => (
-                  <SocialLink key={i} {...s} />
-                ))}
-              </div>
-            </div>
+            {/* ... (keep the left section exactly the same) ... */}
 
             {/* RIGHT - Lottie Animation */}
-            <div
-              className="w-full py-6 sm:py-0 lg:w-1/2 relative flex items-center justify-center"
-              onMouseEnter={() => setIsHovering(true)}
-              onMouseLeave={() => setIsHovering(false)}
-              data-aos="fade-left"
-              data-aos-delay="600"
-            >
-              <div className="relative w-full max-w-[320px] sm:max-w-[400px] mx-auto opacity-90">
-                <div className={`absolute inset-0 bg-gradient-to-r ${
-                  isHovering ? "from-black/10 to-black/10" : "from-[#06B6D4]/10 via-white/5 to-[#FFD6E7]/10"
-                } rounded-3xl blur-3xl`}></div>
-                <div className="relative z-10 w-full">
-                  <DotLottieReact {...lottieOptions} />
-                </div>
-              </div>
-            </div>
+            {/* ... (keep the right section exactly the same) ... */}
           </div>
 
-          {/* PROJECT SECTION - Adjusted spacing values */}
+          {/* PROJECT SECTION - Fixed spacing here */}
           <div className="py-4 md:py-8" data-aos="fade-up" data-aos-delay="300">
             {/* Our Product Header */}
             <div className="text-center mb-4 md:mb-6">
@@ -258,3 +353,5 @@ const Home = () => {
 };
 
 export default memo(Home);
+deepseek_jsx_20250513_809b16.jsx
+5 KB
