@@ -252,29 +252,4 @@ const Home = () => {
             </div>
           </div>
 
-          {/* ABOUT US SECTION */}
-          <div className="py-8 md:py-12" id="About">
-            <div className="text-center mb-6 md:mb-8">
-              <h2 className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#06B6D4] to-[#FFD6E7]">
-                About Us
-              </h2>
-              <p className="mt-2 text-gray-400 max-w-2xl mx-auto text-base sm:text-lg">
-                We are passionate developers creating innovative solutions
-              </p>
-            </div>
-            <div className="max-w-4xl mx-auto text-gray-300 text-center">
-              <p className="mb-4">
-                Our team specializes in building high-performance applications with cutting-edge technologies.
-              </p>
-              <p>
-                We focus on delivering exceptional user experiences while maintaining robust and scalable architectures.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
 export default memo(Home);
