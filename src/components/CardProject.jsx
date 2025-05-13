@@ -6,57 +6,59 @@ const CardProject = ({ Img, Title, Description, Link: ProjectLink, id }) => {
   const handleAction = (e, type) => {
     if ((type === 'demo' && !ProjectLink) || (type === 'details' && !id)) {
       e.preventDefault();
-      alert(`${type === 'demo' ? 'Live demo' : 'Details'} not available`);
+      alert(`${type === 'demo' ? 'Demo' : 'Detail'} tidak tersedia`);
     }
   };
 
   return (
-    <div className="w-full mb-4 last:mb-0">
-      {/* Horizontal elongated card */}
-      <div className="flex h-32 bg-gradient-to-r from-slate-800 to-slate-900 rounded-lg border border-white/10 shadow hover:shadow-lg transition-all duration-300 overflow-hidden">
+    {/* Kartu horizontal dalam list vertikal */}
+    <div className="w-full mb-4 last:mb-0"> 
+      <div className="flex h-28 bg-gradient-to-r from-slate-800 to-slate-900 rounded-lg border border-white/10 hover:border-blue-500/30 transition-all duration-300 overflow-hidden">
         
-        {/* Left - Image */}
-        <div className="w-32 flex-shrink-0">
-          <img
+        {/* Gambar di kiri */}
+        <div className="w-24 flex-shrink-0 bg-gray-700">
+          <img 
             src={Img}
             alt={Title}
-            className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+            className="w-full h-full object-cover hover:scale-110 transition-transform duration-500"
           />
         </div>
         
-        {/* Middle - Content */}
-        <div className="flex-grow p-4 flex flex-col justify-between">
+        {/* Konten tengah */}
+        <div className="flex-grow p-3 flex flex-col justify-between">
           <div>
-            <h3 className="text-lg font-semibold text-white">{Title}</h3>
-            <p className="text-sm text-gray-300 mt-1 line-clamp-2">{Description}</p>
+            <h3 className="text-md font-bold text-white line-clamp-1">{Title}</h3>
+            <p className="text-xs text-gray-300 line-clamp-2 mt-1">{Description}</p>
           </div>
           
-          {/* Action buttons */}
+          {/* Tombol aksi */}
           <div className="flex justify-between items-center mt-2">
-            <div className="flex space-x-3">
-              <a
-                href={ProjectLink || "#"}
+            <div className="flex space-x-2">
+              {/* Tombol Preview */}
+              <button
                 onClick={(e) => handleAction(e, 'demo')}
-                className={`flex items-center text-sm ${ProjectLink ? 'text-blue-400 hover:text-blue-300' : 'text-gray-500 cursor-not-allowed'}`}
+                disabled={!ProjectLink}
+                className={`p-1.5 rounded-md ${ProjectLink ? 'text-blue-400 hover:bg-blue-400/10' : 'text-gray-500 cursor-not-allowed'}`}
+                title="Preview"
               >
-                <Eye className="w-4 h-4 mr-1" />
-                Preview
-              </a>
+                <Eye className="w-4 h-4" />
+              </button>
               
+              {/* Tombol Detail */}
               <Link
                 to={id ? `/project/${id}` : "#"}
                 onClick={(e) => handleAction(e, 'details')}
-                className={`flex items-center text-sm ${id ? 'text-purple-400 hover:text-purple-300' : 'text-gray-500 cursor-not-allowed'}`}
+                className={`p-1.5 rounded-md ${id ? 'text-purple-400 hover:bg-purple-400/10' : 'text-gray-500 cursor-not-allowed'}`}
+                title="Detail"
               >
-                <Info className="w-4 h-4 mr-1" />
-                Details
+                <Info className="w-4 h-4" />
               </Link>
             </div>
             
-            {/* Right - Buy button */}
-            <button className="flex items-center bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200">
-              <ShoppingCart className="w-5 h-5 mr-2" />
-              Get Now
+            {/* Tombol Beli di kanan */}
+            <button className="flex items-center space-x-1 bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-xs font-medium transition-colors">
+              <ShoppingCart className="w-4 h-4" />
+              <span>Beli</span>
             </button>
           </div>
         </div>
