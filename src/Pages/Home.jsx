@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, memo } from "react";
-import { Github, Mail, ExternalLink, Discord, ArrowRight, Sparkles,Award, Wand2, Cpu, Zap, Clock, ShieldCheck } from "lucide-react";
+import { Github, Mail, ExternalLink, MessageCircle, ArrowRight, Sparkles,Award, Wand2, Cpu, Zap, Clock, ShieldCheck } from "lucide-react";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import AOS from "aos";
 import { Link } from "react-router-dom";
@@ -27,7 +27,7 @@ const FEATURE_BADGES = [
 ];
 const SOCIAL_LINKS = [
   { icon: Github, link: "https://github.com/" },
-  { icon: Discord, link: "https://dsc.gg/Tenebris" },
+  { icon: MessageCircle, link: "https://dsc.gg/Tenebris" },
 ];
 
 // Dummy Project Data
