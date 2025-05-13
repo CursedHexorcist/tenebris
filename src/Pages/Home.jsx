@@ -190,9 +190,9 @@ const Home = () => {
           </div>
 
           {/* PROJECT SECTION */}
-          <div className="mt-20" data-aos="fade-up" data-aos-delay="300">
+          <div className="pb-20" data-aos="fade-up" data-aos-delay="300">
             {/* Our Product Header */}
-            <div className="text-center mb-8">
+            <div className="text-center mb-6">
               <div className="inline-block relative group">
                 <h2 
                   className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#06B6D4] to-[#FFD6E7]" 
@@ -213,33 +213,42 @@ const Home = () => {
               </p>
             </div>
 
-            {/* Project Filter */}
-            <div className="flex gap-3 mb-6 justify-center">
-              {["All", "Ongoing", "Coming Soon"].map((cat) => (
-                <button
-                  key={cat}
-                  onClick={() => setSelectedCategory(cat)}
-                  className={`px-4 py-1.5 rounded-full text-sm font-medium transition ${
-                    selectedCategory === cat
-                      ? "bg-[#06B6D4]/10 text-[#06B6D4] border border-[#06B6D4]/50"
-                      : "text-gray-400 border border-transparent hover:text-white"
-                  }`}
-                >
-                  {cat}
-                </button>
+            {/* Social Icons - Moved closer to Our Product */}
+            <div className="flex justify-center gap-4 mb-8">
+              {SOCIAL_LINKS.map((s, i) => (
+                <SocialLink key={i} {...s} />
               ))}
             </div>
-            <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
-              {filteredProjects.map((project) => (
-                <Link
-                  key={project.id}
-                  to={`/project/${project.id}`}
-                  className="p-4 rounded-xl bg-white/5 backdrop-blur border border-white/10 hover:border-[#06B6D4]/30 transition"
-                >
-                  <div className="text-lg font-semibold text-white">{project.name}</div>
-                  <div className="text-sm text-gray-400 mt-1">{project.category}</div>
-                </Link>
-              ))}
+
+            {/* Project Filter - Moved further down */}
+            <div className="mt-12">
+              <div className="flex gap-3 mb-6 justify-center">
+                {["All", "Ongoing", "Coming Soon"].map((cat) => (
+                  <button
+                    key={cat}
+                    onClick={() => setSelectedCategory(cat)}
+                    className={`px-4 py-1.5 rounded-full text-sm font-medium transition ${
+                      selectedCategory === cat
+                        ? "bg-[#06B6D4]/10 text-[#06B6D4] border border-[#06B6D4]/50"
+                        : "text-gray-400 border border-transparent hover:text-white"
+                    }`}
+                  >
+                    {cat}
+                  </button>
+                ))}
+              </div>
+              <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
+                {filteredProjects.map((project) => (
+                  <Link
+                    key={project.id}
+                    to={`/project/${project.id}`}
+                    className="p-4 rounded-xl bg-white/5 backdrop-blur border border-white/10 hover:border-[#06B6D4]/30 transition"
+                  >
+                    <div className="text-lg font-semibold text-white">{project.name}</div>
+                    <div className="text-sm text-gray-400 mt-1">{project.category}</div>
+                  </Link>
+                ))}
+              </div>
             </div>
           </div>
         </div>
