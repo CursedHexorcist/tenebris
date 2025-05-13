@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, memo } from "react";
-import { Github, Linkedin, Mail, ExternalLink, Instagram, ArrowRight, Sparkles, Award, Wand2, Cpu } from "lucide-react";
+import { Github, Linkedin, Mail, ExternalLink, Instagram, ArrowRight, Sparkles,Award, Wand2, Cpu, Zap, Clock, ShieldCheck } from "lucide-react";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import AOS from "aos";
 import { Link } from "react-router-dom";
@@ -18,9 +18,12 @@ const WORDS = [
 
 // Badge & Social Link Data
 const FEATURE_BADGES = [
+  { icon: Zap, label: "Fast Execution" },
+  { icon: Clock, label: "24/7 Service" },
+  { icon: ShieldCheck, label: "Safe & Secure" },
   { icon: Award, label: "Premium Quality" },
   { icon: Wand2, label: "Easy To Use" },
-  { icon: Cpu, label: "Executor Compatibility" },
+  { icon: Cpu, label: "Executor Compatibility" }
 ];
 const SOCIAL_LINKS = [
   { icon: Github, link: "https://github.com/gabrieluiux" },
