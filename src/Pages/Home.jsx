@@ -131,7 +131,7 @@ const Home = () => {
       : PROJECTS.filter((p) => p.category === selectedCategory);
 
   const lottieOptions = {
-    src: "https://lottie.host/5880aed6-ea38-4b2e-8a31-5d7ef753a3bf/1zoJh7p1Lg.lottie",
+    src: "https://lottie.host/91b4f3ae-2e02-4d42-9a5f-9bf8a5a73b28/ZR06yRFgvh.lottie",
     loop: true,
     autoplay: true,
     style: { width: "100%", height: "100%" },
