@@ -190,9 +190,9 @@ const Home = () => {
           </div>
 
           {/* PROJECT SECTION */}
-          <div className="pb-20" data-aos="fade-up" data-aos-delay="300">
+          <div className="py-12 md:py-16" data-aos="fade-up" data-aos-delay="300">
             {/* Our Product Header */}
-            <div className="text-center mb-6">
+            <div className="text-center mb-8 md:mb-10">
               <div className="inline-block relative group">
                 <h2 
                   className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#06B6D4] to-[#FFD6E7]" 
