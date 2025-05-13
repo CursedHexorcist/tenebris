@@ -3,7 +3,6 @@ import { Github, Mail, ExternalLink, ArrowRight, Sparkles,Award, Wand2, Cpu, Zap
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import AOS from "aos";
 import { Link } from "react-router-dom";
-import { ReactComponent as Discord } from "../dist/discord.svg";
 import "aos/dist/aos.css";
 
 // Typing Constants
@@ -28,7 +27,7 @@ const FEATURE_BADGES = [
 ];
 const SOCIAL_LINKS = [
   { icon: Github, link: "https://github.com/" },
-  { icon: Discord, link: "https://dsc.gg/Tenebris" },
+  { icon: "https://res.cloudinary.com/dc3bfhgfd/image/upload/v1747129106/icons8-discord-30_eqdhkn.png", link: "https://dsc.gg/Tenebris" },
 ];
 
 // Dummy Project Data
