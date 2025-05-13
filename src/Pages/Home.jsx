@@ -3,7 +3,7 @@ import { Github, Mail, ExternalLink, MessageCircle, ArrowRight, Sparkles,Award, 
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import AOS from "aos";
 import { Link } from "react-router-dom";
-import { ReactComponent as Discord } from "../dist/discord.svg"; // Pastikan path sesuai
+import { ReactComponent as Discord } from "../dist/discord.svg";
 import "aos/dist/aos.css";
 
 // Typing Constants
