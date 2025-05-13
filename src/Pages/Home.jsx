@@ -135,7 +135,7 @@ const Home = () => {
     <div className="min-h-screen bg-[#030014] overflow-hidden" id="Home">
       <div className={`relative z-10 transition-all duration-1000 ${isLoaded ? "opacity-100" : "opacity-0"}`}>
         <div className="container mx-auto px-4 sm:px-6 lg:px-16 xl:px-24 2xl:px-32 min-h-screen">
-          <div className="flex flex-col lg:flex-row items-center md:justify-between gap-6 lg:gap-12 pt-24 md:pt-28 pb-10">
+          <div className="flex flex-col lg:flex-row items-center md:justify-between gap-6 lg:gap-12 pt-16 md:pt-20 pb-8">
             {/* LEFT */}
             <div className="w-full lg:w-1/2 space-y-4 sm:space-y-6 md:space-y-8" data-aos="fade-right" data-aos-delay="200">
               <MainTitle />
@@ -172,7 +172,7 @@ const Home = () => {
 
             {/* RIGHT - Lottie Animation */}
             <div
-              className="w-full py-8 sm:py-0 lg:w-1/2 relative flex items-center justify-center"
+              className="w-full py-6 sm:py-0 lg:w-1/2 relative flex items-center justify-center"
               onMouseEnter={() => setIsHovering(true)}
               onMouseLeave={() => setIsHovering(false)}
               data-aos="fade-left"
@@ -190,9 +190,9 @@ const Home = () => {
           </div>
 
           {/* PROJECT SECTION */}
-          <div className="py-12 md:py-16" data-aos="fade-up" data-aos-delay="300">
+          <div className="py-8 md:py-12" data-aos="fade-up" data-aos-delay="300">
             {/* Our Product Header */}
-            <div className="text-center mb-8 md:mb-10">
+            <div className="text-center mb-6 md:mb-8">
               <div className="inline-block relative group">
                 <h2 
                   className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#06B6D4] to-[#FFD6E7]" 
@@ -214,7 +214,7 @@ const Home = () => {
             </div>
 
             {/* Project Filter and Content */}
-            <div className="mt-8 flex flex-col md:flex-row gap-6">
+            <div className="mt-6 flex flex-col md:flex-row gap-4">
               {/* Left Side Filter - Slider Style */}
               <div className="md:w-48 flex-shrink-0">
                 <div className="flex md:flex-col gap-2 overflow-x-auto md:overflow-x-visible pb-2 md:pb-0">
@@ -236,7 +236,7 @@ const Home = () => {
 
               {/* Right Side Projects */}
               <div className="flex-1">
-                <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
+                <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
                   {filteredProjects.map((project) => (
                     <Link
                       key={project.id}
@@ -249,6 +249,26 @@ const Home = () => {
                   ))}
                 </div>
               </div>
+            </div>
+          </div>
+
+          {/* ABOUT US SECTION */}
+          <div className="py-8 md:py-12" id="About">
+            <div className="text-center mb-6 md:mb-8">
+              <h2 className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#06B6D4] to-[#FFD6E7]">
+                About Us
+              </h2>
+              <p className="mt-2 text-gray-400 max-w-2xl mx-auto text-base sm:text-lg">
+                We are passionate developers creating innovative solutions
+              </p>
+            </div>
+            <div className="max-w-4xl mx-auto text-gray-300 text-center">
+              <p className="mb-4">
+                Our team specializes in building high-performance applications with cutting-edge technologies.
+              </p>
+              <p>
+                We focus on delivering exceptional user experiences while maintaining robust and scalable architectures.
+              </p>
             </div>
           </div>
         </div>
