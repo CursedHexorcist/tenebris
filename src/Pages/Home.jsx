@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, memo } from "react";
-import { Github, Linkedin, Mail, ExternalLink, Instagram, ArrowRight, Sparkles } from "lucide-react";
+import { Github, Linkedin, Mail, ExternalLink, Instagram, ArrowRight, Sparkles, Award, Wand2, Cpu } from "lucide-react";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import AOS from "aos";
 import { Link } from "react-router-dom";
@@ -18,9 +18,9 @@ const WORDS = [
 
 // Badge & Social Link Data
 const FEATURE_BADGES = [
-  { icon: "⚡", label: "Fast Execution" },
-  { icon: "🚀", label: "24/7 Service" },
-  { icon: "🔒", label: "Safe & Secure" },
+  { icon: Award, label: "Premium Quality" },
+  { icon: Wand2, label: "Easy To Use" },
+  { icon: Cpu, label: "Executor Compatibility" },
 ];
 const SOCIAL_LINKS = [
   { icon: Github, link: "https://github.com/gabrieluiux" },
@@ -47,9 +47,9 @@ const MainTitle = memo(() => (
 ));
 
 // Feature Badge
-const FeatureBadge = memo(({ icon, label }) => (
+const FeatureBadge = memo(({ icon: Icon, label }) => (
   <div className="px-3 py-1 rounded-full border border-white/10 text-white text-sm flex items-center gap-2 bg-white/5 backdrop-blur-md">
-    <span>{icon}</span>
+    <Icon className="w-4 h-4" />
     <span>{label}</span>
   </div>
 ));
