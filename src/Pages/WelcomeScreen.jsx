@@ -15,7 +15,7 @@ const TypewriterEffect = ({ text, className = "" }) => {
       } else {
         clearInterval(timer);
       }
-    }, 80);
+    }, 100);
 
     return () => clearInterval(timer);
   }, [text]);
@@ -31,9 +31,9 @@ const TypewriterEffect = ({ text, className = "" }) => {
 const BackgroundEffect = () => (
   <div className="absolute inset-0 overflow-hidden">
     <motion.div 
-      className="absolute inset-0 bg-gradient-to-br from-indigo-900/30 via-purple-900/20 to-pink-900/30 blur-2xl"
+      className="absolute inset-0 bg-gradient-to-r from-indigo-700/50 via-purple-700/30 to-pink-600/40 blur-2xl"
       animate={{
-        opacity: [0.8, 1, 0.8],
+        opacity: [0.7, 1, 0.7],
       }}
       transition={{
         duration: 5,
@@ -41,39 +41,21 @@ const BackgroundEffect = () => (
         ease: "easeInOut"
       }}
     />
-    <motion.div 
-      className="absolute inset-0 bg-gradient-to-tr from-indigo-600/20 via-transparent to-purple-600/20 blur-3xl"
-      animate={{
-        backgroundPosition: ['0% 0%', '100% 100%'],
-      }}
-      transition={{
-        duration: 12,
-        repeat: Infinity,
-        repeatType: "reverse",
-        ease: "linear"
-      }}
-    />
   </div>
 );
 
-const ParticleEffect = () => (
-  <motion.div
-    className="absolute top-0 left-0 w-full h-full"
-    animate={{
-      opacity: [0, 1, 0],
-      scale: [1, 1.5, 1],
+const HoverButton = ({ children, className = "" }) => (
+  <motion.button
+    className={`py-2 px-4 text-white font-bold bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg transition-all duration-300 transform ${className}`}
+    whileHover={{
+      scale: 1.05,
+      boxShadow: "0px 5px 30px rgba(255, 255, 255, 0.2)",
+      backgroundColor: "rgba(0,0,0,0.4)",
     }}
-    transition={{
-      duration: 3,
-      repeat: Infinity,
-      repeatType: "reverse",
-      ease: "easeInOut"
-    }}
+    whileTap={{ scale: 0.98 }}
   >
-    <div className="absolute w-2 h-2 bg-white rounded-full animate-ping opacity-50" style={{ animationDelay: "0s" }} />
-    <div className="absolute w-2 h-2 bg-cyan-300 rounded-full animate-ping opacity-50" style={{ animationDelay: "1s" }} />
-    <div className="absolute w-2 h-2 bg-purple-400 rounded-full animate-ping opacity-50" style={{ animationDelay: "2s" }} />
-  </motion.div>
+    {children}
+  </motion.button>
 );
 
 const WelcomeScreen = ({ onLoadingComplete }) => {
@@ -158,12 +140,11 @@ const WelcomeScreen = ({ onLoadingComplete }) => {
           variants={containerVariants}
         >
           <BackgroundEffect />
-          <ParticleEffect />
 
           {showContent && (
             <div className="relative z-10 text-center px-4 w-full max-w-4xl mx-auto">
               {/* Main Glowing Background */}
-              <div className="absolute -inset-8 bg-gradient-to-r from-cyan-500/30 via-purple-500/20 to-pink-500/20 rounded-full blur-3xl animate-glow-pulse" />
+              <div className="absolute -inset-8 bg-gradient-to-r from-blue-500/30 via-purple-600/20 to-pink-500/20 rounded-full blur-3xl animate-glow-pulse" />
               
               {/* Text Container */}
               <motion.div
@@ -193,21 +174,14 @@ const WelcomeScreen = ({ onLoadingComplete }) => {
                 </h1>
               </motion.div>
 
-              {/* Glowing Loading Bar */}
+              {/* Premium Button */}
               <motion.div
-                className="flex justify-center relative group"
+                className="flex justify-center mt-6"
                 variants={textVariants}
               >
-                <div className="absolute -inset-1 bg-gradient-to-r from-blue-500/30 to-purple-600/30 rounded-full blur opacity-0 group-hover:opacity-50 transition-opacity duration-300" />
-                <div className="relative w-64 h-2 bg-gray-800 rounded-full overflow-hidden">
-                  <motion.div
-                    className="absolute top-0 left-0 h-full bg-gradient-to-r from-blue-400 to-purple-500"
-                    initial={{ width: 0 }}
-                    animate={{ width: "100%" }}
-                    transition={{ duration: 1.5, ease: "linear" }}
-                  />
-                </div>
+                <HoverButton>Enter the Hub</HoverButton>
               </motion.div>
+
             </div>
           )}
         </motion.div>
