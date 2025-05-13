@@ -15,7 +15,7 @@ const TypewriterEffect = ({ text, className = "" }) => {
       } else {
         clearInterval(timer);
       }
-    }, 100);
+    }, 80);
 
     return () => clearInterval(timer);
   }, [text]);
@@ -23,7 +23,7 @@ const TypewriterEffect = ({ text, className = "" }) => {
   return (
     <span className={`inline-block ${className}`}>
       {displayText}
-      <span className="animate-pulse">|</span>
+      <span className="animate-blink">|</span>
     </span>
   );
 };
@@ -31,23 +31,23 @@ const TypewriterEffect = ({ text, className = "" }) => {
 const BackgroundEffect = () => (
   <div className="absolute inset-0 overflow-hidden">
     <motion.div 
-      className="absolute inset-0 bg-gradient-to-br from-indigo-900/30 via-purple-900/30 to-pink-900/30 blur-3xl"
+      className="absolute inset-0 bg-gradient-to-br from-indigo-900/30 via-purple-900/20 to-pink-900/30 blur-2xl"
       animate={{
         opacity: [0.8, 1, 0.8],
       }}
       transition={{
-        duration: 4,
+        duration: 5,
         repeat: Infinity,
         ease: "easeInOut"
       }}
     />
     <motion.div 
-      className="absolute inset-0 bg-gradient-to-tr from-indigo-600/20 via-transparent to-purple-600/20 blur-2xl"
+      className="absolute inset-0 bg-gradient-to-tr from-indigo-600/20 via-transparent to-purple-600/20 blur-3xl"
       animate={{
         backgroundPosition: ['0% 0%', '100% 100%'],
       }}
       transition={{
-        duration: 8,
+        duration: 12,
         repeat: Infinity,
         repeatType: "reverse",
         ease: "linear"
@@ -56,22 +56,42 @@ const BackgroundEffect = () => (
   </div>
 );
 
+const ParticleEffect = () => (
+  <motion.div
+    className="absolute top-0 left-0 w-full h-full"
+    animate={{
+      opacity: [0, 1, 0],
+      scale: [1, 1.5, 1],
+    }}
+    transition={{
+      duration: 3,
+      repeat: Infinity,
+      repeatType: "reverse",
+      ease: "easeInOut"
+    }}
+  >
+    <div className="absolute w-2 h-2 bg-white rounded-full animate-ping opacity-50" style={{ animationDelay: "0s" }} />
+    <div className="absolute w-2 h-2 bg-cyan-300 rounded-full animate-ping opacity-50" style={{ animationDelay: "1s" }} />
+    <div className="absolute w-2 h-2 bg-purple-400 rounded-full animate-ping opacity-50" style={{ animationDelay: "2s" }} />
+  </motion.div>
+);
+
 const WelcomeScreen = ({ onLoadingComplete }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [showContent, setShowContent] = useState(false);
 
   useEffect(() => {
     AOS.init({
-      duration: 1000,
+      duration: 1200,
       once: false,
-      mirror: false,
+      mirror: true,
     });
 
     const timer1 = setTimeout(() => setShowContent(true), 300);
     const timer2 = setTimeout(() => {
       setIsLoading(false);
-      setTimeout(() => onLoadingComplete?.(), 1000);
-    }, 1500);
+      setTimeout(() => onLoadingComplete?.(), 1500);
+    }, 1800);
 
     return () => {
       clearTimeout(timer1);
@@ -84,43 +104,45 @@ const WelcomeScreen = ({ onLoadingComplete }) => {
     visible: { 
       opacity: 1,
       transition: {
-        when: "beforeChildren",
-        staggerChildren: 0.2
+        staggerChildren: 0.3,
+        delayChildren: 0.5,
       }
     },
     exit: {
       opacity: 0,
-      scale: 0.95,
+      scale: 0.9,
       transition: {
-        duration: 0.8,
-        ease: [0.22, 1, 0.36, 1],
-        when: "afterChildren"
+        duration: 0.7,
+        ease: "easeInOut",
       }
     }
   };
 
   const textVariants = {
     hidden: { 
-      y: 40,
+      y: 100,
       opacity: 0,
-      filter: 'blur(5px)'
+      filter: 'blur(10px)',
+      scale: 0.95,
     },
     visible: {
       y: 0,
       opacity: 1,
       filter: 'blur(0px)',
+      scale: 1,
       transition: {
         type: "spring",
         stiffness: 100,
-        damping: 15
+        damping: 25
       }
     },
     exit: {
-      y: -40,
+      y: -100,
       opacity: 0,
       filter: 'blur(5px)',
+      scale: 0.9,
       transition: {
-        ease: "easeIn"
+        ease: "easeOut"
       }
     }
   };
@@ -129,43 +151,41 @@ const WelcomeScreen = ({ onLoadingComplete }) => {
     <AnimatePresence>
       {isLoading && (
         <motion.div
-          className="fixed inset-0 bg-[#050017] overflow-hidden flex items-center justify-center font-poppins"
+          className="fixed inset-0 bg-[#0a0011] flex items-center justify-center text-white font-poppins"
           initial="hidden"
           animate="visible"
           exit="exit"
           variants={containerVariants}
         >
           <BackgroundEffect />
+          <ParticleEffect />
 
           {showContent && (
             <div className="relative z-10 text-center px-4 w-full max-w-4xl mx-auto">
-              {/* Main Glow Container */}
-              <div className="absolute -inset-8 bg-gradient-to-r from-indigo-500/30 via-purple-500/30 to-pink-500/30 rounded-full blur-3xl animate-glow-pulse" />
+              {/* Main Glowing Background */}
+              <div className="absolute -inset-8 bg-gradient-to-r from-cyan-500/30 via-purple-500/20 to-pink-500/20 rounded-full blur-3xl animate-glow-pulse" />
               
               {/* Text Container */}
               <motion.div
-                className="text-center mb-6 sm:mb-8 md:mb-12 relative"
+                className="text-center mb-8 sm:mb-12 md:mb-16 relative"
                 variants={textVariants}
               >
-                <h1 className="text-3xl sm:text-4xl md:text-6xl font-bold space-y-2 sm:space-y-4">
-                  <div className="mb-2 sm:mb-4 relative">
-                    {/* White "Welcome to" with glow */}
-                    <div className="relative inline-block">
-                      <div className="absolute -inset-1 bg-white/20 rounded-full blur-md" />
-                      <TypewriterEffect 
-                        text="Welcome to" 
-                        className="text-white font-medium tracking-wider"
-                      />
-                    </div>
+                <h1 className="text-4xl sm:text-5xl md:text-7xl font-extrabold tracking-widest">
+                  <div className="relative mb-4 sm:mb-6">
+                    <div className="absolute inset-0 bg-white/25 rounded-lg blur-2xl" />
+                    <TypewriterEffect 
+                      text="Welcome to" 
+                      className="text-white font-semibold tracking-wide text-shadow-xl"
+                    />
                   </div>
-                  <div className="mt-8 flex items-center justify-center space-x-[2px]">
+                  <div className="mt-10 flex items-center justify-center space-x-2">
                     <div className="relative inline-block group">
-                      <span className="relative inline-block px-[2px] bg-gradient-to-r from-cyan-400 via-blue-300 to-purple-400 bg-clip-text text-transparent">
+                      <span className="relative inline-block px-[2px] bg-gradient-to-r from-blue-400 via-indigo-500 to-purple-400 bg-clip-text text-transparent">
                         TENEBRIS
                       </span>
                     </div>
                     <div className="relative inline-block group">
-                      <span className="relative inline-block px-[2px] bg-gradient-to-r from-cyan-400 via-blue-300 to-purple-400 bg-clip-text text-transparent">
+                      <span className="relative inline-block px-[2px] bg-gradient-to-r from-blue-400 via-indigo-500 to-purple-400 bg-clip-text text-transparent">
                         HUB
                       </span>
                     </div>
@@ -173,19 +193,19 @@ const WelcomeScreen = ({ onLoadingComplete }) => {
                 </h1>
               </motion.div>
 
-              {/* Loading Bar with Glow */}
+              {/* Glowing Loading Bar */}
               <motion.div
                 className="flex justify-center relative group"
                 variants={textVariants}
               >
-                <div className="absolute -inset-1 bg-gradient-to-r from-cyan-400/20 to-purple-500/20 rounded-full blur opacity-0 group-hover:opacity-50 transition-opacity duration-300" />
-                <div className="relative w-48 h-1 bg-gray-700 rounded-full overflow-hidden">
+                <div className="absolute -inset-1 bg-gradient-to-r from-blue-500/30 to-purple-600/30 rounded-full blur opacity-0 group-hover:opacity-50 transition-opacity duration-300" />
+                <div className="relative w-64 h-2 bg-gray-800 rounded-full overflow-hidden">
                   <motion.div
-                    className="absolute top-0 left-0 h-full bg-gradient-to-r from-cyan-400 to-purple-500"
+                    className="absolute top-0 left-0 h-full bg-gradient-to-r from-blue-400 to-purple-500"
                     initial={{ width: 0 }}
                     animate={{ width: "100%" }}
-                    transition={{ duration: 1, ease: "linear" }} // Durasi 1.9 detik
-                    />
+                    transition={{ duration: 1.5, ease: "linear" }}
+                  />
                 </div>
               </motion.div>
             </div>
