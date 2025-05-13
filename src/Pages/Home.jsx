@@ -121,7 +121,7 @@ const Home = () => {
       setTimeout(() => {
         setSelectedCategory(category);
         setIsTransitioning(false);
-      }, 300); // Match this duration with the CSS transition
+      }, 300);
     }
   };
 
@@ -146,7 +146,6 @@ const Home = () => {
     <div className="min-h-screen bg-[#030014] overflow-hidden" id="Home">
       <div className={`relative z-10 transition-all duration-1000 ${isLoaded ? "opacity-100" : "opacity-0"}`}>
         <div className="container mx-auto px-4 sm:px-6 lg:px-16 xl:px-24 2xl:px-32 min-h-screen">
-          {/* Adjusted padding-top to move content up */}
           <div className="flex flex-col lg:flex-row items-center md:justify-between gap-6 lg:gap-12 pt-16 md:pt-20 pb-10">
             {/* LEFT */}
             <div className="w-full lg:w-1/2 space-y-4 sm:space-y-6 md:space-y-8" data-aos="fade-right" data-aos-delay="200">
@@ -162,20 +161,7 @@ const Home = () => {
                   <FeatureBadge key={i} {...badge} />
                 ))}
               </div>
-              <div className="flex gap-3" data-aos="fade-up" data-aos-delay="1400">
-                <Link
-                  to={`/project/your-project-id`}
-                  className="inline-flex items-center text-[#06B6D4] hover:text-[#06B6D4]/80"
-                >
-                  <span className="text-sm font-medium">Detail Project</span>
-                  <ArrowRight className="w-4 h-4 ml-1" />
-                </Link>
-                <a href="#Contact" className="inline-flex items-center text-[#06B6D4] hover:text-[#06B6D4]/80">
-                  <span className="text-sm font-medium">Contact</span>
-                  <Mail className="w-4 h-4 ml-1" />
-                </a>
-              </div>
-              <div className="hidden sm:flex gap-4" data-aos="fade-up" data-aos-delay="1600">
+              <div className="flex gap-4" data-aos="fade-up" data-aos-delay="1600">
                 {SOCIAL_LINKS.map((s, i) => (
                   <SocialLink key={i} {...s} />
                 ))}
