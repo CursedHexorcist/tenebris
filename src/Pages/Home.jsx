@@ -134,7 +134,7 @@ const Home = () => {
   return (
     <div className="min-h-screen bg-[#030014] overflow-hidden" id="Home">
       <div className={`relative z-10 transition-all duration-1000 ${isLoaded ? "opacity-100" : "opacity-0"}`}>
-        <div className="container mx-auto px-4 sm:px-6 lg:px-16 xl:px-24 2xl:px-32 min-h-screen">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-16 xl:px-24 2xl:px-32 pt-24 md:pt-28 pb-8">
           <div className="flex flex-col lg:flex-row items-center md:justify-between gap-6 lg:gap-12 pt-16 md:pt-20 pb-8">
             {/* LEFT */}
             <div className="w-full lg:w-1/2 space-y-4 sm:space-y-6 md:space-y-8" data-aos="fade-right" data-aos-delay="200">
