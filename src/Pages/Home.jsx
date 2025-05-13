@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, memo } from "react";
-import { Github, Linkedin, Mail, ExternalLink, Instagram, ArrowRight } from "lucide-react";
+import { Github, Linkedin, Mail, ExternalLink, Instagram, ArrowRight, Sparkles } from "lucide-react";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import AOS from "aos";
 import { Link } from "react-router-dom";
@@ -189,8 +189,31 @@ const Home = () => {
             </div>
           </div>
 
-          {/* PROJECT FILTER SECTION */}
+          {/* PROJECT SECTION */}
           <div className="mt-20" data-aos="fade-up" data-aos-delay="300">
+            {/* Our Product Header */}
+            <div className="text-center mb-8">
+              <div className="inline-block relative group">
+                <h2 
+                  className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#06B6D4] to-[#FFD6E7]" 
+                  data-aos="zoom-in-up"
+                  data-aos-duration="600"
+                >
+                  Our Product
+                </h2>
+              </div>
+              <p 
+                className="mt-2 text-gray-400 max-w-2xl mx-auto text-base sm:text-lg flex items-center justify-center gap-2"
+                data-aos="zoom-in-up"
+                data-aos-duration="800"
+              >
+                <Sparkles className="w-5 h-5 text-[#06B6D4]" />
+                Crafting digital experiences that inspire and perform
+                <Sparkles className="w-5 h-5 text-[#FFD6E7]" />
+              </p>
+            </div>
+
+            {/* Project Filter */}
             <div className="flex gap-3 mb-6 justify-center">
               {["All", "Ongoing", "Coming Soon"].map((cat) => (
                 <button
