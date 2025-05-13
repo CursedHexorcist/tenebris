@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, memo } from "react";
-import { Github, Mail, ExternalLink, MessageCircle, ArrowRight, Sparkles,Award, Wand2, Cpu, Zap, Clock, ShieldCheck } from "lucide-react";
+import { Github, Mail, ExternalLink, ArrowRight, Sparkles,Award, Wand2, Cpu, Zap, Clock, ShieldCheck } from "lucide-react";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import AOS from "aos";
 import { Link } from "react-router-dom";
