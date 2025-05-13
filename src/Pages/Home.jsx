@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, memo } from "react";
-import { Github, Linkedin, Mail, ExternalLink, Instagram, ArrowRight, Sparkles,Award, Wand2, Cpu, Zap, Clock, ShieldCheck } from "lucide-react";
+import { Github, Mail, ExternalLink, Discord, ArrowRight, Sparkles,Award, Wand2, Cpu, Zap, Clock, ShieldCheck } from "lucide-react";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import AOS from "aos";
 import { Link } from "react-router-dom";
@@ -26,9 +26,8 @@ const FEATURE_BADGES = [
   { icon: Cpu, label: "Executor Compatibility" }
 ];
 const SOCIAL_LINKS = [
-  { icon: Github, link: "https://github.com/gabrieluiux" },
-  { icon: Linkedin, link: "https://www.linkedin.com/in/gabrielltan/" },
-  { icon: Instagram, link: "https://www.instagram.com/capt_ivonic/?hl=id" },
+  { icon: Github, link: "https://github.com/" },
+  { icon: Discord, link: "https://dsc.gg/Tenebris" },
 ];
 
 // Dummy Project Data
