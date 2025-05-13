@@ -75,6 +75,7 @@ const Home = () => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("All");
+  const [isTransitioning, setIsTransitioning] = useState(false);
 
   useEffect(() => {
     AOS.init({ once: true, offset: 10 });
@@ -114,6 +115,16 @@ const Home = () => {
     return () => clearTimeout(timeout);
   }, [handleTyping]);
 
+  const handleCategoryChange = (category) => {
+    if (category !== selectedCategory) {
+      setIsTransitioning(true);
+      setTimeout(() => {
+        setSelectedCategory(category);
+        setIsTransitioning(false);
+      }, 300); // Match this duration with the CSS transition
+    }
+  };
+
   const filteredProjects =
     selectedCategory === "All"
       ? PROJECTS
@@ -135,7 +146,8 @@ const Home = () => {
     <div className="min-h-screen bg-[#030014] overflow-hidden" id="Home">
       <div className={`relative z-10 transition-all duration-1000 ${isLoaded ? "opacity-100" : "opacity-0"}`}>
         <div className="container mx-auto px-4 sm:px-6 lg:px-16 xl:px-24 2xl:px-32 min-h-screen">
-          <div className="flex flex-col lg:flex-row items-center md:justify-between gap-6 lg:gap-12 pt-24 md:pt-28 pb-10">
+          {/* Adjusted padding-top to move content up */}
+          <div className="flex flex-col lg:flex-row items-center md:justify-between gap-6 lg:gap-12 pt-16 md:pt-20 pb-10">
             {/* LEFT */}
             <div className="w-full lg:w-1/2 space-y-4 sm:space-y-6 md:space-y-8" data-aos="fade-right" data-aos-delay="200">
               <MainTitle />
@@ -221,8 +233,8 @@ const Home = () => {
                   {["All", "Ongoing", "Coming Soon"].map((cat) => (
                     <button
                       key={cat}
-                      onClick={() => setSelectedCategory(cat)}
-                      className={`px-4 py-2 rounded-lg text-sm font-medium transition whitespace-nowrap ${
+                      onClick={() => handleCategoryChange(cat)}
+                      className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 whitespace-nowrap ${
                         selectedCategory === cat
                           ? "bg-[#06B6D4]/10 text-[#06B6D4] border border-[#06B6D4]/50"
                           : "text-gray-400 border border-transparent hover:text-white hover:bg-white/5"
@@ -236,12 +248,14 @@ const Home = () => {
 
               {/* Right Side Projects */}
               <div className="flex-1">
-                <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
+                <div className={`grid sm:grid-cols-2 md:grid-cols-3 gap-6 transition-opacity duration-300 ${
+                  isTransitioning ? "opacity-50" : "opacity-100"
+                }`}>
                   {filteredProjects.map((project) => (
                     <Link
                       key={project.id}
                       to={`/project/${project.id}`}
-                      className="p-4 rounded-xl bg-white/5 backdrop-blur border border-white/10 hover:border-[#06B6D4]/30 transition"
+                      className="p-4 rounded-xl bg-white/5 backdrop-blur border border-white/10 hover:border-[#06B6D4]/30 transition-all duration-300 hover:scale-[1.02]"
                     >
                       <div className="text-lg font-semibold text-white">{project.name}</div>
                       <div className="text-sm text-gray-400 mt-1">{project.category}</div>
