@@ -18,9 +18,9 @@ const WORDS = [
 
 // Badge & Social Link Data
 const FEATURE_BADGES = [
-  { icon: "⚡", label: "Fast Execution" },
-  { icon: "🚀", label: "24/7 Service" },
-  { icon: "🔒", label: "Safe & Secure" },
+  { icon: "âš¡", label: "Fast Execution" },
+  { icon: "ðŸš€", label: "24/7 Service" },
+  { icon: "ðŸ”’", label: "Safe & Secure" },
 ];
 const SOCIAL_LINKS = [
   { icon: Github, link: "https://github.com/gabrieluiux" },
@@ -133,13 +133,11 @@ const Home = () => {
 
   return (
     <div className="min-h-screen bg-[#030014] overflow-hidden" id="Home">
-      <div className={`relative z-10 transition-all duration-1000 ${isLoaded ? "opacity-100" : "opacity-0"}`}>
-        {/* MAIN CONTAINER WITH ADJUSTED PADDING */}
-        <div className="container mx-auto px-4 sm:px-6 lg:px-16 xl:px-24 2xl:px-32 pt-8 md:pt-12 lg:pt-20 pb-4">
-          {/* CONTENT CONTAINER WITH REDUCED PADDING FOR MD SCREENS */}
-          <div className="flex flex-col lg:flex-row items-center md:justify-between gap-4 md:gap-6 lg:gap-12 pt-6 md:pt-8 lg:pt-12 pb-8">
+      <div className={relative z-10 transition-all duration-1000 ${isLoaded ? "opacity-100" : "opacity-0"}}>
+        <div className="container mx-auto px-4 sm:px-6 lg:px-16 xl:px-24 2xl:px-32 pt-12 md:pt-20 pb-4">
+          <div className="flex flex-col lg:flex-row items-center md:justify-between gap-6 lg:gap-12 pt-8 md:pt-12 pb-8">
             {/* LEFT */}
-            <div className="w-full lg:w-1/2 space-y-4 sm:space-y-5 md:space-y-6" data-aos="fade-right" data-aos-delay="200">
+            <div className="w-full lg:w-1/2 space-y-4 sm:space-y-6 md:space-y-8" data-aos="fade-right" data-aos-delay="200">
               <MainTitle />
               <div className="h-8 flex items-center" data-aos="fade-up" data-aos-delay="800">
                 <span className="text-xl md:text-2xl bg-gradient-to-r from-gray-100 to-gray-300 bg-clip-text text-transparent font-light">
@@ -147,14 +145,14 @@ const Home = () => {
                 </span>
                 <span className="w-[3px] h-6 bg-gradient-to-t from-[#06B6D4] to-[#FFD6E7] ml-1 animate-blink"></span>
               </div>
-              <div className="flex flex-wrap gap-2 md:gap-3" data-aos="fade-up" data-aos-delay="1200">
+              <div className="flex flex-wrap gap-3" data-aos="fade-up" data-aos-delay="1200">
                 {FEATURE_BADGES.map((badge, i) => (
                   <FeatureBadge key={i} {...badge} />
                 ))}
               </div>
               <div className="flex gap-3" data-aos="fade-up" data-aos-delay="1400">
                 <Link
-                  to={`/project/your-project-id`}
+                  to={/project/your-project-id}
                   className="inline-flex items-center text-[#06B6D4] hover:text-[#06B6D4]/80"
                 >
                   <span className="text-sm font-medium">Detail Project</span>
@@ -174,13 +172,13 @@ const Home = () => {
 
             {/* RIGHT - Lottie Animation */}
             <div
-              className="w-full py-4 sm:py-0 lg:w-1/2 relative flex items-center justify-center"
+              className="w-full py-6 sm:py-0 lg:w-1/2 relative flex items-center justify-center"
               onMouseEnter={() => setIsHovering(true)}
               onMouseLeave={() => setIsHovering(false)}
               data-aos="fade-left"
               data-aos-delay="600"
             >
-              <div className="relative w-full max-w-[300px] sm:max-w-[360px] md:max-w-[400px] mx-auto opacity-90">
+              <div className="relative w-full max-w-[320px] sm:max-w-[400px] mx-auto opacity-90">
                 <div className={`absolute inset-0 bg-gradient-to-r ${
                   isHovering ? "from-black/10 to-black/10" : "from-[#06B6D4]/10 via-white/5 to-[#FFD6E7]/10"
                 } rounded-3xl blur-3xl`}></div>
@@ -191,13 +189,13 @@ const Home = () => {
             </div>
           </div>
 
-          {/* PROJECT SECTION WITH ADJUSTED PADDING */}
-          <div className="py-6 md:py-8 lg:py-12" data-aos="fade-up" data-aos-delay="300">
+          {/* PROJECT SECTION - Adjusted spacing values */}
+          <div className="py-4 md:py-8" data-aos="fade-up" data-aos-delay="300">
             {/* Our Product Header */}
-            <div className="text-center mb-4 md:mb-6 lg:mb-8">
+            <div className="text-center mb-4 md:mb-6">
               <div className="inline-block relative group">
                 <h2 
-                  className="text-3xl sm:text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#06B6D4] to-[#FFD6E7]" 
+                  className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#06B6D4] to-[#FFD6E7]" 
                   data-aos="zoom-in-up"
                   data-aos-duration="600"
                 >
@@ -216,15 +214,15 @@ const Home = () => {
             </div>
 
             {/* Project Filter and Content */}
-            <div className="mt-4 md:mt-6 flex flex-col md:flex-row gap-3 md:gap-4">
+            <div className="mt-4 flex flex-col md:flex-row gap-4">
               {/* Left Side Filter - Slider Style */}
-              <div className="md:w-40 lg:w-48 flex-shrink-0">
+              <div className="md:w-48 flex-shrink-0">
                 <div className="flex md:flex-col gap-2 overflow-x-auto md:overflow-x-visible pb-2 md:pb-0">
                   {["All", "Ongoing", "Coming Soon"].map((cat) => (
                     <button
                       key={cat}
                       onClick={() => setSelectedCategory(cat)}
-                      className={`px-3 py-1.5 md:px-4 md:py-2 rounded-lg text-sm font-medium transition whitespace-nowrap ${
+                      className={`px-4 py-2 rounded-lg text-sm font-medium transition whitespace-nowrap ${
                         selectedCategory === cat
                           ? "bg-[#06B6D4]/10 text-[#06B6D4] border border-[#06B6D4]/50"
                           : "text-gray-400 border border-transparent hover:text-white hover:bg-white/5"
@@ -238,15 +236,15 @@ const Home = () => {
 
               {/* Right Side Projects */}
               <div className="flex-1">
-                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
+                <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
                   {filteredProjects.map((project) => (
                     <Link
                       key={project.id}
-                      to={`/project/${project.id}`}
-                      className="p-3 md:p-4 rounded-xl bg-white/5 backdrop-blur border border-white/10 hover:border-[#06B6D4]/30 transition"
+                      to={/project/${project.id}}
+                      className="p-4 rounded-xl bg-white/5 backdrop-blur border border-white/10 hover:border-[#06B6D4]/30 transition"
                     >
-                      <div className="text-base md:text-lg font-semibold text-white">{project.name}</div>
-                      <div className="text-xs md:text-sm text-gray-400 mt-1">{project.category}</div>
+                      <div className="text-lg font-semibold text-white">{project.name}</div>
+                      <div className="text-sm text-gray-400 mt-1">{project.category}</div>
                     </Link>
                   ))}
                 </div>
