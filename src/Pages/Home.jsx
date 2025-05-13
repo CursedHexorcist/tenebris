@@ -3,6 +3,7 @@ import { Github, Mail, ExternalLink, MessageCircle, ArrowRight, Sparkles,Award, 
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import AOS from "aos";
 import { Link } from "react-router-dom";
+import { ReactComponent as Discord } from "../dist/discord.svg"; // Pastikan path sesuai
 import "aos/dist/aos.css";
 
 // Typing Constants
@@ -27,7 +28,7 @@ const FEATURE_BADGES = [
 ];
 const SOCIAL_LINKS = [
   { icon: Github, link: "https://github.com/" },
-  { icon: MessageCircle, link: "https://dsc.gg/Tenebris" },
+  { icon: Discord, link: "https://dsc.gg/Tenebris" },
 ];
 
 // Dummy Project Data
