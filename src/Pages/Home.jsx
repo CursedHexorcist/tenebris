@@ -32,10 +32,9 @@ const SOCIAL_LINKS = [
 
 // Dummy Project Data
 const PROJECTS = [
-  { id: "1", name: "Dashboard Redesign", category: "Ongoing" },
-  { id: "2", name: "Mobile App Concept", category: "Coming Soon" },
-  { id: "3", name: "E-Commerce UI", category: "Ongoing" },
-  { id: "4", name: "Portfolio v2", category: "Coming Soon" },
+  { id: "1", name: "ROBLOX SCRIPT", category: "Free" },
+  { id: "2", name: "GROWTOPIA SCRIPT", category: "Coming Soon" },
+  { id: "3", name: "SKIBIDI", category: "Free" },
 ];
 
 // Title Component
@@ -218,7 +217,7 @@ const Home = () => {
               {/* Left Side Filter - Slider Style */}
               <div className="md:w-48 flex-shrink-0">
                 <div className="flex md:flex-col gap-2 overflow-x-auto md:overflow-x-visible pb-2 md:pb-0">
-                  {["All", "Ongoing", "Coming Soon"].map((cat) => (
+                  {["All", "Free", "Coming Soon"].map((cat) => (
                     <button
                       key={cat}
                       onClick={() => handleCategoryChange(cat)}
