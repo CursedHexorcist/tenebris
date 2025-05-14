@@ -10,7 +10,7 @@
 	font-family: "Poppins", serif;
 	scroll-behavior: smooth;
 	scrollbar-width: thin;
-	scrollbar-color: rgba(0, 207, 213, 0.4) rgba(255, 158, 207, 0.2);
+	scrollbar-color: rgba(0, 207, 213, 0.5) rgba(0, 207, 213, 0.1);
 }
 
 html,
@@ -41,7 +41,7 @@ body {
 	animation-delay: 4s;
 }
 
-/* Enhanced Custom Scrollbar Styles */
+/* Custom Scrollbar - Ocean Cyan Only */
 ::-webkit-scrollbar {
 	width: 8px;
 	height: 8px;
@@ -56,31 +56,31 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-	background: linear-gradient(135deg, rgba(0, 207, 213, 0.4), rgba(255, 158, 207, 0.4));
+	background: linear-gradient(135deg, rgba(0, 207, 213, 0.4), rgba(0, 207, 213, 0.6));
 	backdrop-filter: blur(4px);
 	-webkit-backdrop-filter: blur(4px);
 	border-radius: 20px;
 	border: 1px solid rgba(255, 255, 255, 0.1);
 	box-shadow:
-		inset 0 0 20px rgba(0, 207, 213, 0.2),
-		0 0 10px rgba(255, 158, 207, 0.2);
+		inset 0 0 20px rgba(0, 207, 213, 0.3),
+		0 0 10px rgba(0, 207, 213, 0.2);
 	transition: all 0.3s ease;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-	background: linear-gradient(135deg, rgba(0, 207, 213, 0.6), rgba(255, 158, 207, 0.6));
-	border: 1px solid rgba(255, 158, 207, 0.4);
+	background: linear-gradient(135deg, rgba(0, 207, 213, 0.6), rgba(0, 207, 213, 0.8));
+	border: 1px solid rgba(0, 207, 213, 0.4);
 	box-shadow:
 		inset 0 0 30px rgba(0, 207, 213, 0.4),
-		0 0 15px rgba(255, 158, 207, 0.4);
+		0 0 15px rgba(0, 207, 213, 0.4);
 }
 
 ::-webkit-scrollbar-thumb:active {
-	background: linear-gradient(135deg, rgba(0, 207, 213, 0.7), rgba(255, 158, 207, 0.7));
-	border: 1px solid rgba(255, 158, 207, 0.5);
+	background: linear-gradient(135deg, rgba(0, 207, 213, 0.8), rgba(0, 207, 213, 1));
+	border: 1px solid rgba(0, 207, 213, 0.6);
 	box-shadow:
-		inset 0 0 40px rgba(0, 207, 213, 0.5),
-		0 0 20px rgba(255, 158, 207, 0.5);
+		inset 0 0 40px rgba(0, 207, 213, 0.6),
+		0 0 20px rgba(0, 207, 213, 0.6);
 }
 
 ::-webkit-scrollbar-corner {
@@ -146,7 +146,7 @@ body {
 		width: 20px;
 		height: 20px;
 		border-radius: 50%;
-		background: rgba(255, 158, 207, 0.8);
+		background: rgba(0, 207, 213, 0.8);
 	}
 
 	.main > div:nth-child(2)::after {
