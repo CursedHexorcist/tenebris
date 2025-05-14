@@ -31,7 +31,7 @@ const ProfileImageSlider = memo(() => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const images = [
     "https://res.cloudinary.com/dc3bfhgfd/image/upload/v1746947564/WhatsApp_Image_2025-05-11_at_14.07.23_73b83b9c_zakzbj.jpg",
-    "https://res.cloudinary.com/dc3bfhgfd/image/upload/v1746947607/nierautomata_gakyda.jpg" // Using same image for demo
+    "https://res.cloudinary.com/dc3bfhgfd/image/upload/v1746947607/nierautomata_gakyda.jpg"
   ];
 
   const nextSlide = () => {
@@ -57,13 +57,11 @@ const ProfileImageSlider = memo(() => {
         </div>
 
         {/* Slider container */}
-        <div className="relative overflow-hidden w-72 h-72 sm:w-80 sm:h-80 rounded-full mx-auto">
+        <div className="relative overflow-hidden w-72 h-72 sm:w-80 sm:h-80 rounded-full mx-auto" aria-live="polite">
           {images.map((img, index) => (
             <div
               key={index}
-              className={absolute inset-0 transition-opacity duration-500 ${
-                index === currentSlide ? 'opacity-100' : 'opacity-0 pointer-events-none'
-              }}
+              className={`absolute inset-0 transition-opacity duration-500 ${index === currentSlide ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
             >
               <div className="w-full h-full rounded-full overflow-hidden shadow-[0_0_40px_rgba(6,182,212,0.3)] transform transition-all duration-700 group-hover:scale-105">
                 <div className="absolute inset-0 border-4 border-white/20 rounded-full z-20 transition-all duration-700 group-hover:border-white/40 group-hover:scale-105" />
@@ -73,7 +71,7 @@ const ProfileImageSlider = memo(() => {
                 
                 <img
                   src={img}
-                  alt={Profile ${index + 1}}
+                  alt={`Profile ${index + 1}`}
                   className="w-full h-full object-cover transition-all duration-700 group-hover:scale-110 group-hover:rotate-2"
                   loading="lazy"
                 />
@@ -91,14 +89,14 @@ const ProfileImageSlider = memo(() => {
         {/* Navigation arrows */}
         <button
           onClick={prevSlide}
-          className="absolute left-0 top-1/2 -translate-y-1/2 z-20 bg-black/50 hover:bg-black/70 rounded-full p-2 transition-all duration-300 shadow-lg"
+          className="absolute left-0 top-1/2 -translate-y-1/2 z-20 bg-black/50 hover:bg-black/70 rounded-full p-2 transition-all duration-300 shadow-lg focus:outline-none focus:ring-2 focus:ring-[#06B6D4]"
           aria-label="Previous image"
         >
           <ChevronLeft className="w-6 h-6 text-white" />
         </button>
         <button
           onClick={nextSlide}
-          className="absolute right-0 top-1/2 -translate-y-1/2 z-20 bg-black/50 hover:bg-black/70 rounded-full p-2 transition-all duration-300 shadow-lg"
+          className="absolute right-0 top-1/2 -translate-y-1/2 z-20 bg-black/50 hover:bg-black/70 rounded-full p-2 transition-all duration-300 shadow-lg focus:outline-none focus:ring-2 focus:ring-[#06B6D4]"
           aria-label="Next image"
         >
           <ChevronRight className="w-6 h-6 text-white" />
@@ -110,10 +108,10 @@ const ProfileImageSlider = memo(() => {
             <button
               key={index}
               onClick={() => setCurrentSlide(index)}
-              className={w-3 h-3 rounded-full transition-all duration-300 ${
+              className={`w-3 h-3 rounded-full transition-all duration-300 ${
                 index === currentSlide ? 'bg-[#06B6D4] w-6' : 'bg-gray-500/50'
-              }}
-              aria-label={Go to slide ${index + 1}}
+              }`}
+              aria-label={`Go to slide ${index + 1}`}
             />
           ))}
         </div>
@@ -125,7 +123,7 @@ const ProfileImageSlider = memo(() => {
 const StatCard = memo(({ icon: Icon, color, value, label, description, animation }) => (
   <div data-aos={animation} data-aos-duration={1300} className="relative group">
     <div className="relative z-10 bg-gray-900/50 backdrop-blur-lg rounded-2xl p-6 border border-white/10 overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-2xl h-full flex flex-col justify-between">
-      <div className={absolute -z-10 inset-0 bg-gradient-to-br ${color} opacity-10 group-hover:opacity-20 transition-opacity duration-300}></div>
+      <div className={`absolute -z-10 inset-0 bg-gradient-to-br ${color} opacity-10 group-hover:opacity-20 transition-opacity duration-300`}></div>
       
       <div className="flex items-center justify-between mb-4">
         <div className="w-16 h-16 rounded-full flex items-center justify-center bg-white/10 transition-transform group-hover:rotate-6">
@@ -185,7 +183,9 @@ const AboutPage = () => {
   useEffect(() => {
     const initAOS = () => {
       AOS.init({
-        once: false, 
+        once: true,
+        duration: 800,
+        easing: 'ease-in-out-quad'
       });
     };
 
@@ -204,7 +204,7 @@ const AboutPage = () => {
     };
   }, []);
 
-  const statsData = useMemo(() => [
+  const statsData = [
     {
       icon: Code,
       color: "from-[#06B6D4] to-[#FFD6E7]",
@@ -221,7 +221,7 @@ const AboutPage = () => {
       description: "Continuous learning journey",
       animation: "fade-left",
     },
-  ], [totalProjects, YearExperience]);
+  ];
 
   return (
     <div
@@ -271,8 +271,8 @@ const AboutPage = () => {
                 onMouseEnter={() => setIsHoveringGwen(true)}
                 onMouseLeave={() => setIsHoveringGwen(false)}
               >
-                <div className={absolute inset-0 rounded-lg bg-gradient-to-r from-[#06B6D4] to-[#FFD6E7] transition-all duration-300 ${isHoveringGwen ? 'opacity-0' : 'opacity-100'}}></div>
-                <div className={absolute inset-0 bg-[#030014] rounded-lg border border-transparent transition-all duration-300 ${isHoveringGwen ? 'opacity-100 border-gradient' : 'opacity-0'}}>
+                <div className={`absolute inset-0 rounded-lg bg-gradient-to-r from-[#06B6D4] to-[#FFD6E7] transition-all duration-300 ${isHoveringGwen ? 'opacity-0' : 'opacity-100'}`}></div>
+                <div className={`absolute inset-0 bg-[#030014] rounded-lg border border-transparent transition-all duration-300 ${isHoveringGwen ? 'opacity-100 border-gradient' : 'opacity-0'}`}>
                   <div className="absolute inset-0 rounded-lg border-2 border-transparent bg-clip-padding" style={{
                     backgroundImage: 'linear-gradient(#030014, #030014), linear-gradient(to right, #06B6D4, #FFD6E7)',
                     backgroundOrigin: 'border-box',
@@ -282,7 +282,7 @@ const AboutPage = () => {
                 <button 
                   data-aos="fade-up"
                   data-aos-duration="800"
-                  className="relative w-full lg:w-auto sm:px-6 py-2 sm:py-3 rounded-lg text-white font-medium flex items-center justify-center lg:justify-start gap-2 animate-bounce-slow"
+                  className="relative w-full lg:w-auto sm:px-6 py-2 sm:py-3 rounded-lg text-white font-medium flex items-center justify-center lg:justify-start gap-2 animate-bounce-slow focus:outline-none focus:ring-2 focus:ring-[#06B6D4]"
                 >
                   <MessageCircle className="w-4 h-4 sm:w-5 sm:h-5" /> 
                   Chat With Gwen
@@ -297,8 +297,8 @@ const AboutPage = () => {
                 onMouseEnter={() => setIsHoveringNier(true)}
                 onMouseLeave={() => setIsHoveringNier(false)}
               >
-                <div className={absolute inset-0 rounded-lg bg-gradient-to-r from-[#06B6D4] to-[#FFD6E7] transition-all duration-300 ${isHoveringNier ? 'opacity-0' : 'opacity-100'}}></div>
-                <div className={absolute inset-0 bg-[#030014] rounded-lg border border-transparent transition-all duration-300 ${isHoveringNier ? 'opacity-100 border-gradient' : 'opacity-0'}}>
+                <div className={`absolute inset-0 rounded-lg bg-gradient-to-r from-[#06B6D4] to-[#FFD6E7] transition-all duration-300 ${isHoveringNier ? 'opacity-0' : 'opacity-100'}`}></div>
+                <div className={`absolute inset-0 bg-[#030014] rounded-lg border border-transparent transition-all duration-300 ${isHoveringNier ? 'opacity-100 border-gradient' : 'opacity-0'}`}>
                   <div className="absolute inset-0 rounded-lg border-2 border-transparent bg-clip-padding" style={{
                     backgroundImage: 'linear-gradient(#030014, #030014), linear-gradient(to right, #06B6D4, #FFD6E7)',
                     backgroundOrigin: 'border-box',
@@ -308,7 +308,7 @@ const AboutPage = () => {
                 <button 
                   data-aos="fade-up"
                   data-aos-duration="1000"
-                  className="relative w-full lg:w-auto sm:px-6 py-2 sm:py-3 rounded-lg text-white font-medium flex items-center justify-center lg:justify-start gap-2 animate-bounce-slow delay-200"
+                  className="relative w-full lg:w-auto sm:px-6 py-2 sm:py-3 rounded-lg text-white font-medium flex items-center justify-center lg:justify-start gap-2 animate-bounce-slow delay-200 focus:outline-none focus:ring-2 focus:ring-[#06B6D4]"
                 >
                   <MessageCircle className="w-4 h-4 sm:w-5 sm:h-5" /> 
                   Chat With Nier
@@ -320,7 +320,7 @@ const AboutPage = () => {
           <ProfileImageSlider />
         </div>
 
-        <a href="#Creations">
+        <a href="#Creations" className="focus:outline-none focus:ring-2 focus:ring-[#06B6D4] rounded-lg">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-16 cursor-pointer">
             {statsData.map((stat) => (
               <StatCard key={stat.label} {...stat} />
@@ -329,7 +329,15 @@ const AboutPage = () => {
         </a>
       </div>
 
-      <style jsx>{
+      <style jsx>{`
+        @keyframes bounce {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-10px); }
+        }
+        @keyframes pulse {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0.5; }
+        }
         @keyframes float {
           0%, 100% { transform: translateY(0); }
           50% { transform: translateY(-20px); }
@@ -346,7 +354,10 @@ const AboutPage = () => {
         .animate-spin-slower {
           animation: spin-slower 8s linear infinite;
         }
-      }</style>
+        .animate-float {
+          animation: float 6s ease-in-out infinite;
+        }
+      `}</style>
     </div>
   );
 };
