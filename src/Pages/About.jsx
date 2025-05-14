@@ -166,13 +166,13 @@ const StatCard = memo(({ icon: Icon, color, value, label, description, animation
 
 const AboutPage = () => {
   const { totalProjects, YearExperience } = useMemo(() => {
-    const startDate = new Date("2022-12-06");
+    const startDate = new Date("1999-12-06");
     const today = new Date();
     const experience = today.getFullYear() - startDate.getFullYear() -
       (today < new Date(today.getFullYear(), startDate.getMonth(), startDate.getDate()) ? 1 : 0);
 
     return {
-      totalProjects: 2,
+      totalProjects: 3,
       YearExperience: experience
     };
   }, []);
