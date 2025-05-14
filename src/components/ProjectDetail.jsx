@@ -14,6 +14,7 @@ const TECH_ICONS = {
   Javascript: Code,
   HTML: Code,
   CSS: Code,
+  Lua: Code,
   default: Package,
 };
 
