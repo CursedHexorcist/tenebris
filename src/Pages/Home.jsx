@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useCallback, memo } from "react";
-import { Github, Mail, ExternalLink, BadgeCheck, ArrowRight, Sparkles,Award, Wand2, Cpu, Zap, Clock, ShieldCheck } from "lucide-react";
+import { Github, Mail, ExternalLink, BadgeCheck, ArrowRight, Sparkles, Award, Wand2, Cpu, Zap, Clock, ShieldCheck } from "lucide-react";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import AOS from "aos";
 import { Link } from "react-router-dom";
 import "aos/dist/aos.css";
+import { db, collection } from "../firebase";
+import { getDocs } from "firebase/firestore";
 
 // Typing Constants
 const TYPING_SPEED = 80;
@@ -28,13 +30,6 @@ const FEATURE_BADGES = [
 const SOCIAL_LINKS = [
   { icon: Github, link: "https://github.com/" },
   { icon: BadgeCheck, link: "https://dsc.gg/Tenebris" },
-];
-
-// Dummy Project Data
-const PROJECTS = [
-  { id: "1", name: "ROBLOX SCRIPT", category: "Free" },
-  { id: "2", name: "GROWTOPIA SCRIPT", category: "Coming Soon" },
-  { id: "3", name: "SKIBIDI", category: "Free" },
 ];
 
 // Title Component
@@ -67,6 +62,41 @@ const SocialLink = memo(({ icon: Icon, link }) => (
   </a>
 ));
 
+// Project Card Component (similar to CardProject)
+const ProjectCard = ({ project }) => {
+  const handleDetails = (e) => {
+    if (!project.id) {
+      console.log("ID kosong");
+      e.preventDefault();
+      alert("Project details are not available");
+    }
+  };
+
+  return (
+    <Link
+      to={`/project/${project.id}`}
+      onClick={handleDetails}
+      className="p-4 rounded-xl bg-white/5 backdrop-blur border border-white/10 hover:border-[#06B6D4]/30 transition-all duration-300 hover:scale-[1.02] group"
+    >
+      <div className="relative overflow-hidden rounded-lg mb-3">
+        <img
+          src={project.Img}
+          alt={project.Title}
+          className="w-full h-40 object-cover transform group-hover:scale-105 transition-transform duration-500"
+        />
+      </div>
+      <div className="text-lg font-semibold text-white">{project.Title}</div>
+      <div className="text-sm text-gray-400 mt-1">{project.category || "Project"}</div>
+      <div className="mt-3 flex justify-end">
+        <button className="inline-flex items-center space-x-2 px-3 py-1 rounded-lg bg-white/5 hover:bg-white/10 text-white/90 transition-all duration-200 hover:scale-105 active:scale-95 text-sm">
+          <span>Details</span>
+          <ArrowRight className="w-4 h-4" />
+        </button>
+      </div>
+    </Link>
+  );
+};
+
 // Main Home Component
 const Home = () => {
   const [text, setText] = useState("");
@@ -77,6 +107,8 @@ const Home = () => {
   const [isHovering, setIsHovering] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [projects, setProjects] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     AOS.init({ once: true, offset: 10 });
@@ -87,6 +119,32 @@ const Home = () => {
   useEffect(() => {
     setIsLoaded(true);
     return () => setIsLoaded(false);
+  }, []);
+
+  // Fetch projects from Firebase
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        const projectCollection = collection(db, "projects");
+        const projectSnapshot = await getDocs(projectCollection);
+        const projectData = projectSnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+          category: doc.data().category || "Free" // Default category
+        }));
+        
+        setProjects(projectData);
+        setLoading(false);
+        
+        // Store in localStorage
+        localStorage.setItem("projects", JSON.stringify(projectData));
+      } catch (error) {
+        console.error("Error fetching projects:", error);
+        setLoading(false);
+      }
+    };
+
+    fetchProjects();
   }, []);
 
   const handleTyping = useCallback(() => {
@@ -126,18 +184,9 @@ const Home = () => {
     }
   };
 
-  const handleProjectClick = (e, id) => {
-    if (!id) {
-      console.log("ID kosong");
-      e.preventDefault();
-      alert("Project details are not available");
-    }
-  };
-
-  const filteredProjects =
-    selectedCategory === "All"
-      ? PROJECTS
-      : PROJECTS.filter((p) => p.category === selectedCategory);
+  const filteredProjects = selectedCategory === "All" 
+    ? projects 
+    : projects.filter((p) => p.category === selectedCategory);
 
   const lottieOptions = {
     src: "https://lottie.host/1a32fee8-6121-4e6e-b861-fc4afe794b61/0W8pY7Wfem.lottie",
@@ -243,21 +292,21 @@ const Home = () => {
 
               {/* Right Side Projects */}
               <div className="flex-1">
-                <div className={`grid sm:grid-cols-2 md:grid-cols-3 gap-6 transition-opacity duration-300 ${
-                  isTransitioning ? "opacity-50" : "opacity-100"
-                }`}>
-                  {filteredProjects.map((project) => (
-                    <Link
-                      key={project.id}
-                      to={`/project/${project.id}`}
-                      onClick={(e) => handleProjectClick(e, project.id)}
-                      className="p-4 rounded-xl bg-white/5 backdrop-blur border border-white/10 hover:border-[#06B6D4]/30 transition-all duration-300 hover:scale-[1.02]"
-                    >
-                      <div className="text-lg font-semibold text-white">{project.name}</div>
-                      <div className="text-sm text-gray-400 mt-1">{project.category}</div>
-                    </Link>
-                  ))}
-                </div>
+                {loading ? (
+                  <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
+                    {[1, 2, 3].map((i) => (
+                      <div key={i} className="p-4 rounded-xl bg-white/5 backdrop-blur border border-white/10 animate-pulse h-48"></div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className={`grid sm:grid-cols-2 md:grid-cols-3 gap-6 transition-opacity duration-300 ${
+                    isTransitioning ? "opacity-50" : "opacity-100"
+                  }`}>
+                    {filteredProjects.map((project, index) => (
+                      <ProjectCard key={project.id || index} project={project} />
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
           </div>
