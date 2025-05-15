@@ -126,6 +126,14 @@ const Home = () => {
     }
   };
 
+  const handleProjectClick = (e, id) => {
+    if (!id) {
+      console.log("ID kosong");
+      e.preventDefault();
+      alert("Project details are not available");
+    }
+  };
+
   const filteredProjects =
     selectedCategory === "All"
       ? PROJECTS
@@ -242,6 +250,7 @@ const Home = () => {
                     <Link
                       key={project.id}
                       to={`/project/${project.id}`}
+                      onClick={(e) => handleProjectClick(e, project.id)}
                       className="p-4 rounded-xl bg-white/5 backdrop-blur border border-white/10 hover:border-[#06B6D4]/30 transition-all duration-300 hover:scale-[1.02]"
                     >
                       <div className="text-lg font-semibold text-white">{project.name}</div>
