@@ -62,7 +62,7 @@ const SocialLink = memo(({ icon: Icon, link }) => (
   </a>
 ));
 
-// Project Card Component (similar to CardProject)
+// Project Card Component
 const ProjectCard = ({ project }) => {
   const handleDetails = (e) => {
     if (!project.id) {
@@ -109,6 +109,8 @@ const Home = () => {
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showAllProjects, setShowAllProjects] = useState(false);
+  const visibleProjectsCount = 3;
 
   useEffect(() => {
     AOS.init({ once: true, offset: 10 });
@@ -177,6 +179,7 @@ const Home = () => {
   const handleCategoryChange = (category) => {
     if (category !== selectedCategory) {
       setIsTransitioning(true);
+      setShowAllProjects(false); // Reset show all when changing category
       setTimeout(() => {
         setSelectedCategory(category);
         setIsTransitioning(false);
@@ -187,6 +190,15 @@ const Home = () => {
   const filteredProjects = selectedCategory === "All" 
     ? projects 
     : projects.filter((p) => p.category === selectedCategory);
+
+  // Determine which projects to display based on showAll state
+  const displayedProjects = selectedCategory === "All" && !showAllProjects 
+    ? filteredProjects.slice(0, visibleProjectsCount) 
+    : filteredProjects;
+
+  const toggleShowAll = () => {
+    setShowAllProjects(!showAllProjects);
+  };
 
   const lottieOptions = {
     src: "https://lottie.host/1a32fee8-6121-4e6e-b861-fc4afe794b61/0W8pY7Wfem.lottie",
@@ -299,13 +311,37 @@ const Home = () => {
                     ))}
                   </div>
                 ) : (
-                  <div className={`grid sm:grid-cols-2 md:grid-cols-3 gap-6 transition-opacity duration-300 ${
-                    isTransitioning ? "opacity-50" : "opacity-100"
-                  }`}>
-                    {filteredProjects.map((project, index) => (
-                      <ProjectCard key={project.id || index} project={project} />
-                    ))}
-                  </div>
+                  <>
+                    <div className={`grid sm:grid-cols-2 md:grid-cols-3 gap-6 transition-opacity duration-300 ${
+                      isTransitioning ? "opacity-50" : "opacity-100"
+                    }`}>
+                      {displayedProjects.map((project, index) => (
+                        <ProjectCard key={project.id || index} project={project} />
+                      ))}
+                    </div>
+                    
+                    {/* Show More/Less button - only for "All" category when there are more projects */}
+                    {selectedCategory === "All" && filteredProjects.length > visibleProjectsCount && (
+                      <div className="mt-6 flex justify-center">
+                        <button
+                          onClick={toggleShowAll}
+                          className="px-4 py-2 rounded-lg bg-white/5 hover:bg-white/10 text-white/90 transition-all duration-200 flex items-center gap-2"
+                        >
+                          {showAllProjects ? (
+                            <>
+                              <span>Show Less</span>
+                              <ArrowRight className="w-4 h-4 rotate-180" />
+                            </>
+                          ) : (
+                            <>
+                              <span>Show More</span>
+                              <ArrowRight className="w-4 h-4" />
+                            </>
+                          )}
+                        </button>
+                      </div>
+                    )}
+                  </>
                 )}
               </div>
             </div>
