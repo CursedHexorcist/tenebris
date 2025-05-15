@@ -1,11 +1,9 @@
 import React, { useState, useEffect, useCallback, memo } from "react";
-import { Github, Mail, ExternalLink, BadgeCheck, ArrowRight, Sparkles, Award, Wand2, Cpu, Zap, Clock, ShieldCheck } from "lucide-react";
+import { Github, Mail, ExternalLink, BadgeCheck, ArrowRight, Sparkles,Award, Wand2, Cpu, Zap, Clock, ShieldCheck } from "lucide-react";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import AOS from "aos";
 import { Link } from "react-router-dom";
 import "aos/dist/aos.css";
-import { db } from '../firebase'; // Adjust path as needed
-import { collection, getDocs } from 'firebase/firestore';
 
 // Typing Constants
 const TYPING_SPEED = 80;
@@ -30,6 +28,13 @@ const FEATURE_BADGES = [
 const SOCIAL_LINKS = [
   { icon: Github, link: "https://github.com/" },
   { icon: BadgeCheck, link: "https://dsc.gg/Tenebris" },
+];
+
+// Dummy Project Data
+const PROJECTS = [
+  { id: "1", name: "ROBLOX SCRIPT", category: "Free" },
+  { id: "2", name: "GROWTOPIA SCRIPT", category: "Coming Soon" },
+  { id: "3", name: "SKIBIDI", category: "Free" },
 ];
 
 // Title Component
@@ -72,9 +77,6 @@ const Home = () => {
   const [isHovering, setIsHovering] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [isTransitioning, setIsTransitioning] = useState(false);
-  const [projects, setProjects] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
   useEffect(() => {
     AOS.init({ once: true, offset: 10 });
@@ -85,27 +87,6 @@ const Home = () => {
   useEffect(() => {
     setIsLoaded(true);
     return () => setIsLoaded(false);
-  }, []);
-
-  // Fetch projects from Firebase
-  useEffect(() => {
-    const fetchProjects = async () => {
-      try {
-        const querySnapshot = await getDocs(collection(db, "projects"));
-        const projectsData = [];
-        querySnapshot.forEach((doc) => {
-          projectsData.push({ id: doc.id, ...doc.data() });
-        });
-        setProjects(projectsData);
-        setLoading(false);
-      } catch (err) {
-        console.error("Error fetching projects: ", err);
-        setError(err);
-        setLoading(false);
-      }
-    };
-
-    fetchProjects();
   }, []);
 
   const handleTyping = useCallback(() => {
@@ -155,8 +136,8 @@ const Home = () => {
 
   const filteredProjects =
     selectedCategory === "All"
-      ? projects
-      : projects.filter((p) => p.category === selectedCategory);
+      ? PROJECTS
+      : PROJECTS.filter((p) => p.category === selectedCategory);
 
   const lottieOptions = {
     src: "https://lottie.host/1a32fee8-6121-4e6e-b861-fc4afe794b61/0W8pY7Wfem.lottie",
@@ -170,27 +151,50 @@ const Home = () => {
     }`,
   };
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-[#030014] flex items-center justify-center">
-        <div className="text-white">Loading projects...</div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="min-h-screen bg-[#030014] flex items-center justify-center">
-        <div className="text-red-500">Error loading projects: {error.message}</div>
-      </div>
-    );
-  }
-
   return (
     <div className="min-h-screen bg-[#030014] overflow-hidden" id="Home">
       <div className={`relative z-10 transition-all duration-1000 ${isLoaded ? "opacity-100" : "opacity-0"}`}>
         <div className="container mx-auto px-4 sm:px-6 lg:px-16 xl:px-24 2xl:px-32 w-full">
-          {/* ... (rest of your existing JSX remains the same until the projects section) ... */}
+          <div className="flex flex-col lg:flex-row items-center md:justify-between gap-6 lg:gap-12 pt-16 md:pt-20 pb-10">
+            {/* LEFT */}
+            <div className="w-full lg:w-1/2 space-y-4 sm:space-y-6 md:space-y-8" data-aos="fade-right" data-aos-delay="200">
+              <MainTitle />
+              <div className="h-8 flex items-center" data-aos="fade-up" data-aos-delay="800">
+                <span className="text-xl md:text-2xl bg-gradient-to-r from-gray-100 to-gray-300 bg-clip-text text-transparent font-light">
+                  {text}
+                </span>
+                <span className="w-[3px] h-6 bg-gradient-to-t from-[#06B6D4] to-[#FFD6E7] ml-1 animate-blink"></span>
+              </div>
+              <div className="flex flex-wrap gap-3" data-aos="fade-up" data-aos-delay="1200">
+                {FEATURE_BADGES.map((badge, i) => (
+                  <FeatureBadge key={i} {...badge} />
+                ))}
+              </div>
+              <div className="flex gap-4" data-aos="fade-up" data-aos-delay="1600">
+                {SOCIAL_LINKS.map((s, i) => (
+                  <SocialLink key={i} {...s} />
+                ))}
+              </div>
+            </div>
+
+            {/* RIGHT - Lottie Animation */}
+            <div
+              className="w-full py-8 sm:py-0 lg:w-1/2 relative flex items-center justify-center"
+              onMouseEnter={() => setIsHovering(true)}
+              onMouseLeave={() => setIsHovering(false)}
+              data-aos="fade-left"
+              data-aos-delay="600"
+            >
+              <div className="relative w-full max-w-[320px] sm:max-w-[400px] mx-auto opacity-90">
+                <div className={`absolute inset-0 bg-gradient-to-r ${
+                  isHovering ? "from-black/10 to-black/10" : "from-[#06B6D4]/10 via-white/5 to-[#FFD6E7]/10"
+                } rounded-3xl blur-3xl`}></div>
+                <div className="relative z-10 w-full">
+                  <DotLottieReact {...lottieOptions} />
+                </div>
+              </div>
+            </div>
+          </div>
 
           {/* PROJECT SECTION */}
           <div className="mt-20 mb-20 pb-20" data-aos="fade-up" data-aos-delay="300">
@@ -242,23 +246,17 @@ const Home = () => {
                 <div className={`grid sm:grid-cols-2 md:grid-cols-3 gap-6 transition-opacity duration-300 ${
                   isTransitioning ? "opacity-50" : "opacity-100"
                 }`}>
-                  {filteredProjects.length > 0 ? (
-                    filteredProjects.map((project) => (
-                      <Link
-                        key={project.id}
-                        to={`/project/${project.id}`}
-                        onClick={(e) => handleProjectClick(e, project.id)}
-                        className="p-4 rounded-xl bg-white/5 backdrop-blur border border-white/10 hover:border-[#06B6D4]/30 transition-all duration-300 hover:scale-[1.02]"
-                      >
-                        <div className="text-lg font-semibold text-white">{project.name}</div>
-                        <div className="text-sm text-gray-400 mt-1">{project.category}</div>
-                      </Link>
-                    ))
-                  ) : (
-                    <div className="col-span-3 text-center text-gray-400 py-10">
-                      No projects found in this category
-                    </div>
-                  )}
+                  {filteredProjects.map((project) => (
+                    <Link
+                      key={project.id}
+                      to={`/project/${project.id}`}
+                      onClick={(e) => handleProjectClick(e, project.id)}
+                      className="p-4 rounded-xl bg-white/5 backdrop-blur border border-white/10 hover:border-[#06B6D4]/30 transition-all duration-300 hover:scale-[1.02]"
+                    >
+                      <div className="text-lg font-semibold text-white">{project.name}</div>
+                      <div className="text-sm text-gray-400 mt-1">{project.category}</div>
+                    </Link>
+                  ))}
                 </div>
               </div>
             </div>
