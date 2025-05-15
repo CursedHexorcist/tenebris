@@ -274,7 +274,7 @@ const Home = () => {
               {/* Left Side Filter - Slider Style */}
               <div className="md:w-48 flex-shrink-0">
                 <div className="flex md:flex-col gap-2 overflow-x-auto md:overflow-x-visible pb-2 md:pb-0 w-full">
-                  {["All", "Free", "Coming Soon"].map((cat) => (
+                  {["All", "Free", "Premium", "Coming Soon"].map((cat) => (
                     <button
                       key={cat}
                       onClick={() => handleCategoryChange(cat)}
