@@ -2,12 +2,16 @@ import React, { useEffect, useRef } from "react";
 
 const AnimatedBackground = () => {
   const blobRefs = useRef([]);
-  const centerPositions = [
-    { x: 150, y: 150 },
-    { x: 400, y: 250 },
-    { x: 200, y: 450 },
-    { x: 450, y: 350 },
-  ];
+  const blobCount = 12;
+
+  // Posisi tengah acak untuk blob (menyebar ke seluruh layar)
+  const generateCenters = () =>
+    Array.from({ length: blobCount }, () => ({
+      x: Math.random() * window.innerWidth,
+      y: Math.random() * window.innerHeight,
+    }));
+
+  const centerPositions = useRef(generateCenters());
 
   useEffect(() => {
     let frameId;
@@ -19,14 +23,21 @@ const AnimatedBackground = () => {
       blobRefs.current.forEach((blob, index) => {
         if (!blob) return;
 
-        const center = centerPositions[index];
-        const radius = 50 + index * 15;
-        const speed = 0.4 + index * 0.3;
+        const center = centerPositions.current[index];
+        const radius = 30 + (index % 3) * 20;
+        const speed = 0.4 + (index % 5) * 0.15;
 
-        const x = center.x + Math.cos(elapsed * speed + index) * radius;
-        const y = center.y + Math.sin(elapsed * speed + index) * radius;
-        const scale = 0.9 + 0.3 * Math.sin(elapsed * 1.5 + index);
-        const opacity = 0.4 + 0.25 * Math.cos(elapsed * 1.2 + index);
+        const x =
+          center.x +
+          Math.cos(elapsed * speed + index) * radius;
+        const y =
+          center.y +
+          Math.sin(elapsed * speed + index) * radius;
+
+        const scale =
+          0.9 + 0.3 * Math.sin(elapsed * 1.3 + index);
+        const opacity =
+          0.4 + 0.25 * Math.cos(elapsed * 1.1 + index);
 
         blob.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
         blob.style.opacity = opacity;
@@ -41,18 +52,22 @@ const AnimatedBackground = () => {
 
   const blobGradients = [
     "from-purple-400 to-pink-400",
-    "from-cyan-400 to-blue-500",
-    "from-pink-400 to-rose-400",
-    "from-indigo-400 to-purple-500",
+    "from-blue-400 to-cyan-400",
+    "from-rose-400 to-pink-500",
+    "from-emerald-400 to-teal-400",
+    "from-indigo-400 to-violet-500",
+    "from-yellow-300 to-orange-400",
   ];
 
   return (
     <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
-      {blobGradients.map((gradient, i) => (
+      {Array.from({ length: blobCount }).map((_, i) => (
         <div
           key={i}
           ref={(el) => (blobRefs.current[i] = el)}
-          className={`absolute w-40 h-40 bg-gradient-to-br ${gradient} rounded-full blur-3xl mix-blend-lighten transition-transform duration-700 ease-in-out`}
+          className={`absolute w-36 h-36 bg-gradient-to-br ${
+            blobGradients[i % blobGradients.length]
+          } rounded-full blur-xl mix-blend-lighten transition-transform duration-700 ease-in-out`}
           style={{
             top: 0,
             left: 0,
@@ -62,9 +77,9 @@ const AnimatedBackground = () => {
         />
       ))}
 
-      {/* Overlay dengan gradient gelap lembut */}
+      {/* Chill dark gradient overlay */}
       <div
-        className="absolute inset-0 bg-gradient-to-br from-black/70 via-black/60 to-black/70"
+        className="absolute inset-0 bg-gradient-to-br from-black/60 via-black/50 to-black/60"
         style={{ pointerEvents: "none" }}
       />
     </div>
