@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, memo } from "react";
-import { Github, Mail, ExternalLink, BadgeCheck, ArrowRight, Sparkles, Award, Wand2, Cpu, Zap, Clock, ShieldCheck } from "lucide-react";
+import { Github, Mail, ExternalLink, BadgeCheck, ArrowRight, Sparkles, Award, Wand2, Cpu, Zap, Clock, ShieldCheck, Flame } from "lucide-react";
 import AOS from "aos";
 import { Link } from "react-router-dom";
 import "aos/dist/aos.css";
@@ -27,8 +27,8 @@ const FEATURE_BADGES = [
   { icon: Cpu, label: "Executor Compatibility" }
 ];
 const SOCIAL_LINKS = [
-  { icon: Github, link: "https://github.com/" },
-  { icon: BadgeCheck, link: "https://dsc.gg/Tenebris" },
+  { icon: Github, link: "https://github.com/", label: "GitHub" },
+  { icon: BadgeCheck, link: "https://dsc.gg/Tenebris", label: "Join Our Discord" },
 ];
 
 // Enhanced Title Component with vibrant flowing gradient animation
@@ -54,17 +54,44 @@ const FeatureBadge = memo(({ icon: Icon, label }) => (
   </div>
 ));
 
-// Social Link
-const SocialLink = memo(({ icon: Icon, link }) => (
-  <a
-    href={link}
-    target="_blank"
-    rel="noopener noreferrer"
-    className="w-10 h-10 rounded-full bg-white/5 backdrop-blur-md flex items-center justify-center hover:bg-white/10 transition"
-  >
-    <Icon className="w-5 h-5 text-white" />
-  </a>
-));
+// Social Link - Updated version
+const SocialLink = memo(({ icon: Icon, link, label }) => {
+  const isDiscord = link.includes("discord");
+  const isGithub = link.includes("github");
+  
+  return (
+    <a
+      href={link}
+      target="_blank"
+      rel="noopener noreferrer"
+      className={`rounded-full flex items-center justify-center transition ${
+        isDiscord 
+          ? "bg-[#5865F2] hover:bg-[#4752C4] px-4 py-2 gap-2"
+          : isGithub
+          ? "bg-white/5 hover:bg-white/10 px-4 py-2 gap-2"
+          : "w-10 h-10 bg-white/5 hover:bg-white/10"
+      }`}
+    >
+      <Icon className="w-5 h-5 text-white" />
+      {label && <span className="text-white text-sm font-medium">{label}</span>}
+    </a>
+  );
+});
+
+// Get Yours Button with flame icon
+const GetYoursButton = memo(() => {
+  return (
+    <a
+      href="#"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="px-4 py-2 rounded-full flex items-center gap-2 bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600 transition-all duration-300 hover:shadow-lg hover:shadow-orange-500/20"
+    >
+      <Flame className="w-5 h-5 text-white" />
+      <span className="text-white text-sm font-medium">Get Yours</span>
+    </a>
+  );
+});
 
 // Project Card Component
 const ProjectCard = ({ project }) => {
@@ -230,6 +257,7 @@ const Home = () => {
                 {SOCIAL_LINKS.map((s, i) => (
                   <SocialLink key={i} {...s} />
                 ))}
+                <GetYoursButton />
               </div>
             </div>
           </div>
