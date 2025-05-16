@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useCallback, memo } from "react";
-import { Github, Mail, ExternalLink, BadgeCheck, ArrowRight, Sparkles, Award, Wand2, Cpu, Zap, Clock, ShieldCheck } from "lucide-react";
+import { 
+  Github, BadgeCheck, ArrowRight, Sparkles, Award, Wand2, Cpu, Zap, Clock, ShieldCheck 
+} from "lucide-react";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import AOS from "aos";
 import { Link } from "react-router-dom";
@@ -7,7 +9,6 @@ import "aos/dist/aos.css";
 import { db, collection } from "../firebase";
 import { getDocs } from "firebase/firestore";
 
-// Typing Constants
 const TYPING_SPEED = 80;
 const ERASING_SPEED = 70;
 const PAUSE_DURATION = 700;
@@ -18,7 +19,6 @@ const WORDS = [
   "Optimized Performance",
 ];
 
-// Badge & Social Link Data
 const FEATURE_BADGES = [
   { icon: Zap, label: "Fast Execution" },
   { icon: Clock, label: "24/7 Service" },
@@ -27,12 +27,12 @@ const FEATURE_BADGES = [
   { icon: Wand2, label: "Easy To Use" },
   { icon: Cpu, label: "Executor Compatibility" }
 ];
+
 const SOCIAL_LINKS = [
   { icon: Github, link: "https://github.com/" },
   { icon: BadgeCheck, link: "https://dsc.gg/Tenebris" },
 ];
 
-// Title Component
 const MainTitle = memo(() => (
   <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white leading-tight tracking-tight">
     TENEBRIS <br />
@@ -42,7 +42,6 @@ const MainTitle = memo(() => (
   </h1>
 ));
 
-// Feature Badge
 const FeatureBadge = memo(({ icon: Icon, label }) => (
   <div className="px-3 py-1 rounded-full border border-white/10 text-white text-sm flex items-center gap-2 bg-white/5 backdrop-blur-md">
     <Icon className="w-4 h-4" />
@@ -50,7 +49,6 @@ const FeatureBadge = memo(({ icon: Icon, label }) => (
   </div>
 ));
 
-// Social Link
 const SocialLink = memo(({ icon: Icon, link }) => (
   <a
     href={link}
@@ -62,11 +60,9 @@ const SocialLink = memo(({ icon: Icon, link }) => (
   </a>
 ));
 
-// Project Card Component
 const ProjectCard = ({ project }) => {
   const handleDetails = (e) => {
     if (!project.id) {
-      console.log("ID kosong");
       e.preventDefault();
       alert("Project details are not available");
     }
@@ -97,7 +93,6 @@ const ProjectCard = ({ project }) => {
   );
 };
 
-// Main Home Component
 const Home = () => {
   const [text, setText] = useState("");
   const [isTyping, setIsTyping] = useState(true);
@@ -123,7 +118,6 @@ const Home = () => {
     return () => setIsLoaded(false);
   }, []);
 
-  // Fetch projects from Firebase
   useEffect(() => {
     const fetchProjects = async () => {
       try {
@@ -132,13 +126,11 @@ const Home = () => {
         const projectData = projectSnapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
-          category: doc.data().category || "Free" // Default category
+          category: doc.data().category || "Free"
         }));
         
         setProjects(projectData);
         setLoading(false);
-        
-        // Store in localStorage
         localStorage.setItem("projects", JSON.stringify(projectData));
       } catch (error) {
         console.error("Error fetching projects:", error);
@@ -179,7 +171,7 @@ const Home = () => {
   const handleCategoryChange = (category) => {
     if (category !== selectedCategory) {
       setIsTransitioning(true);
-      setShowAllProjects(false); // Reset show all when changing category
+      setShowAllProjects(false);
       setTimeout(() => {
         setSelectedCategory(category);
         setIsTransitioning(false);
@@ -191,7 +183,6 @@ const Home = () => {
     ? projects 
     : projects.filter((p) => p.category === selectedCategory);
 
-  // Determine which projects to display based on showAll state
   const displayedProjects = selectedCategory === "All" && !showAllProjects 
     ? filteredProjects.slice(0, visibleProjectsCount) 
     : filteredProjects;
@@ -214,14 +205,14 @@ const Home = () => {
 
   return (
     <div className="min-h-screen bg-[#030014] overflow-hidden" id="Home">
-      <div className={`relative z-10 transition-all duration-1000 ${isLoaded ? "opacity-100" : "opacity-0"}`}>
+      <div className={`relative z-10 transition-opacity duration-1000 ${isLoaded ? "opacity-100" : "opacity-0"}`}>
         <div className="container mx-auto px-4 sm:px-6 lg:px-16 xl:px-24 2xl:px-32 w-full">
           <div className="flex flex-col lg:flex-row items-center md:justify-between gap-6 lg:gap-12 pt-16 md:pt-20 pb-10">
-            {/* LEFT */}
+            {/* LEFT SIDE */}
             <div className="w-full lg:w-1/2 space-y-4 sm:space-y-6 md:space-y-8" data-aos="fade-right" data-aos-delay="200">
               <MainTitle />
               <div className="h-8 flex items-center" data-aos="fade-up" data-aos-delay="800">
-                <span className="text-xl md:text-2xl bg-gradient-to-r from-gray-100 to-gray-300 bg-clip-text text-transparent font-light">
+                <span className="text-xl md:text-2xl bg-gradient-to-r from-gray-100 to-gray-300 bg-clip-text text-transparent font-light select-none">
                   {text}
                 </span>
                 <span className="w-[3px] h-6 bg-gradient-to-t from-[#06B6D4] to-[#FFD6E7] ml-1 animate-blink"></span>
@@ -232,119 +223,76 @@ const Home = () => {
                 ))}
               </div>
               <div className="flex gap-4" data-aos="fade-up" data-aos-delay="1600">
-                {SOCIAL_LINKS.map((s, i) => (
-                  <SocialLink key={i} {...s} />
+                {SOCIAL_LINKS.map((social, i) => (
+                  <SocialLink key={i} {...social} />
                 ))}
               </div>
             </div>
 
-            {/* RIGHT - Lottie Animation */}
+            {/* RIGHT SIDE */}
             <div
-              className="w-full py-8 sm:py-0 lg:w-1/2 relative flex items-center justify-center"
+              className="relative w-full lg:w-1/2 max-w-md sm:max-w-xl md:max-w-2xl aspect-[1/1] cursor-pointer select-none"
               onMouseEnter={() => setIsHovering(true)}
               onMouseLeave={() => setIsHovering(false)}
               data-aos="fade-left"
-              data-aos-delay="600"
+              data-aos-delay="400"
             >
-              <div className="relative w-full max-w-[320px] sm:max-w-[400px] mx-auto opacity-90">
-                <div className={`absolute inset-0 bg-gradient-to-r ${
-                  isHovering ? "from-black/10 to-black/10" : "from-[#06B6D4]/10 via-white/5 to-[#FFD6E7]/10"
-                } rounded-3xl blur-3xl`}></div>
-                <div className="relative z-10 w-full">
-                  <DotLottieReact {...lottieOptions} />
-                </div>
-              </div>
+              <DotLottieReact {...lottieOptions} />
+              <div className="absolute inset-0 pointer-events-none rounded-2xl shadow-[inset_0_0_60px_#06b6d4]"></div>
             </div>
           </div>
 
-          {/* PROJECT SECTION */}
-          <div className="mt-20 mb-20 pb-20" data-aos="fade-up" data-aos-delay="300">
-            {/* Our Product Header */}
-            <div className="text-center mb-6">
-              <div className="inline-block relative group">
-                <h2 
-                  className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#06B6D4] to-[#FFD6E7]" 
-                  data-aos="zoom-in-up"
-                  data-aos-duration="600"
+          {/* CATEGORY FILTER */}
+          <div className="mt-12 text-white" data-aos="fade-up" data-aos-delay="1800">
+            <div className="flex flex-wrap gap-4 mb-6 justify-center sm:justify-start">
+              {["All", "Free", "Premium"].map((cat) => (
+                <button
+                  key={cat}
+                  onClick={() => handleCategoryChange(cat)}
+                  disabled={isTransitioning}
+                  className={`px-5 py-2 rounded-full border text-sm font-semibold transition-all ${
+                    selectedCategory === cat
+                      ? "bg-gradient-to-r from-[#06B6D4] to-[#FFD6E7] text-black border-transparent"
+                      : "border-white/30 hover:border-white/60 text-white/80"
+                  }`}
                 >
-                  Our Product
-                </h2>
-              </div>
-              <p 
-                className="mt-2 text-gray-400 max-w-2xl mx-auto text-base sm:text-lg flex items-center justify-center gap-2"
-                data-aos="zoom-in-up"
-                data-aos-duration="800"
-              >
-                <Sparkles className="w-5 h-5 text-[#06B6D4]" />
-                Crafting digital experiences that inspire and perform
-                <Sparkles className="w-5 h-5 text-[#FFD6E7]" />
-              </p>
+                  {cat}
+                </button>
+              ))}
             </div>
 
-            {/* Project Filter and Content */}
-            <div className="mt-8 flex flex-col md:flex-row gap-6">
-              {/* Left Side Filter - Slider Style */}
-              <div className="md:w-48 flex-shrink-0">
-                <div className="flex md:flex-col gap-2 overflow-x-auto md:overflow-x-visible pb-2 md:pb-0 w-full">
-                  {["All", "Free", "Premium", "Coming Soon"].map((cat) => (
-                    <button
-                      key={cat}
-                      onClick={() => handleCategoryChange(cat)}
-                      className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 whitespace-nowrap ${
-                        selectedCategory === cat
-                          ? "bg-[#06B6D4]/10 text-[#06B6D4] border border-[#06B6D4]/50"
-                          : "text-gray-400 border border-transparent hover:text-white hover:bg-white/5"
-                      }`}
-                    >
-                      {cat}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Right Side Projects */}
-              <div className="flex-1">
-                {loading ? (
-                  <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
-                    {[1, 2, 3].map((i) => (
-                      <div key={i} className="p-4 rounded-xl bg-white/5 backdrop-blur border border-white/10 animate-pulse h-48"></div>
-                    ))}
-                  </div>
+            {/* PROJECTS GRID */}
+            {loading ? (
+              <div className="text-center text-white/50">Loading projects...</div>
+            ) : (
+              <>
+                {filteredProjects.length === 0 ? (
+                  <div className="text-center text-white/50">No projects found.</div>
                 ) : (
                   <>
-                    <div className={`grid sm:grid-cols-2 md:grid-cols-3 gap-6 transition-opacity duration-300 ${
-                      isTransitioning ? "opacity-50" : "opacity-100"
-                    }`}>
-                      {displayedProjects.map((project, index) => (
-                        <ProjectCard key={project.id || index} project={project} />
+                    <div
+                      className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 transition-all duration-300 ${
+                        isTransitioning ? "opacity-50 pointer-events-none" : "opacity-100"
+                      }`}
+                    >
+                      {displayedProjects.map((project) => (
+                        <ProjectCard key={project.id} project={project} />
                       ))}
                     </div>
-                    
-                    {/* Show More/Less button - only for "All" category when there are more projects */}
                     {selectedCategory === "All" && filteredProjects.length > visibleProjectsCount && (
-                      <div className="mt-6 flex justify-center">
+                      <div className="flex justify-center mt-8">
                         <button
                           onClick={toggleShowAll}
-                          className="px-4 py-2 rounded-lg bg-white/5 hover:bg-white/10 text-white/90 transition-all duration-200 flex items-center gap-2"
+                          className="px-6 py-2 rounded-lg bg-gradient-to-r from-[#06B6D4] to-[#FFD6E7] text-black font-semibold hover:brightness-110 transition"
                         >
-                          {showAllProjects ? (
-                            <>
-                              <span>Show Less</span>
-                              <ArrowRight className="w-4 h-4 rotate-180" />
-                            </>
-                          ) : (
-                            <>
-                              <span>Show More</span>
-                              <ArrowRight className="w-4 h-4" />
-                            </>
-                          )}
+                          {showAllProjects ? "Show Less" : "Show More"}
                         </button>
                       </div>
                     )}
                   </>
                 )}
-              </div>
-            </div>
+              </>
+            )}
           </div>
         </div>
       </div>
@@ -352,4 +300,4 @@ const Home = () => {
   );
 };
 
-export default memo(Home);
+export default Home;
