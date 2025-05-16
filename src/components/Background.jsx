@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 
-const ChillCloudsBackground = () => {
+const GlowingDustBackground = () => {
   const canvasRef = useRef(null);
 
   useEffect(() => {
@@ -10,60 +10,79 @@ const ChillCloudsBackground = () => {
     let width = (canvas.width = window.innerWidth);
     let height = (canvas.height = window.innerHeight);
 
-    // Cloud blobs: posisi dan ukuran awal, jumlah sedikit dan besar
-    const clouds = [
-      { x: width * 0.15, y: height * 0.3, radius: 200, alpha: 0.14, speedX: 0.01 },
-      { x: width * 0.6, y: height * 0.15, radius: 150, alpha: 0.12, speedX: 0.008 },
-      { x: width * 0.8, y: height * 0.6, radius: 180, alpha: 0.1, speedX: 0.012 },
-      { x: width * 0.3, y: height * 0.7, radius: 220, alpha: 0.1, speedX: 0.009 },
-      { x: width * 0.5, y: height * 0.45, radius: 170, alpha: 0.08, speedX: 0.011 },
-    ];
+    class Particle {
+      constructor() {
+        this.reset();
+      }
+
+      reset() {
+        this.x = Math.random() * width;
+        this.y = Math.random() * height;
+        this.radius = 1 + Math.random() * 2.5;
+        this.speedX = (Math.random() - 0.5) * 0.15;
+        this.speedY = (Math.random() - 0.5) * 0.15;
+        this.alpha = 0.05 + Math.random() * 0.15;
+        this.color = `rgba(${Math.floor(100 + Math.random() * 100)}, ${Math.floor(
+          100 + Math.random() * 150
+        )}, 255, ${this.alpha})`;
+      }
+
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+
+        // Looping particles agar selalu stay di layar
+        if (this.x < 0) this.x = width;
+        else if (this.x > width) this.x = 0;
+
+        if (this.y < 0) this.y = height;
+        else if (this.y > height) this.y = 0;
+      }
+
+      draw(ctx) {
+        const gradient = ctx.createRadialGradient(
+          this.x,
+          this.y,
+          0,
+          this.x,
+          this.y,
+          this.radius * 8
+        );
+        gradient.addColorStop(0, this.color);
+        gradient.addColorStop(1, "rgba(0, 0, 50, 0)");
+
+        ctx.fillStyle = gradient;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius * 8, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    // Buat 20 partikel glowing dust
+    const particles = [];
+    for (let i = 0; i < 20; i++) {
+      particles.push(new Particle());
+    }
 
     const resize = () => {
       width = canvas.width = window.innerWidth;
       height = canvas.height = window.innerHeight;
-
-      // Recalculate positions relative to new size
-      clouds[0].x = width * 0.15;
-      clouds[0].y = height * 0.3;
-      clouds[1].x = width * 0.6;
-      clouds[1].y = height * 0.15;
-      clouds[2].x = width * 0.8;
-      clouds[2].y = height * 0.6;
-      clouds[3].x = width * 0.3;
-      clouds[3].y = height * 0.7;
-      clouds[4].x = width * 0.5;
-      clouds[4].y = height * 0.45;
     };
+
     window.addEventListener("resize", resize);
-
-    function drawCloud(x, y, radius, alpha) {
-      // Buat gradien lingkaran besar blur seperti awan halus
-      const gradient = ctx.createRadialGradient(x, y, radius * 0.4, x, y, radius);
-      gradient.addColorStop(0, `rgba(255,255,255,${alpha})`);
-      gradient.addColorStop(1, "rgba(255,255,255,0)");
-
-      ctx.fillStyle = gradient;
-      ctx.beginPath();
-      ctx.arc(x, y, radius, 0, Math.PI * 2);
-      ctx.fill();
-    }
 
     let animationFrameId;
 
-    function animate() {
+    const animate = () => {
       ctx.clearRect(0, 0, width, height);
-      ctx.globalCompositeOperation = "lighter";
 
-      clouds.forEach((cloud) => {
-        drawCloud(cloud.x, cloud.y, cloud.radius, cloud.alpha);
-        // Gerakkan perlahan ke kanan, loop kembali jika keluar layar
-        cloud.x += cloud.speedX;
-        if (cloud.x - cloud.radius > width) cloud.x = -cloud.radius;
+      particles.forEach((p) => {
+        p.update();
+        p.draw(ctx);
       });
 
       animationFrameId = requestAnimationFrame(animate);
-    }
+    };
 
     animate();
 
@@ -77,9 +96,9 @@ const ChillCloudsBackground = () => {
     <canvas
       ref={canvasRef}
       className="fixed inset-0 z-0 pointer-events-none"
-      style={{ width: "100%", height: "100%", background: "#0e0e20" }}
+      style={{ width: "100%", height: "100%", background: "#0a0a1f" }}
     />
   );
 };
 
-export default ChillCloudsBackground;
+export default GlowingDustBackground;
