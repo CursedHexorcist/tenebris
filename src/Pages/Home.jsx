@@ -31,30 +31,12 @@ const SOCIAL_LINKS = [
   { icon: BadgeCheck, link: "https://dsc.gg/Tenebris" },
 ];
 
-// Gradient colors for animation
-const GRADIENT_COLORS = [
-  'from-[#06B6D4] to-[#FF80B5]', // ocean cyan to pink
-  'from-[#FF80B5] to-[#FFD6E7]', // pink to soft pink
-  'from-[#FFD6E7] to-[#C4A2E8]', // soft pink to soft purple
-  'from-[#C4A2E8] to-[#9F5F80]', // soft purple to maroon
-  'from-[#9F5F80] to-[#06B6D4]', // maroon back to ocean cyan
-];
-
-// Title Component with animated gradient
+// Title Component with smooth flowing gradient animation
 const MainTitle = memo(() => {
-  const [gradientIndex, setGradientIndex] = useState(0);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setGradientIndex((prev) => (prev + 1) % GRADIENT_COLORS.length);
-    }, 3000); // Change gradient every 3 seconds
-    return () => clearInterval(interval);
-  }, []);
-
   return (
     <div className="w-full text-center">
       <h1 className="text-5xl sm:text-6xl md:text-7xl font-extrabold text-white leading-tight tracking-tight">
-        <span className={`bg-gradient-to-r ${GRADIENT_COLORS[gradientIndex]} bg-clip-text text-transparent transition-all duration-1000`}>
+        <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#06B6D4] via-[#FF80B5] to-[#9F5F80] bg-[length:200%_auto] animate-gradient-flow">
           tenebris
         </span>
       </h1>
@@ -82,7 +64,7 @@ const SocialLink = memo(({ icon: Icon, link }) => (
   </a>
 ));
 
-// Project Card Component - Updated design but keeping all ID-related code
+// Project Card Component
 const ProjectCard = ({ project }) => {
   const handleDetails = (e) => {
     if (!project.id) {
@@ -98,7 +80,6 @@ const ProjectCard = ({ project }) => {
       onClick={handleDetails}
       className="p-4 rounded-xl bg-gradient-to-br from-white/5 to-white/10 backdrop-blur border border-white/10 hover:border-[#06B6D4]/30 transition-all duration-300 hover:scale-[1.02] group relative overflow-hidden"
     >
-      {/* New animated background effect */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-transparent via-[#06B6D4]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
       
       <div className="relative z-10">
@@ -108,7 +89,6 @@ const ProjectCard = ({ project }) => {
             alt={project.Title}
             className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
           />
-          {/* New shape overlay */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
         </div>
         <div className="text-lg font-semibold text-white">{project.Title}</div>
@@ -205,7 +185,7 @@ const Home = () => {
   const handleCategoryChange = (category) => {
     if (category !== selectedCategory) {
       setIsTransitioning(true);
-      setShowAllProjects(false); // Reset show all when changing category
+      setShowAllProjects(false);
       setTimeout(() => {
         setSelectedCategory(category);
         setIsTransitioning(false);
@@ -217,7 +197,6 @@ const Home = () => {
     ? projects 
     : projects.filter((p) => p.category === selectedCategory);
 
-  // Determine which projects to display based on showAll state
   const displayedProjects = selectedCategory === "All" && !showAllProjects 
     ? filteredProjects.slice(0, visibleProjectsCount) 
     : filteredProjects;
@@ -255,9 +234,9 @@ const Home = () => {
 
           {/* PROJECT SECTION */}
           <div className="mt-20 mb-20 pb-20" data-aos="fade-up" data-aos-delay="300">
-            {/* Our Product Header */}
+            {/* Our Product Header - Removed decorative lines */}
             <div className="text-center mb-12">
-              <div className="inline-block relative group">
+              <div className="inline-block relative">
                 <h2 
                   className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#06B6D4] to-[#FFD6E7]" 
                   data-aos="zoom-in-up"
@@ -265,10 +244,6 @@ const Home = () => {
                 >
                   Our Product
                 </h2>
-                {/* New decorative elements */}
-                <div className="absolute -bottom-2 left-0 w-full h-1 bg-gradient-to-r from-[#06B6D4] to-[#FFD6E7] opacity-70 rounded-full"></div>
-                <div className="absolute -bottom-2 left-1/4 w-2 h-2 bg-[#06B6D4] rounded-full transform -translate-x-1/2"></div>
-                <div className="absolute -bottom-2 left-3/4 w-2 h-2 bg-[#FFD6E7] rounded-full transform -translate-x-1/2"></div>
               </div>
               <p 
                 className="mt-4 text-gray-400 max-w-2xl mx-auto text-base sm:text-lg flex items-center justify-center gap-2"
@@ -283,7 +258,7 @@ const Home = () => {
 
             {/* Project Filter and Content */}
             <div className="mt-8 flex flex-col md:flex-row gap-6">
-              {/* Left Side Filter - Slider Style */}
+              {/* Left Side Filter */}
               <div className="md:w-48 flex-shrink-0">
                 <div className="flex md:flex-col gap-2 overflow-x-auto md:overflow-x-visible pb-2 md:pb-0 w-full">
                   {["All", "Free", "Premium", "Coming Soon"].map((cat) => (
@@ -320,7 +295,6 @@ const Home = () => {
                       ))}
                     </div>
                     
-                    {/* Show More/Less button - only for "All" category when there are more projects */}
                     {selectedCategory === "All" && filteredProjects.length > visibleProjectsCount && (
                       <div className="mt-6 flex justify-center">
                         <button
