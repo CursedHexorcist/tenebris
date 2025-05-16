@@ -1,11 +1,7 @@
-import React, { useEffect, useRef, useState } from "react";
-import "./SnowfallScene.css";
+import React, { useEffect, useRef } from "react";
 
-const SnowfallBackground = () => {
+const AnimatedBackground = () => {
   const blobRefs = useRef([]);
-  const snowContainerRef = useRef(null);
-  const [isClient, setIsClient] = useState(false);
-
   const initialPositions = [
     { x: -4, y: 0 },
     { x: -4, y: 0 },
@@ -14,158 +10,41 @@ const SnowfallBackground = () => {
   ];
 
   useEffect(() => {
-    setIsClient(true);
-  }, []);
-
-  useEffect(() => {
-    if (!isClient || !snowContainerRef.current) return;
-
-    // Blob animation effect
     let requestId;
-    const handleScroll = () => {
-      const scrollY = window.pageYOffset;
-      blobRefs.current.forEach((blob, index) => {
-        if (!blob) return;
+    let currentScroll = window.scrollY;
 
+    const handleScroll = () => {
+      currentScroll = window.scrollY;
+
+      blobRefs.current.forEach((blob, index) => {
         const initialPos = initialPositions[index];
-        const xOffset = Math.sin(scrollY / 100 + index * 0.5) * 340;
-        const yOffset = Math.cos(scrollY / 100 + index * 0.5) * 40;
+        const xOffset = Math.sin(currentScroll / 100 + index * 0.5) * 340;
+        const yOffset = Math.cos(currentScroll / 100 + index * 0.5) * 40;
+
         const x = initialPos.x + xOffset;
         const y = initialPos.y + yOffset;
 
-        blob.style.transform = `translate(${x}px, ${y}px)`;
-        blob.style.transition = "transform 1.4s ease-out";
+        if (blob) {
+          blob.style.transform = `translate(${x}px, ${y}px)`;
+          blob.style.transition = "transform 1.4s ease-out";
+        }
       });
 
       requestId = requestAnimationFrame(handleScroll);
     };
 
+    requestId = requestAnimationFrame(handleScroll);
     window.addEventListener("scroll", handleScroll);
 
-    // Snowfall effect
-    const TOTAL_NUM_FLAKES = 150;
-    const LAYERS = [
-      {
-        layer: 1,
-        sizeMin: 10,
-        sizeMax: 16,
-        speedFactor: 0.06,
-        swayAmpMin: 3,
-        swayAmpMax: 10,
-        opacity: 0.8,
-        blur: 0,
-        zIndex: 6,
-      },
-      {
-        layer: 2,
-        sizeMin: 8,
-        sizeMax: 12,
-        speedFactor: 0.04,
-        swayAmpMin: 3,
-        swayAmpMax: 8,
-        opacity: 0.6,
-        blur: 1,
-        zIndex: 5,
-      },
-    ];
-
-    const canvases = [];
-    const ctxs = [];
-    const flakes = [];
-
-    LAYERS.forEach((layer) => {
-      const canvas = document.createElement("canvas");
-      canvas.id = `snow-canvas-${layer.layer}`;
-      canvas.style.position = "fixed";
-      canvas.style.top = "0";
-      canvas.style.left = "0";
-      canvas.style.zIndex = layer.zIndex;
-      canvas.style.pointerEvents = "none";
-      snowContainerRef.current.appendChild(canvas);
-
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-
-      const ctx = canvas.getContext("2d");
-      canvases.push(canvas);
-      ctxs.push(ctx);
-
-      for (let i = 0; i < Math.floor(TOTAL_NUM_FLAKES / LAYERS.length); i++) {
-        flakes.push({
-          x: Math.random() * canvas.width,
-          y: Math.random() * -canvas.height,
-          size: Math.random() * (layer.sizeMax - layer.sizeMin) + layer.sizeMin,
-          speed: (Math.random() + 0.3) * layer.speedFactor,
-          sway: {
-            amp: Math.random() * (layer.swayAmpMax - layer.swayAmpMin) + layer.swayAmpMin,
-            speed: Math.random() * 0.01 + 0.005,
-            offset: Math.random() * Math.PI * 2,
-          },
-          layer: layer,
-        });
-      }
-    });
-
-    let snowRequestId;
-    const animateSnow = () => {
-      ctxs.forEach((ctx) => {
-        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-      });
-
-      flakes.forEach((flake) => {
-        const ctx = ctxs[flake.layer.layer - 1];
-        if (!ctx) return;
-
-        flake.y += flake.speed;
-        flake.x += Math.sin(flake.y * flake.sway.speed + flake.sway.offset) * flake.sway.amp * 0.1;
-
-        if (
-          flake.y > ctx.canvas.height ||
-          flake.x < -20 ||
-          flake.x > ctx.canvas.width + 20
-        ) {
-          flake.y = Math.random() * -50;
-          flake.x = Math.random() * ctx.canvas.width;
-        }
-
-        ctx.beginPath();
-        ctx.arc(flake.x, flake.y, flake.size / 4, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(255, 255, 255, ${flake.layer.opacity})`;
-        ctx.filter = `blur(${flake.layer.blur}px)`;
-        ctx.fill();
-      });
-
-      snowRequestId = requestAnimationFrame(animateSnow);
-    };
-
-    const handleResize = () => {
-      canvases.forEach((canvas) => {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-      });
-    };
-
-    window.addEventListener("resize", handleResize);
-    animateSnow();
-
     return () => {
-      window.removeEventListener("scroll", handleScroll);
-      window.removeEventListener("resize", handleResize);
       cancelAnimationFrame(requestId);
-      cancelAnimationFrame(snowRequestId);
-      canvases.forEach((canvas) => {
-        canvas.remove();
-      });
+      window.removeEventListener("scroll", handleScroll);
     };
-  }, [isClient]);
-
-  if (!isClient) {
-    return <div className="fixed inset-0 bg-black z-0" />;
-  }
+  }, []);
 
   return (
-    <div className="fixed inset-0 overflow-hidden z-0">
-      {/* Blobs */}
+    <div className="fixed inset-0 z-0 pointer-events-none">
+      {/* Blob layers */}
       <div className="absolute inset-0">
         <div
           ref={(ref) => (blobRefs.current[0] = ref)}
@@ -185,26 +64,36 @@ const SnowfallBackground = () => {
         />
       </div>
 
-      {/* Dark grid overlay */}
+      {/* Grid Overlay */}
       <div
-        className="absolute inset-0 bg-[linear-gradient(to_right,#00000099_1px,transparent_1px),linear-gradient(to_bottom,#00000099_1px,transparent_1px)] opacity-80"
-        style={{ backgroundSize: "32px 32px", filter: "blur(10px)", zIndex: 1 }}
+        className="absolute inset-0 bg-[linear-gradient(to_right,#00000099_1px,transparent_1px),linear-gradient(to_bottom,#00000099_1px,transparent_1px)] bg-[size:32px_32px] opacity-80"
+        style={{
+          filter: "blur(10px)",
+          zIndex: 1,
+        }}
       />
 
-      {/* Glassmorphism effect */}
+      {/* Glassmorphism & neon glow */}
       <div
         className="absolute inset-0"
         style={{
-          background: "rgba(0, 0, 0, 0.7)",
-          backdropFilter: "blur(8px)",
+          background: "rgba(0, 0, 0, 0.8)",
+          backdropFilter: "blur(12px)",
           zIndex: 2,
         }}
       />
 
-      {/* Snow container */}
-      <div ref={snowContainerRef} className="absolute inset-0" style={{ zIndex: 3 }} />
+      {/* Optional neon shadow layer */}
+      <div
+        className="absolute inset-0"
+        style={{
+          boxShadow:
+            "0 0 40px 10px rgba(0, 255, 255, 0.3), 0 0 40px 10px rgba(255, 0, 255, 0.3)",
+          zIndex: 3,
+        }}
+      />
     </div>
   );
 };
 
-export default SnowfallBackground;
+export default AnimatedBackground;
