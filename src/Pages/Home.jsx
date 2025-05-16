@@ -31,18 +31,33 @@ const SOCIAL_LINKS = [
   { icon: BadgeCheck, link: "https://dsc.gg/Tenebris" },
 ];
 
-// Title Component with smooth flowing gradient animation
+// Title Component with enhanced smooth flowing gradient animation
 const MainTitle = memo(() => {
   return (
     <div className="w-full text-center">
       <h1 className="text-5xl sm:text-6xl md:text-7xl font-extrabold text-white leading-tight tracking-tight">
-        <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#06B6D4] via-[#FF80B5] to-[#9F5F80] bg-[length:200%_auto] animate-gradient-flow">
+        <span 
+          className="text-transparent bg-clip-text bg-gradient-to-r 
+          from-[#06B6D4] via-[#0EA5E9] via-[#7DD3FC] to-[#BAE6FD] to-[#06B6D4]
+          bg-[length:400%_auto] animate-gradient-flow"
+          style={{
+            backgroundImage: 'linear-gradient(90deg, #06B6D4, #0EA5E9, #7DD3FC, #BAE6FD, #0EA5E9, #06B6D4)',
+            animation: 'gradientFlow 8s ease infinite'
+          }}
+        >
           tenebris
         </span>
       </h1>
     </div>
   );
 });
+
+// Add this to your global CSS or styles
+// @keyframes gradientFlow {
+//   0% { background-position: 0% 50% }
+//   50% { background-position: 100% 50% }
+//   100% { background-position: 0% 50% }
+// }
 
 // Feature Badge
 const FeatureBadge = memo(({ icon: Icon, label }) => (
@@ -207,6 +222,17 @@ const Home = () => {
 
   return (
     <div className="min-h-screen bg-[#030014] overflow-hidden" id="Home">
+      <style jsx global>{`
+        @keyframes gradientFlow {
+          0% { background-position: 0% 50% }
+          50% { background-position: 100% 50% }
+          100% { background-position: 0% 50% }
+        }
+        .animate-gradient-flow {
+          animation: gradientFlow 8s ease infinite;
+        }
+      `}</style>
+      
       <div className={`relative z-10 transition-all duration-1000 ${isLoaded ? "opacity-100" : "opacity-0"}`}>
         <div className="container mx-auto px-4 sm:px-6 lg:px-16 xl:px-24 2xl:px-32 w-full">
           {/* Centered Main Title */}
@@ -217,7 +243,7 @@ const Home = () => {
                 <span className="text-xl md:text-2xl bg-gradient-to-r from-gray-100 to-gray-300 bg-clip-text text-transparent font-light">
                   {text}
                 </span>
-                <span className="w-[3px] h-6 bg-gradient-to-t from-[#06B6D4] to-[#FFD6E7] ml-1 animate-blink"></span>
+                <span className="w-[3px] h-6 bg-gradient-to-t from-[#06B6D4] to-[#BAE6FD] ml-1 animate-blink"></span>
               </div>
               <div className="flex flex-wrap gap-3 justify-center mt-8" data-aos="fade-up" data-aos-delay="1200">
                 {FEATURE_BADGES.map((badge, i) => (
@@ -238,7 +264,7 @@ const Home = () => {
             <div className="text-center mb-12">
               <div className="inline-block relative">
                 <h2 
-                  className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#06B6D4] to-[#FFD6E7]" 
+                  className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#06B6D4] to-[#BAE6FD]" 
                   data-aos="zoom-in-up"
                   data-aos-duration="600"
                 >
@@ -252,7 +278,7 @@ const Home = () => {
               >
                 <Sparkles className="w-5 h-5 text-[#06B6D4]" />
                 Crafting digital experiences that inspire and perform
-                <Sparkles className="w-5 h-5 text-[#FFD6E7]" />
+                <Sparkles className="w-5 h-5 text-[#BAE6FD]" />
               </p>
             </div>
 
