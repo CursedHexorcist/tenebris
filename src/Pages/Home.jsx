@@ -45,7 +45,7 @@ const MainTitle = memo(() => {
             animation: 'gradientFlow 8s ease infinite'
           }}
         >
-          tenebris
+          TENEBRIS
         </span>
       </h1>
     </div>
