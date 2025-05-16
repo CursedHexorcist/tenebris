@@ -20,6 +20,34 @@ body {
 	scroll-behavior: smooth !important;
 }
 
+/* ==================== NEW GRADIENT ANIMATION ==================== */
+@keyframes gradientFlow {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animate-gradient-flow {
+  animation: gradientFlow 8s ease infinite;
+  background-size: 400% 400%;
+  background-image: linear-gradient(
+    90deg,
+    #06B6D4,
+    #0EA5E9,
+    #7DD3FC,
+    #BAE6FD,
+    #0EA5E9,
+    #06B6D4
+  );
+}
+
+/* ==================== EXISTING ANIMATIONS ==================== */
 @keyframes blob {
 	0%, 100% {
 		transform: translateY(0);
@@ -41,7 +69,20 @@ body {
 	animation-delay: 4s;
 }
 
-/* Custom Scrollbar - Ocean Cyan Only */
+@keyframes shine {
+	from {
+		left: -100%;
+	}
+	to {
+		left: 200%;
+	}
+}
+
+.animate-shine {
+	animation: shine 1.5s ease-in-out infinite;
+}
+
+/* ==================== SCROLLBAR STYLES ==================== */
 ::-webkit-scrollbar {
 	width: 8px;
 	height: 8px;
@@ -91,19 +132,7 @@ body {
 	will-change: transform, opacity !important;
 }
 
-@keyframes shine {
-	from {
-		left: -100%;
-	}
-	to {
-		left: 200%;
-	}
-}
-
-.animate-shine {
-	animation: shine 1.5s ease-in-out infinite;
-}
-
+/* ==================== DARK MODE STYLES ==================== */
 @media (prefers-color-scheme: dark) {
 	::-webkit-scrollbar-track {
 		background: rgba(3, 0, 20, 0.6);
@@ -177,13 +206,5 @@ body {
 		-ms-user-select: none;
 		user-select: none;
 		cursor: default;
-	}
-	@keyframes gradientFlow {
-		0% { background-position: 0% 50%; }
-		100% { background-position: 100% 50%; }
-	}
-	.animate-gradient-flow {
-		animation: gradientFlow 6s ease infinite;
-		background-size: 200% auto;
 	}
 }
