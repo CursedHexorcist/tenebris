@@ -10,41 +10,48 @@ const AnimatedBackground = () => {
   ];
 
   useEffect(() => {
-    let requestId;
-    let currentScroll = window.scrollY;
+    let frameId;
+    let startTime = performance.now();
 
-    const handleScroll = () => {
-      currentScroll = window.scrollY;
+    const animate = (time) => {
+      const elapsed = (time - startTime) / 1000; // detik
 
       blobRefs.current.forEach((blob, index) => {
+        if (!blob) return;
+
         const initialPos = initialPositions[index];
-        const xOffset = Math.sin(currentScroll / 100 + index * 0.5) * 340;
-        const yOffset = Math.cos(currentScroll / 100 + index * 0.5) * 40;
 
-        const x = initialPos.x + xOffset;
-        const y = initialPos.y + yOffset;
+        // Posisi X dan Y berdasarkan gelombang sinusoidal
+        const xOffset = Math.sin(elapsed + index * 1.5) * 150;
+        const yOffset = Math.cos(elapsed + index * 1.5) * 40;
 
-        if (blob) {
-          blob.style.transform = `translate(${x}px, ${y}px)`;
-          blob.style.transition = "transform 1.4s ease-out";
-        }
+        // Skala yang berdenyut antara 0.85 sampai 1.15
+        const scale = 1 + 0.15 * Math.sin(elapsed * 3 + index);
+
+        // Rotasi perlahan antara -10 sampai 10 derajat
+        const rotation = 10 * Math.sin(elapsed * 1.5 + index);
+
+        // Gabungkan transformasi: translate + scale + rotate
+        blob.style.transform = `
+          translate(${initialPos.x + xOffset}px, ${initialPos.y + yOffset}px)
+          scale(${scale})
+          rotate(${rotation}deg)
+        `;
+
+        // Transisi halus
+        blob.style.transition = "transform 0.2s ease-out";
       });
 
-      requestId = requestAnimationFrame(handleScroll);
+      frameId = requestAnimationFrame(animate);
     };
 
-    requestId = requestAnimationFrame(handleScroll);
-    window.addEventListener("scroll", handleScroll);
+    frameId = requestAnimationFrame(animate);
 
-    return () => {
-      cancelAnimationFrame(requestId);
-      window.removeEventListener("scroll", handleScroll);
-    };
+    return () => cancelAnimationFrame(frameId);
   }, []);
 
   return (
     <div className="fixed inset-0 z-0 pointer-events-none">
-      {/* Blob layers */}
       <div className="absolute inset-0">
         <div
           ref={(ref) => (blobRefs.current[0] = ref)}
@@ -83,7 +90,7 @@ const AnimatedBackground = () => {
         }}
       />
 
-      {/* Optional neon shadow layer */}
+      {/* Neon shadow */}
       <div
         className="absolute inset-0"
         style={{
