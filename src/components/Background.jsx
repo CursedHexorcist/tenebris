@@ -10,12 +10,12 @@ const AuroraBackground = () => {
     let width = (canvas.width = window.innerWidth);
     let height = (canvas.height = window.innerHeight);
 
-    const waves = Array.from({ length: 5 }).map((_, i) => ({
-      amplitude: 30 + i * 15,
-      wavelength: 200 + i * 50,
-      speed: 0.2 + i * 0.05,
-      phase: i * Math.PI * 0.5,
-      color: `hsla(${180 + i * 30}, 70%, 70%, 0.07)`,
+    const waves = Array.from({ length: 7 }).map((_, i) => ({
+      amplitude: 40 + i * 18,
+      wavelength: 150 + i * 60,
+      speed: 0.15 + i * 0.07,
+      phase: i * Math.PI * 0.6,
+      color: `hsla(${180 + i * 20}, 100%, 70%, 0.05)`,
     }));
 
     const resize = () => {
@@ -33,7 +33,7 @@ const AuroraBackground = () => {
 
       ctx.clearRect(0, 0, width, height);
 
-      waves.forEach((wave) => {
+      waves.forEach((wave, index) => {
         ctx.beginPath();
         for (let x = 0; x <= width; x += 2) {
           const y =
@@ -43,7 +43,9 @@ const AuroraBackground = () => {
           ctx.lineTo(x, y);
         }
         ctx.strokeStyle = wave.color;
-        ctx.lineWidth = 150;
+        ctx.lineWidth = 180 - index * 10;
+        ctx.shadowColor = wave.color;
+        ctx.shadowBlur = 40;
         ctx.stroke();
       });
 
@@ -62,7 +64,7 @@ const AuroraBackground = () => {
     <canvas
       ref={canvasRef}
       className="fixed inset-0 z-0 pointer-events-none"
-      style={{ width: "100%", height: "100%" }}
+      style={{ width: "100%", height: "100%", background: "#0f0f23" }}
     />
   );
 };
