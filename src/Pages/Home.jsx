@@ -31,19 +31,13 @@ const SOCIAL_LINKS = [
   { icon: BadgeCheck, link: "https://dsc.gg/Tenebris" },
 ];
 
-// Title Component with enhanced smooth flowing gradient animation
+// Enhanced Title Component with vibrant flowing gradient animation
 const MainTitle = memo(() => {
   return (
     <div className="w-full text-center">
       <h1 className="text-5xl sm:text-6xl md:text-7xl font-extrabold text-white leading-tight tracking-tight">
         <span 
-          className="text-transparent bg-clip-text bg-gradient-to-r 
-          from-[#06B6D4] via-[#0EA5E9] via-[#7DD3FC] to-[#BAE6FD] to-[#06B6D4]
-          bg-[length:400%_auto] animate-gradient-flow"
-          style={{
-            backgroundImage: 'linear-gradient(90deg, #06B6D4, #0EA5E9, #7DD3FC, #BAE6FD, #0EA5E9, #06B6D4)',
-            animation: 'gradientFlow 8s ease infinite'
-          }}
+          className="text-transparent bg-clip-text animate-rainbow-flow"
         >
           TENEBRIS
         </span>
@@ -51,13 +45,6 @@ const MainTitle = memo(() => {
     </div>
   );
 });
-
-// Add this to your global CSS or styles
-// @keyframes gradientFlow {
-//   0% { background-position: 0% 50% }
-//   50% { background-position: 100% 50% }
-//   100% { background-position: 0% 50% }
-// }
 
 // Feature Badge
 const FeatureBadge = memo(({ icon: Icon, label }) => (
@@ -222,17 +209,6 @@ const Home = () => {
 
   return (
     <div className="min-h-screen bg-[#030014] overflow-hidden" id="Home">
-      <style jsx global>{`
-        @keyframes gradientFlow {
-          0% { background-position: 0% 50% }
-          50% { background-position: 100% 50% }
-          100% { background-position: 0% 50% }
-        }
-        .animate-gradient-flow {
-          animation: gradientFlow 8s ease infinite;
-        }
-      `}</style>
-      
       <div className={`relative z-10 transition-all duration-1000 ${isLoaded ? "opacity-100" : "opacity-0"}`}>
         <div className="container mx-auto px-4 sm:px-6 lg:px-16 xl:px-24 2xl:px-32 w-full">
           {/* Centered Main Title */}
