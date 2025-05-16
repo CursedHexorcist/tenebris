@@ -1,104 +1,74 @@
 import React, { useEffect, useRef } from "react";
 
-const GlowingDustBackground = () => {
-  const canvasRef = useRef(null);
+const AnimatedBackground = () => {
+  const blobRefs = useRef([]);
+  const centerPositions = [
+    { x: 150, y: 150 },
+    { x: 400, y: 250 },
+    { x: 200, y: 450 },
+    { x: 450, y: 350 },
+  ];
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext("2d");
+    let frameId;
+    let startTime = performance.now();
 
-    let width = (canvas.width = window.innerWidth);
-    let height = (canvas.height = window.innerHeight);
+    const animate = (time) => {
+      const elapsed = (time - startTime) / 1000;
 
-    class Particle {
-      constructor() {
-        this.reset();
-      }
+      blobRefs.current.forEach((blob, index) => {
+        if (!blob) return;
 
-      reset() {
-        this.x = Math.random() * width;
-        this.y = Math.random() * height;
-        this.radius = 1 + Math.random() * 2.5;
-        this.speedX = (Math.random() - 0.5) * 0.15;
-        this.speedY = (Math.random() - 0.5) * 0.15;
-        this.alpha = 0.05 + Math.random() * 0.15;
-        this.color = `rgba(${Math.floor(100 + Math.random() * 100)}, ${Math.floor(
-          100 + Math.random() * 150
-        )}, 255, ${this.alpha})`;
-      }
+        const center = centerPositions[index];
+        const radius = 50 + index * 15;
+        const speed = 0.4 + index * 0.3;
 
-      update() {
-        this.x += this.speedX;
-        this.y += this.speedY;
+        const x = center.x + Math.cos(elapsed * speed + index) * radius;
+        const y = center.y + Math.sin(elapsed * speed + index) * radius;
+        const scale = 0.9 + 0.3 * Math.sin(elapsed * 1.5 + index);
+        const opacity = 0.4 + 0.25 * Math.cos(elapsed * 1.2 + index);
 
-        // Looping particles agar selalu stay di layar
-        if (this.x < 0) this.x = width;
-        else if (this.x > width) this.x = 0;
-
-        if (this.y < 0) this.y = height;
-        else if (this.y > height) this.y = 0;
-      }
-
-      draw(ctx) {
-        const gradient = ctx.createRadialGradient(
-          this.x,
-          this.y,
-          0,
-          this.x,
-          this.y,
-          this.radius * 8
-        );
-        gradient.addColorStop(0, this.color);
-        gradient.addColorStop(1, "rgba(0, 0, 50, 0)");
-
-        ctx.fillStyle = gradient;
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.radius * 8, 0, Math.PI * 2);
-        ctx.fill();
-      }
-    }
-
-    // Buat 20 partikel glowing dust
-    const particles = [];
-    for (let i = 0; i < 20; i++) {
-      particles.push(new Particle());
-    }
-
-    const resize = () => {
-      width = canvas.width = window.innerWidth;
-      height = canvas.height = window.innerHeight;
-    };
-
-    window.addEventListener("resize", resize);
-
-    let animationFrameId;
-
-    const animate = () => {
-      ctx.clearRect(0, 0, width, height);
-
-      particles.forEach((p) => {
-        p.update();
-        p.draw(ctx);
+        blob.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
+        blob.style.opacity = opacity;
       });
 
-      animationFrameId = requestAnimationFrame(animate);
+      frameId = requestAnimationFrame(animate);
     };
 
-    animate();
-
-    return () => {
-      cancelAnimationFrame(animationFrameId);
-      window.removeEventListener("resize", resize);
-    };
+    frameId = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(frameId);
   }, []);
 
+  const blobGradients = [
+    "from-purple-400 to-pink-400",
+    "from-cyan-400 to-blue-500",
+    "from-pink-400 to-rose-400",
+    "from-indigo-400 to-purple-500",
+  ];
+
   return (
-    <canvas
-      ref={canvasRef}
-      className="fixed inset-0 z-0 pointer-events-none"
-      style={{ width: "100%", height: "100%", background: "#0a0a1f" }}
-    />
+    <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
+      {blobGradients.map((gradient, i) => (
+        <div
+          key={i}
+          ref={(el) => (blobRefs.current[i] = el)}
+          className={`absolute w-40 h-40 bg-gradient-to-br ${gradient} rounded-full blur-3xl mix-blend-lighten transition-transform duration-700 ease-in-out`}
+          style={{
+            top: 0,
+            left: 0,
+            opacity: 0.5,
+            willChange: "transform, opacity",
+          }}
+        />
+      ))}
+
+      {/* Overlay dengan gradient gelap lembut */}
+      <div
+        className="absolute inset-0 bg-gradient-to-br from-black/70 via-black/60 to-black/70"
+        style={{ pointerEvents: "none" }}
+      />
+    </div>
   );
 };
 
-export default GlowingDustBackground;
+export default AnimatedBackground;
