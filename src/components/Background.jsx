@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 
-const AuroraParticles = () => {
+const CloudSmoke = () => {
   const canvasRef = useRef(null);
 
   useEffect(() => {
@@ -10,20 +10,18 @@ const AuroraParticles = () => {
     let width = (canvas.width = window.innerWidth);
     let height = (canvas.height = window.innerHeight);
 
-    const particlesCount = 100;
-    const particles = [];
+    const cloudCount = 30; // jumlah awan partikel
+    const clouds = [];
 
-    // Membuat partikel dengan posisi, ukuran, kecepatan acak
-    for (let i = 0; i < particlesCount; i++) {
-      particles.push({
+    // Buat partikel awan dengan posisi acak, ukuran, alpha, dan kecepatan perlahan
+    for (let i = 0; i < cloudCount; i++) {
+      clouds.push({
         x: Math.random() * width,
         y: Math.random() * height,
-        size: 20 + Math.random() * 40,
-        speedX: (Math.random() - 0.5) * 0.2,
-        speedY: (Math.random() - 0.5) * 0.1,
-        hue: 150 + Math.random() * 100, // hijau ke cyan ke biru
-        alpha: 0.1 + Math.random() * 0.3,
-        blur: 15 + Math.random() * 20,
+        radius: 80 + Math.random() * 120,
+        speedX: (Math.random() - 0.5) * 0.03,
+        speedY: (Math.random() - 0.3) * 0.01,
+        alpha: 0.06 + Math.random() * 0.08,
       });
     }
 
@@ -36,24 +34,21 @@ const AuroraParticles = () => {
 
     let animationFrameId;
 
-    const drawParticle = (p) => {
+    const drawCloud = (c) => {
       const gradient = ctx.createRadialGradient(
-        p.x,
-        p.y,
-        p.size * 0.1,
-        p.x,
-        p.y,
-        p.size
+        c.x,
+        c.y,
+        c.radius * 0.4,
+        c.x,
+        c.y,
+        c.radius
       );
-      gradient.addColorStop(0, `hsla(${p.hue}, 90%, 80%, ${p.alpha})`);
-      gradient.addColorStop(1, `hsla(${p.hue}, 90%, 50%, 0)`);
+      gradient.addColorStop(0, `rgba(220,220,230,${c.alpha})`);
+      gradient.addColorStop(1, `rgba(220,220,230,0)`);
 
       ctx.fillStyle = gradient;
-      ctx.shadowColor = `hsla(${p.hue}, 90%, 80%, ${p.alpha})`;
-      ctx.shadowBlur = p.blur;
-
       ctx.beginPath();
-      ctx.ellipse(p.x, p.y, p.size * 0.6, p.size * 0.9, 0, 0, Math.PI * 2);
+      ctx.arc(c.x, c.y, c.radius, 0, Math.PI * 2);
       ctx.fill();
     };
 
@@ -61,18 +56,18 @@ const AuroraParticles = () => {
       ctx.clearRect(0, 0, width, height);
       ctx.globalCompositeOperation = "lighter";
 
-      particles.forEach((p) => {
-        drawParticle(p);
+      clouds.forEach((c) => {
+        drawCloud(c);
 
-        // update posisi partikel perlahan dengan arah acak
-        p.x += p.speedX;
-        p.y += p.speedY;
+        // update posisi perlahan, loop kalau keluar layar
+        c.x += c.speedX;
+        c.y += c.speedY;
 
-        // Loop partikel jika keluar layar, pindah ke sisi lain
-        if (p.x > width + p.size) p.x = -p.size;
-        else if (p.x < -p.size) p.x = width + p.size;
-        if (p.y > height + p.size) p.y = -p.size;
-        else if (p.y < -p.size) p.y = height + p.size;
+        if (c.x - c.radius > width) c.x = -c.radius;
+        else if (c.x + c.radius < 0) c.x = width + c.radius;
+
+        if (c.y - c.radius > height) c.y = -c.radius;
+        else if (c.y + c.radius < 0) c.y = height + c.radius;
       });
 
       animationFrameId = requestAnimationFrame(animate);
@@ -90,9 +85,9 @@ const AuroraParticles = () => {
     <canvas
       ref={canvasRef}
       className="fixed inset-0 z-0 pointer-events-none"
-      style={{ width: "100%", height: "100%", background: "#0f0f23" }}
+      style={{ width: "100%", height: "100%", background: "#101024" }}
     />
   );
 };
 
-export default AuroraParticles;
+export default CloudSmoke;
