@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 
-const AuroraBackground = () => {
+const AuroraParticles = () => {
   const canvasRef = useRef(null);
 
   useEffect(() => {
@@ -10,13 +10,22 @@ const AuroraBackground = () => {
     let width = (canvas.width = window.innerWidth);
     let height = (canvas.height = window.innerHeight);
 
-    const waves = Array.from({ length: 7 }).map((_, i) => ({
-      amplitude: 40 + i * 18,
-      wavelength: 150 + i * 60,
-      speed: 0.15 + i * 0.07,
-      phase: i * Math.PI * 0.6,
-      color: `hsla(${180 + i * 20}, 100%, 70%, 0.05)`,
-    }));
+    const particlesCount = 100;
+    const particles = [];
+
+    // Membuat partikel dengan posisi, ukuran, kecepatan acak
+    for (let i = 0; i < particlesCount; i++) {
+      particles.push({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        size: 20 + Math.random() * 40,
+        speedX: (Math.random() - 0.5) * 0.2,
+        speedY: (Math.random() - 0.5) * 0.1,
+        hue: 150 + Math.random() * 100, // hijau ke cyan ke biru
+        alpha: 0.1 + Math.random() * 0.3,
+        blur: 15 + Math.random() * 20,
+      });
+    }
 
     const resize = () => {
       width = canvas.width = window.innerWidth;
@@ -26,33 +35,50 @@ const AuroraBackground = () => {
     window.addEventListener("resize", resize);
 
     let animationFrameId;
-    const startTime = performance.now();
 
-    const animate = (time) => {
-      const elapsed = (time - startTime) / 1000;
+    const drawParticle = (p) => {
+      const gradient = ctx.createRadialGradient(
+        p.x,
+        p.y,
+        p.size * 0.1,
+        p.x,
+        p.y,
+        p.size
+      );
+      gradient.addColorStop(0, `hsla(${p.hue}, 90%, 80%, ${p.alpha})`);
+      gradient.addColorStop(1, `hsla(${p.hue}, 90%, 50%, 0)`);
 
+      ctx.fillStyle = gradient;
+      ctx.shadowColor = `hsla(${p.hue}, 90%, 80%, ${p.alpha})`;
+      ctx.shadowBlur = p.blur;
+
+      ctx.beginPath();
+      ctx.ellipse(p.x, p.y, p.size * 0.6, p.size * 0.9, 0, 0, Math.PI * 2);
+      ctx.fill();
+    };
+
+    const animate = () => {
       ctx.clearRect(0, 0, width, height);
+      ctx.globalCompositeOperation = "lighter";
 
-      waves.forEach((wave, index) => {
-        ctx.beginPath();
-        for (let x = 0; x <= width; x += 2) {
-          const y =
-            height / 2 +
-            Math.sin(x / wave.wavelength + elapsed * wave.speed + wave.phase) *
-              wave.amplitude;
-          ctx.lineTo(x, y);
-        }
-        ctx.strokeStyle = wave.color;
-        ctx.lineWidth = 180 - index * 10;
-        ctx.shadowColor = wave.color;
-        ctx.shadowBlur = 40;
-        ctx.stroke();
+      particles.forEach((p) => {
+        drawParticle(p);
+
+        // update posisi partikel perlahan dengan arah acak
+        p.x += p.speedX;
+        p.y += p.speedY;
+
+        // Loop partikel jika keluar layar, pindah ke sisi lain
+        if (p.x > width + p.size) p.x = -p.size;
+        else if (p.x < -p.size) p.x = width + p.size;
+        if (p.y > height + p.size) p.y = -p.size;
+        else if (p.y < -p.size) p.y = height + p.size;
       });
 
       animationFrameId = requestAnimationFrame(animate);
     };
 
-    animationFrameId = requestAnimationFrame(animate);
+    animate();
 
     return () => {
       cancelAnimationFrame(animationFrameId);
@@ -69,4 +95,4 @@ const AuroraBackground = () => {
   );
 };
 
-export default AuroraBackground;
+export default AuroraParticles;
