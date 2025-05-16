@@ -178,4 +178,12 @@ body {
 		user-select: none;
 		cursor: default;
 	}
+	@keyframes gradientFlow {
+		0% { background-position: 0% 50%; }
+		100% { background-position: 100% 50%; }
+	}
+	.animate-gradient-flow {
+		animation: gradientFlow 6s ease infinite;
+		background-size: 200% auto;
+	}
 }
