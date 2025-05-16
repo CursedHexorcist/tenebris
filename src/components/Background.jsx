@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 
-const RealisticClouds = () => {
+const ChillCloudsBackground = () => {
   const canvasRef = useRef(null);
 
   useEffect(() => {
@@ -10,66 +10,43 @@ const RealisticClouds = () => {
     let width = (canvas.width = window.innerWidth);
     let height = (canvas.height = window.innerHeight);
 
-    // Jumlah partikel awan yang besar dan sedikit
-    const cloudsCount = 7;
-
-    // Fungsi buat satu "blob" awan sebagai kumpulan lingkaran tumpang tindih
-    function createCloud() {
-      // pos awal acak
-      const x = Math.random() * width;
-      const y = Math.random() * height;
-      // ukuran acak besar
-      const baseRadius = 80 + Math.random() * 120;
-
-      // kumpulan lingkaran (offset x,y dan radius relatif) buat bentuk awan
-      const circles = [];
-      const circlesCount = 6 + Math.floor(Math.random() * 4);
-      for (let i = 0; i < circlesCount; i++) {
-        circles.push({
-          x: (Math.random() - 0.5) * baseRadius,
-          y: (Math.random() - 0.3) * baseRadius * 0.6,
-          r: baseRadius * (0.4 + Math.random() * 0.4),
-        });
-      }
-
-      // kecepatan drift pelan dan random
-      const speedX = (Math.random() - 0.5) * 0.02;
-      const speedY = (Math.random() - 0.2) * 0.008;
-
-      // alpha transparansi lembut
-      const alpha = 0.07 + Math.random() * 0.06;
-
-      return { x, y, circles, speedX, speedY, alpha };
-    }
-
-    const clouds = Array.from({ length: cloudsCount }, () => createCloud());
+    // Cloud blobs: posisi dan ukuran awal, jumlah sedikit dan besar
+    const clouds = [
+      { x: width * 0.15, y: height * 0.3, radius: 200, alpha: 0.14, speedX: 0.01 },
+      { x: width * 0.6, y: height * 0.15, radius: 150, alpha: 0.12, speedX: 0.008 },
+      { x: width * 0.8, y: height * 0.6, radius: 180, alpha: 0.1, speedX: 0.012 },
+      { x: width * 0.3, y: height * 0.7, radius: 220, alpha: 0.1, speedX: 0.009 },
+      { x: width * 0.5, y: height * 0.45, radius: 170, alpha: 0.08, speedX: 0.011 },
+    ];
 
     const resize = () => {
       width = canvas.width = window.innerWidth;
       height = canvas.height = window.innerHeight;
+
+      // Recalculate positions relative to new size
+      clouds[0].x = width * 0.15;
+      clouds[0].y = height * 0.3;
+      clouds[1].x = width * 0.6;
+      clouds[1].y = height * 0.15;
+      clouds[2].x = width * 0.8;
+      clouds[2].y = height * 0.6;
+      clouds[3].x = width * 0.3;
+      clouds[3].y = height * 0.7;
+      clouds[4].x = width * 0.5;
+      clouds[4].y = height * 0.45;
     };
     window.addEventListener("resize", resize);
 
-    function drawCloud(cloud) {
-      ctx.save();
-      ctx.translate(cloud.x, cloud.y);
-      ctx.fillStyle = `rgba(230, 230, 240, ${cloud.alpha})`;
-      ctx.shadowColor = `rgba(230, 230, 240, ${cloud.alpha * 1.5})`;
-      ctx.shadowBlur = 25;
+    function drawCloud(x, y, radius, alpha) {
+      // Buat gradien lingkaran besar blur seperti awan halus
+      const gradient = ctx.createRadialGradient(x, y, radius * 0.4, x, y, radius);
+      gradient.addColorStop(0, `rgba(255,255,255,${alpha})`);
+      gradient.addColorStop(1, "rgba(255,255,255,0)");
 
-      // gambar semua lingkaran tumpang tindih
+      ctx.fillStyle = gradient;
       ctx.beginPath();
-      cloud.circles.forEach((c) => {
-        const gradient = ctx.createRadialGradient(c.x, c.y, c.r * 0.3, c.x, c.y, c.r);
-        gradient.addColorStop(0, `rgba(255,255,255,${cloud.alpha})`);
-        gradient.addColorStop(1, "rgba(255,255,255,0)");
-        ctx.fillStyle = gradient;
-        ctx.moveTo(c.x + c.r, c.y);
-        ctx.arc(c.x, c.y, c.r, 0, Math.PI * 2);
-        ctx.fill();
-      });
-
-      ctx.restore();
+      ctx.arc(x, y, radius, 0, Math.PI * 2);
+      ctx.fill();
     }
 
     let animationFrameId;
@@ -78,18 +55,11 @@ const RealisticClouds = () => {
       ctx.clearRect(0, 0, width, height);
       ctx.globalCompositeOperation = "lighter";
 
-      clouds.forEach((c) => {
-        drawCloud(c);
-
-        c.x += c.speedX;
-        c.y += c.speedY;
-
-        // Loop di layar
-        if (c.x > width + 150) c.x = -150;
-        else if (c.x < -150) c.x = width + 150;
-
-        if (c.y > height + 150) c.y = -150;
-        else if (c.y < -150) c.y = height + 150;
+      clouds.forEach((cloud) => {
+        drawCloud(cloud.x, cloud.y, cloud.radius, cloud.alpha);
+        // Gerakkan perlahan ke kanan, loop kembali jika keluar layar
+        cloud.x += cloud.speedX;
+        if (cloud.x - cloud.radius > width) cloud.x = -cloud.radius;
       });
 
       animationFrameId = requestAnimationFrame(animate);
@@ -112,4 +82,4 @@ const RealisticClouds = () => {
   );
 };
 
-export default RealisticClouds;
+export default ChillCloudsBackground;
