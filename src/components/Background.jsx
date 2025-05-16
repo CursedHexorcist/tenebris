@@ -21,25 +21,25 @@ const AnimatedBackground = () => {
 
         const initialPos = initialPositions[index];
 
-        // Posisi X dan Y berdasarkan gelombang sinusoidal
-        const xOffset = Math.sin(elapsed + index * 1.5) * 150;
-        const yOffset = Math.cos(elapsed + index * 1.5) * 40;
+        // Kurangi pergerakan supaya lebih halus dan ringan
+        const xOffset = Math.sin(elapsed + index * 1.5) * 60;
+        const yOffset = Math.cos(elapsed + index * 1.5) * 15;
 
-        // Skala yang berdenyut antara 0.85 sampai 1.15
-        const scale = 1 + 0.15 * Math.sin(elapsed * 3 + index);
+        // Skala lebih kecil denyutannya
+        const scale = 1 + 0.07 * Math.sin(elapsed * 2 + index);
 
-        // Rotasi perlahan antara -10 sampai 10 derajat
-        const rotation = 10 * Math.sin(elapsed * 1.5 + index);
+        // Rotasi kecil supaya tetap ada efek tapi ringan
+        const rotation = 5 * Math.sin(elapsed + index);
 
-        // Gabungkan transformasi: translate + scale + rotate
+        // Gabungkan transformasi tanpa transition (langsung)
         blob.style.transform = `
           translate(${initialPos.x + xOffset}px, ${initialPos.y + yOffset}px)
           scale(${scale})
           rotate(${rotation}deg)
         `;
 
-        // Transisi halus
-        blob.style.transition = "transform 0.2s ease-out";
+        // Hilangkan transition agar animasi lebih ringan
+        blob.style.transition = "none";
       });
 
       frameId = requestAnimationFrame(animate);
@@ -55,27 +55,27 @@ const AnimatedBackground = () => {
       <div className="absolute inset-0">
         <div
           ref={(ref) => (blobRefs.current[0] = ref)}
-          className="absolute top-0 -left-4 md:w-96 md:h-96 w-72 h-72 bg-purple-900 rounded-full mix-blend-multiply filter blur-[128px] opacity-80 md:opacity-50"
+          className="absolute top-0 -left-4 md:w-72 md:h-72 w-56 h-56 bg-purple-900 rounded-full mix-blend-multiply filter blur-[64px] opacity-90 md:opacity-80"
         />
         <div
           ref={(ref) => (blobRefs.current[1] = ref)}
-          className="absolute top-0 -right-4 w-96 h-96 bg-cyan-900 rounded-full mix-blend-multiply filter blur-[128px] opacity-80 md:opacity-50 hidden sm:block"
+          className="absolute top-0 -right-4 md:w-72 md:h-72 w-56 h-56 bg-cyan-900 rounded-full mix-blend-multiply filter blur-[64px] opacity-90 md:opacity-80 hidden sm:block"
         />
         <div
           ref={(ref) => (blobRefs.current[2] = ref)}
-          className="absolute -bottom-8 left-[-40%] md:left-20 w-96 h-96 bg-blue-900 rounded-full mix-blend-multiply filter blur-[128px] opacity-80 md:opacity-50"
+          className="absolute -bottom-8 left-[-40%] md:left-20 md:w-72 md:h-72 w-56 h-56 bg-blue-900 rounded-full mix-blend-multiply filter blur-[64px] opacity-90 md:opacity-80"
         />
         <div
           ref={(ref) => (blobRefs.current[3] = ref)}
-          className="absolute -bottom-10 right-20 w-96 h-96 bg-pink-900 rounded-full mix-blend-multiply filter blur-[128px] opacity-60 md:opacity-40 hidden sm:block"
+          className="absolute -bottom-10 right-20 md:w-72 md:h-72 w-56 h-56 bg-pink-900 rounded-full mix-blend-multiply filter blur-[48px] opacity-75 md:opacity-60 hidden sm:block"
         />
       </div>
 
       {/* Grid Overlay */}
       <div
-        className="absolute inset-0 bg-[linear-gradient(to_right,#00000099_1px,transparent_1px),linear-gradient(to_bottom,#00000099_1px,transparent_1px)] bg-[size:32px_32px] opacity-80"
+        className="absolute inset-0 bg-[linear-gradient(to_right,#000000cc_1px,transparent_1px),linear-gradient(to_bottom,#000000cc_1px,transparent_1px)] bg-[size:32px_32px] opacity-90"
         style={{
-          filter: "blur(10px)",
+          filter: "blur(6px)",
           zIndex: 1,
         }}
       />
@@ -84,8 +84,8 @@ const AnimatedBackground = () => {
       <div
         className="absolute inset-0"
         style={{
-          background: "rgba(0, 0, 0, 0.8)",
-          backdropFilter: "blur(12px)",
+          background: "rgba(0, 0, 0, 0.9)",
+          backdropFilter: "blur(8px)",
           zIndex: 2,
         }}
       />
@@ -95,7 +95,7 @@ const AnimatedBackground = () => {
         className="absolute inset-0"
         style={{
           boxShadow:
-            "0 0 40px 10px rgba(0, 255, 255, 0.3), 0 0 40px 10px rgba(255, 0, 255, 0.3)",
+            "0 0 30px 8px rgba(0, 255, 255, 0.4), 0 0 30px 8px rgba(255, 0, 255, 0.4)",
           zIndex: 3,
         }}
       />
